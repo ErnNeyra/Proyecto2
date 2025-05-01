@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Producto/Servicio | We-Connect</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto py-4 px-6 flex items-center justify-between">
+            <a href="/" class="text-xl font-bold text-black">We-Connect</a>
+            <nav class="flex items-center">
+                <a href="/listado.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
+                <a href="/contacto.html" class="text-gray-700 hover:text-black mr-4">Contacto</a>
+                <a href="/registro.html" class="bg-transparent text-gray-700 border border-gray-300 py-2 px-4 rounded-md hover:bg-gray-100 hover:border-gray-400 mr-4 transition duration-200">Registrarse</a>
+                <a href="/login.html" class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">Iniciar Sesión</a>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <a href="/panel_usuario.php" class="text-gray-700 hover:text-black mr-4">Mi Panel</a>
+                <?php endif; ?>
+            </nav>
+        </div>
+    </header>
+    <main class="container mx-auto py-12 px-6 flex justify-center">
+        <div class="max-w-lg bg-white rounded-md shadow-md p-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Publica tu Producto o Servicio</h2>
+            <form id="crear-producto-form" action="/crear_producto.php" method="post" enctype="multipart/form-data">
+                <div class="mb-4">
+                    <label for="nombre_producto" class="block text-gray-700 text-sm font-bold mb-2">Nombre del Producto/Servicio:</label>
+                    <input type="text" id="nombre_producto" name="nombre_producto" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                </div>
+                <div class="mb-4">
+                    <label for="descripcion" class="block text-gray-700 text-sm font-bold mb-2">Descripción:</label>
+                    <textarea id="descripcion" name="descripcion" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="categoria" class="block text-gray-700 text-sm font-bold mb-2">Categoría:</label>
+                    <select id="categoria" name="categoria" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        <option value="">Selecciona una categoría</option>
+                        <option value="productos">Productos</option>
+                        <option value="servicios">Servicios</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="precio" class="block text-gray-700 text-sm font-bold mb-2">Precio (opcional):</label>
+                    <input type="number" id="precio" name="precio" step="0.01" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
+                <div class="mb-6">
+                    <label for="imagen" class="block text-gray-700 text-sm font-bold mb-2">Imagen (opcional):</label>
+                    <input type="file" id="imagen" name="imagen" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none">
+                    <p class="text-gray-500 text-xs italic">Formatos permitidos: JPG, PNG. Tamaño máximo: [establecer límite].</p>
+                </div>
+                <div class="flex items-center justify-end">
+                    <button type="submit" class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 focus:outline-none focus:shadow-outline">Publicar</button>
+                    <a href="/listado.php" class="inline-block align-baseline font-semibold text-sm text-gray-500 hover:text-gray-800 ml-4">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-black py-4 text-center text-gray-400">
+        <p>&copy; 2025 We-Connect. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
