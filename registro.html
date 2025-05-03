@@ -1,213 +1,146 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>We-Connect | Regístrate y Conecta</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <style>
-        /* Estilos adicionales para este ejemplo (puedes moverlos a style.css) */
-        body {
-            background-image: linear-gradient(135deg, #fbc02d 0%, #ffeb3b 100%); /* Un fondo llamativo */
-        }
-        .registration-container {
-            background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-        .benefits-section {
-            background-color: #f9f9f9;
-            padding: 4rem;
-            border-right: 1px solid #eee;
-        }
-        .benefits-section h2 {
-            color: #333;
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-        }
-        .benefit-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-            color: #555;
-        }
-        .benefit-item svg {
-            margin-right: 1rem;
-            color: #fbc02d; /* Color акцентный */
-        }
-        .registration-form {
-            padding: 3rem;
-        }
-        .registration-form h2 {
-            color: #333;
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        .form-group label {
-            display: block;
-            color: #777;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-        .form-group input:focus {
-            outline: none;
-            border-color: #fbc02d;
-            box-shadow: 0 0 0 0.2rem rgba(251, 192, 45, 0.25);
-        }
-        .register-button {
-            background-color: #fbc02d;
-            color: #333;
-            font-weight: bold;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 1.1rem;
-            transition: background-color 0.3s ease;
-        }
-        .register-button:hover {
-            background-color: #e0ac28;
-        }
-        .social-login {
-            margin-top: 2rem;
-            text-align: center;
-        }
-        .social-login p {
-            color: #777;
-            margin-bottom: 1rem;
-        }
-        .social-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            padding: 0.6rem 1rem;
-            margin: 0 0.5rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-        .social-button:hover {
-            background-color: #eee;
-            border-color: #ccc;
-        }
-        .social-button svg {
-            margin-right: 0.5rem;
-        }
-        .login-link {
-            margin-top: 1.5rem;
-            text-align: center;
-            color: #777;
-            font-size: 0.9rem;
-        }
-        .login-link a {
-            color: #fbc02d;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .login-link a:hover {
-            text-decoration: underline;
-        }
-        .mensaje-registro { /* Estilos para el contenedor de mensajes */
-            margin-top: 1rem;
-            padding: 0.8rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-        }
-        .mensaje-registro.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .mensaje-registro.errores {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        .errores ul {
-            list-style-type: disc;
-            margin-left: 1.5rem;
-            padding: 0;
-        }
-        .errores li {
-            margin-bottom: 0.3rem;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>We-Connect | Registro</title>
+  <script src="https://www.paypal.com/sdk/js?client-id=AWrC9V-h8MeR2Pif0XqXYIYjnS7TsU-hIrTfp500af2-QelD_uy0wTLT-0k2irrQjV8MjFWjGmkKoVLn"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #fbc02d 0%, #ffeb3b 100%);
+    }
+    .registration-container {
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    .plan-card {
+      transition: all 0.3s ease;
+    }
+    .plan-card:hover {
+      transform: translateY(-3px);
+    }
+    .plan-card.selected {
+      border-width: 2px;
+      box-shadow: 0 0 0 3px rgba(251, 192, 45, 0.6);
+    }
+    .register-button {
+      background-color: #fbc02d;
+      color: #333;
+      font-weight: bold;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1.1rem;
+      transition: background-color 0.3s ease;
+    }
+    .register-button:hover {
+      background-color: #e0ac28;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans min-h-screen flex items-center justify-center">
-    <div class="registration-container w-full max-w-screen-md shadow-lg rounded-lg overflow-hidden md:flex">
-        <div class="benefits-section md:w-1/2 p-8">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Únete a la Comunidad We-Connect y Desbloquea:</h2>
-            <div class="benefit-item">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10-4v-3a5 5 0 00-10 0v3m2 2c1.791 0 3.272.213 4.968-.707C9.099 13.917 8.309 13 7 13m10 4c-.142 0-2.982.005-4.316-.975C15.901 16.97 16.691 18 18 18m-2-4v-3m2 2c-1.791 0-3.272.213-4.968-.707C18.901 13.917 19.691 13 21 13m-2 4c.142 0 2.982.005 4.316-.975C16.099 16.97 15.309 18 17 18m-2-4v-3"></svg>
-                <span>Conexiones valiosas con otros emprendedores.</span>
-            </div>
-            <div class="benefit-item">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></svg>
-                <span>Oportunidades de colaboración y crecimiento mutuo.</span>
-            </div>
-            <div class="benefit-item">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.808 5c-1.657 0-3 .895-3 2s1.343 2 3 2c.641 0 1.22-.21 1.792-.58A10 10 0 0012 15.044"></svg>
-                <span>Acceso a recursos y herramientas exclusivas (próximamente).</span>
-            </div>
-            <p class="mt-6 text-sm text-gray-600">¡Únete hoy y comienza a construir tu red de apoyo emprendedor!</p>
+<body class="flex items-center justify-center min-h-screen">
+  <div class="registration-container max-w-2xl w-full p-8">
+    <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Crea tu Cuenta en We-Connect</h2>
+    <form id="registro-form" class="space-y-4">
+      <div>
+        <label for="nombre" class="block text-sm text-gray-700 mb-1">Nombre Completo:</label>
+        <input type="text" id="nombre" name="nombre" required class="w-full p-2 border rounded" />
+      </div>
+      <div>
+        <label for="email" class="block text-sm text-gray-700 mb-1">Correo Electrónico:</label>
+        <input type="email" id="email" name="email" required class="w-full p-2 border rounded" />
+      </div>
+      <div>
+        <label for="password" class="block text-sm text-gray-700 mb-1">Contraseña:</label>
+        <input type="password" id="password" name="password" required class="w-full p-2 border rounded" />
+      </div>
+      <div>
+        <label for="confirm-password" class="block text-sm text-gray-700 mb-1">Confirmar Contraseña:</label>
+        <input type="password" id="confirm-password" required class="w-full p-2 border rounded" />
+      </div>
+
+      <!-- Planes como tarjetas -->
+      <div class="mt-6">
+        <p class="mb-2 font-medium text-gray-700">Selecciona un plan:</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div id="plan-free" class="plan-card border border-gray-300 bg-gray-50 p-4 rounded cursor-pointer">
+            <h3 class="text-lg font-semibold text-gray-700">Plan Gratuito</h3>
+            <ul class="text-sm text-gray-600 list-disc pl-5 mt-2">
+              <li>Acceso limitado</li>
+              <li>Perfil básico</li>
+              <li>Mensajes limitados</li>
+            </ul>
+          </div>
+          <div id="plan-premium" class="plan-card border border-yellow-400 bg-yellow-100 p-4 rounded cursor-pointer">
+            <h3 class="text-lg font-semibold text-yellow-800">Plan Premium - $5 USD</h3>
+            <ul class="text-sm text-gray-700 list-disc pl-5 mt-2">
+              <li>Acceso completo</li>
+              <li>Perfil destacado</li>
+              <li>Mensajes ilimitados</li>
+              <li>Eventos exclusivos</li>
+            </ul>
+          </div>
         </div>
+        <input type="hidden" id="plan" name="plan" value="free" />
+      </div>
 
-        <div class="registration-form md:w-1/2 p-8">
-            <h2 class="text-xl font-semibold text-gray-800 mb-6">Crea tu Cuenta</h2>
-            <form id="registro-form" class="space-y-4">
-                <div class="form-group">
-                    <label for="nombre">Nombre Completo:</label>
-                    <input type="text" id="nombre" name="nombre" placeholder="Tu nombre y apellido">
-                </div>
-                <div class="form-group">
-                    <label for="email">Correo Electrónico:</label>
-                    <input type="email" id="email" name="email" placeholder="Tu dirección de correo electrónico">
-                </div>
-                <div class="form-group">
-                    <label for="password">Contraseña:</label>
-                    <input type="password" id="password" name="password" placeholder="Crea una contraseña segura">
-                </div>
-                <div class="form-group">
-                    <label for="confirm-password">Confirmar Contraseña:</label>
-                    <input type="password" id="confirm-password" name="confirmar_password" placeholder="Confirma tu contraseña">
-                </div>
-                <button type="button" onclick="window.location.href='index2.html'" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Volver</button>
-                <button type="submit" class="register-button">Registrarse en We-Connect</button>
-            </form>
+      <!-- PayPal -->
+      <div id="paypal-button-container" class="hidden mt-4"></div>
 
-            <div class="mensaje-registro"></div> <div class="social-login">
-                <p>O regístrate con:</p>
-                <div>
-                    <button class="social-button">
-                        <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.04c-5.52 0-10 4.48-10 10 0 4.46 3.26 8.18 7.62 9.62v-6.76h-2.37v-2.86h2.37v-2.06c0-2.34 1.42-3.61 3.46-3.61 1.01.17 1.92.26 2.72.26v3.01h-1.87c-1.14 0-1.67.57-1.67 1.4v1.92h2.84l-.45 2.86h-2.39v6.76c4.36-1.44 7.62-5.16 7.62-9.62 0-5.52-4.48-10-10-10z"/></svg>
-                        Facebook
-                    </button>
-                    <button class="social-button">
-                        <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path fill="currentColor" d="M21.35 11.1c0-.75-.61-1.36-1.36-1.36h-1.38v-.72c0-.9-.73-1.63-1.63-1.63h-.58c-.9 0-1.63.73-1.63 1.63v.72h-1.38c-.75 0-1.36.61-1.36 1.36v1.38h-.72c-.9 0-1.63.73-1.63 1.63v.58c0 .9.73 1.63 1.63 1.63h.72v1.38c0 .75.61 1.36 1.36 1.36h1.38v.72c.9 0 1.63.73 1.63 1.63h.58c.9 0 1.63-.73 1.63-1.63v-.72h1.38c.75 0 1.36-.61 1.36-1.36v-1.38h.72c.9 0 1.63-.73 1.63-1.63v-.58c0-.9-.73-1.63-1.63-1.63h-.72v-1.38zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3 17.28c-.72 0-1.3-.58-1.3-1.3v-3.48h-2.6v3.48c0 .72-.58 1.3-1.3 1.3h-.58c-.72 0-1.3-.58-1.3-1.3v-3.48h-2.6v3.48c0 .72-.58 1.3-1.3 1.3h-.58c-.72 0-1.3-.58-1.3-1.3V6.72c0-.72.58-1.3 1.3-1.3h5.2c.72 0 1.3.58 1.3 1.3v10.56z"/></svg>
-                        Google
-                    </button>
-                </div>
-            </div>
+      <button type="submit" id="submit-button" class="register-button mt-4">Registrarse</button>
+    </form>
+  </div>
 
-            <p class="login-link">¿Ya tienes una cuenta? <a href="/login.html">Inicia Sesión</a></p>
-        </div>
-    </div>
+  <script>
+    const planFree = document.getElementById('plan-free');
+    const planPremium = document.getElementById('plan-premium');
+    const paypalContainer = document.getElementById('paypal-button-container');
+    const planInput = document.getElementById('plan');
+    const submitButton = document.getElementById('submit-button');
 
-    <script src="js/script.js"></script> </body>
+    function seleccionarPlan(tipo) {
+      if (tipo === 'premium') {
+        planPremium.classList.add('selected');
+        planFree.classList.remove('selected');
+        paypalContainer.classList.remove('hidden');
+        submitButton.disabled = true;
+        planInput.value = 'premium';
+      } else {
+        planFree.classList.add('selected');
+        planPremium.classList.remove('selected');
+        paypalContainer.classList.add('hidden');
+        submitButton.disabled = false;
+        planInput.value = 'free';
+      }
+    }
+
+    planFree.addEventListener('click', () => seleccionarPlan('free'));
+    planPremium.addEventListener('click', () => seleccionarPlan('premium'));
+
+    seleccionarPlan('free');
+
+    // PayPal button render
+    paypal.Buttons({
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: '5.00'
+            }
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          alert('Pago completado por ' + details.payer.name.given_name);
+          submitButton.disabled = false;
+        });
+      }
+    }).render('#paypal-button-container');
+  </script>
+</body>
 </html>
