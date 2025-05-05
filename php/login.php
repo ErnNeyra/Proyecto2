@@ -196,7 +196,7 @@
             </form>
 
             <div class="forgot-password mt-2">
-                <a href="/forgot-password.html">¿Olvidaste tu contraseña?</a>
+                <a href="./forgot_password.html">¿Olvidaste tu contraseña?</a>
             </div>
 
             <div class="social-login mt-6">
