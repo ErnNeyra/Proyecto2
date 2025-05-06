@@ -12,7 +12,6 @@
             <a href="../index.php" class="text-xl font-bold text-black">We-Connect</a>
             <nav class="flex items-center">
                 <a href="./listado.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
-                <a href="./contacto.php" class="text-gray-700 hover:text-black mr-4">Contacto</a>
                 <a href="./registro.php" class="bg-transparent text-gray-700 border border-gray-300 py-2 px-4 rounded-md hover:bg-gray-100 hover:border-gray-400 mr-4 transition duration-200">Registrarse</a>
                 <a href="./login.php" class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">Iniciar Sesión</a>
             </nav>
