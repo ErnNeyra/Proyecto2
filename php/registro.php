@@ -45,11 +45,11 @@
     <?php
         error_reporting( E_ALL );
         ini_set("display_errors", 1 );   
-        require('./config.php');
+        // require('./config.php');
     ?>
 </head>
 <body class="flex items-center justify-center min-h-screen">
-    <?php
+     <?php/*
         if($_SERVER["REQUEST_METHOD"] == "POST"){
             $tmpNombre = $_POST["nombre"];
             $tmpAlias = $_POST["alias"];
@@ -66,7 +66,7 @@
 
             header("location: ./login.php");
             exit;
-        }
+        } */
     ?>
         
     <div class="registration-container max-w-2xl w-full p-8">
@@ -134,7 +134,7 @@
             </div>
         </form>
     </div>
-    <!-- <script>
+    <script>
         const planFree = document.getElementById('plan-free');
         const planPremium = document.getElementById('plan-premium');
         const paypalContainer = document.getElementById('paypal-button-container');
@@ -180,6 +180,6 @@
             });
         }
         }).render('#paypal-button-container');
-  </script> -->
+  </script> 
 </body>
 </html>

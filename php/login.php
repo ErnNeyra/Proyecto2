@@ -163,7 +163,7 @@
                     //Cookie en el cliente, guarda información del navegador
                     //$_COOKIE["usuario"] = "usuario";
 
-                    header("location: ../index.html");
+                    header("location: ../index.php");
                     exit;
                 }else{
                     echo "<h2>La contraseña ese incorrecta.</h2>";
