@@ -134,7 +134,7 @@
             </div>
         </form>
     </div>
-    <!-- <script>
+    <script>
         const planFree = document.getElementById('plan-free');
         const planPremium = document.getElementById('plan-premium');
         const paypalContainer = document.getElementById('paypal-button-container');
@@ -180,6 +180,6 @@
             });
         }
         }).render('#paypal-button-container');
-  </script> -->
+  </script>
 </body>
 </html>
