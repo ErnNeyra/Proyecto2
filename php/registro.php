@@ -180,6 +180,6 @@
             });
         }
         }).render('#paypal-button-container');
-  </script> -->
+  </script>
 </body>
 </html>
