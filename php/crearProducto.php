@@ -1,81 +1,60 @@
 <?php
-    // session_start();
+    error_reporting(E_ALL);
+    ini_set("display_errors",1);
+    require ('config.php');
+    session_start();
 
-    // // Verificar si el usuario ha iniciado sesión
-    // if (!isset($_SESSION['user_id'])) {
-    //     header("Location: /login.html"); // O una página de error de acceso no autorizado
-    //     exit();
-    // }
+    // Verificar si el usuario ha iniciado sesión
+    if (!isset($_SESSION['usuario'])) {
+        // Si no ha iniciado sesión, redirigir a la página de inicio de sesión
+        header("location: login.php"); // O una página de error de acceso no autorizado
+        echo"<h2>Debes iniciar sesión para añadir un producto.</h2>";
+        exit();
+    }else{
+        // Puedes usar $id_usuario para realizar consultas a la base de datos o cualquier otra operación
+        echo "<h2>Bienvenid@ ".$_SESSION["usuario"]."</h2>";
+        echo "<h2>Tu ID de usuario es: ".$_SESSION["id_usuario"]."</h2>";
+    }
 
-    // // **CONFIGURACIÓN DE LA BASE DE DATOS** (Asegúrate de que coincida con tu configuración)
-    // $servername = "localhost";
-    // $username = "usuario_db";
-    // $password = "contraseña_db";
-    // $dbname = "nombre_db";
+    $error = "";
+    $success = "";
 
-    // $conn = new mysqli($servername, $username, $password, $dbname);
-    // if ($conn->connect_error) {
-    //     die("Error de conexión a la base de datos: " . $conn->connect_error);
-    // }
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $nombre = $_POST['nombre'];
+        $descripcion = $_POST['descripcion'];
+        $precio = $_POST['precio'];
+        $id_usuario = $_SESSION['id_usuario'];
+        
 
-    // $error = "";
-    // $success = "";
 
-    // if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    //     $nombre = $_POST['nombre'] ?? '';
-    //     $descripcion = $_POST['descripcion'] ?? '';
-    //     $precio = $_POST['precio'] ?? '';
-    //     $user_id = $_SESSION['user_id'];
+        $imagen = $_FILES["imagen"]["name"];
+        $ubicacionTemporal = $_FILES["imagen"]["tmp_name"];
+        $ubicacionFinal = "../img/$imagen";
+        $imagenTipo = $_FILES["imagen"]["type"];
 
-    //     // **VALIDACIÓN DE DATOS**
-    //     if (empty($nombre)) {
-    //         $error = "El nombre del producto es obligatorio.";
-    //     } elseif (empty($descripcion)) {
-    //         $error = "La descripción del producto es obligatoria.";
-    //     } elseif (!is_numeric($precio) || $precio <= 0) {
-    //         $error = "El precio debe ser un número mayor que cero.";
-    //     } else {
-    //         // **MANEJO DE LA IMAGEN (OPCIONAL)**
-    //         $imagen_url = null;
-    //         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
-    //             $allowed_types = ['image/jpeg', 'image/png'];
-    //             $max_size = 2 * 1024 * 1024; // 2MB
+        //mueve el archivo que se ha cargado de una ubicación a otra
+        move_uploaded_file($ubicacionTemporal, $ubicacionFinal);
 
-    //             if (in_array($_FILES['imagen']['type'], $allowed_types) && $_FILES['imagen']['size'] <= $max_size) {
-    //                 $upload_dir = "uploads/"; // Crea esta carpeta en tu servidor
-    //                 $filename = uniqid() . "_" . basename($_FILES['imagen']['name']);
-    //                 $target_path = $upload_dir . $filename;
-
-    //                 if (move_uploaded_file($_FILES['imagen']['tmp_name'], $target_path)) {
-    //                     $imagen_url = $target_path; // Guardar la ruta en la base de datos
-    //                 } else {
-    //                     $error = "Error al subir la imagen.";
-    //                 }
-    //             } else {
-    //                 $error = "Formato de imagen no válido o tamaño demasiado grande.";
-    //             }
-    //         }
-
-    //         // **INSERCIÓN EN LA BASE DE DATOS**
-    //         if (empty($error)) {
-    //             $sql = "INSERT INTO productos (nombre, descripcion, precio, imagen_url, id_usuario, fecha_creacion) VALUES (?, ?, ?, ?, ?, NOW())";
-    //             $stmt = $conn->prepare($sql);
-    //             $stmt->bind_param("ssdsi", $nombre, $descripcion, $precio, $imagen_url, $user_id);
-
-    //             if ($stmt->execute()) {
-    //                 $success = "Producto creado exitosamente.";
-    //                 // Redirigir al usuario al listado o a una página de éxito
-    //                 header("Location: /listado.php?success=1");
-    //                 exit();
-    //             } else {
-    //                 $error = "Error al guardar el producto en la base de datos: " . $stmt->error;
-    //             }
-    //             $stmt->close();
-    //         }
-    //     }
-    // }
-
-    // $conn->close();
+        if(isset($nombre) && isset($descripcion) && isset($precio) && isset($id_usuario) && isset($ubicacionFinal)){
+                
+            /* $sql = "INSERT INTO animes (titulo, nombre_estudio, anno_estreno, num_temporadas, imagen)
+                VALUES ('$titulo','$nombreEstudio','$anioEstreno','$numeroTemporadas', '$ubicacionFinal')";
+            $_conexion -> query($sql); */
+            
+            //1. Preparar
+            $sql = $_conexion -> prepare("INSERT INTO producto
+                (nombre, descripcion, precio, id_usuario, imagen)
+                VALUES (?, ?, ?, ?, ?)"
+            );
+            //2. Enlazado
+            $sql -> bind_param("ssiis",
+                $nombre, $descripcion, $precio,
+                $id_usuario, $ubicacionFinal
+            );
+            //3. Ejecución
+            $sql -> execute();
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -92,12 +71,13 @@
         <div class="container mx-auto py-4 px-6 flex items-center justify-between">
             <a href="../index.php" class="text-xl font-bold text-black">We-Connect</a>
             <nav class="flex items-center">
-                <a href="./listado.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
-                <a href="./contacto.php" class="text-gray-700 hover:text-black mr-4">Contacto</a>
-                <a href="./registro.php" class="bg-transparent text-gray-700 border border-gray-300 py-2 px-4 rounded-md hover:bg-gray-100 hover:border-gray-400 mr-4 transition duration-200">Registrarse</a>
-                <a href="./login.php" class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">Iniciar Sesión</a>
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <a href="/panel_usuario.php" class="text-gray-700 hover:text-black mr-4">Mi Panel</a>
+                <a href="listado.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
+                <a href="contacto.php" class="text-gray-700 hover:text-black mr-4">Contacto</a>
+                <a href="registro.php" class="bg-transparent text-gray-700 border border-gray-300 py-2 px-4 rounded-md hover:bg-gray-100 hover:border-gray-400 mr-4 transition duration-200">Registrarse</a>
+                <a href="login.php" class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">Iniciar Sesión</a>
+                <a class="btn btn-danger" href="logout.php">Cerrar sesión</a>
+                <?php if (isset($_SESSION['usuario'])): ?>
+                    <a href="panelUsuario.php" class="text-gray-700 hover:text-black mr-4">Mi Panel</a>
                 <?php endif; ?>
             </nav>
         </div>
@@ -123,7 +103,7 @@
                 </div>
                 <div class="mb-4">
                     <label for="precio" class="block text-gray-700 text-sm font-bold mb-2">Precio:</label>
-                    <input type="number" id="precio" name="precio" step="0.01" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <input type="text" id="precio" name="precio" step="0.01" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                 </div>
                 <div class="mb-4">
                     <label for="imagen" class="block text-gray-700 text-sm font-bold mb-2">Imagen (opcional):</label>
@@ -132,7 +112,7 @@
                 </div>
                 <div class="flex items-center justify-between">
                     <button type="submit" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:shadow-outline">Crear Producto</button>
-                    <a href="./listado.php" class="inline-block align-baseline font-semibold text-sm text-blue-500 hover:text-blue-800">Cancelar</a>
+                    <a href="listado.php" class="inline-block align-baseline font-semibold text-sm text-blue-500 hover:text-blue-800">Cancelar</a>
                 </div>
             </form>
         </div>

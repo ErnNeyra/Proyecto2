@@ -45,14 +45,14 @@
     <?php
         error_reporting( E_ALL );
         ini_set("display_errors", 1 );   
-        require('./config.php');
+        require('config.php');
     ?>
 </head>
 <body class="flex items-center justify-center min-h-screen">
     <?php
         if($_SERVER["REQUEST_METHOD"] == "POST"){
             $tmpNombre = $_POST["nombre"];
-            $tmpAlias = $_POST["alias"];
+            $tmpUsuario = $_POST["usuario"];
             $tmpEmail = $_POST["email"];
             $tmpContrasena = $_POST["contrasena"];
             
@@ -61,10 +61,10 @@
             $contrasena_cifrada = password_hash($tmpContrasena,PASSWORD_DEFAULT);
 
             //Introduzco en mi base de datos dentro de la tabla usuarios. el nombre de usuario y contraseña
-            $sql = "INSERT INTO usuario (nombre, alias, email, contrasena) VALUES ('$tmpNombre', '$tmpAlias', '$tmpEmail','$contrasena_cifrada')";
+            $sql = "INSERT INTO usuario (nombre, usuario, email, contrasena) VALUES ('$tmpNombre', '$tmpUsuario', '$tmpEmail','$contrasena_cifrada')";
             $_conexion -> query($sql);
 
-            header("location: ./login.php");
+            header("location: login.php");
             exit;
         }
     ?>
@@ -80,10 +80,10 @@
                 <input type="text" id="nombre" name="nombre" required class="w-full p-2 border rounded" />
             </div>
 
-            <!-- Alias del usuario -->
+            <!-- Nombre de usuario alias -->
             <div>
-                <label for="alias" class="block text-sm text-gray-700 mb-1">Nombre de usuario ó alias:</label>
-                <input type="text" id="alias" name="alias" required class="w-full p-2 border rounded" />
+                <label for="usuario" class="block text-sm text-gray-700 mb-1">Nombre de usuario ó alias:</label>
+                <input type="text" id="usuario" name="usuario" required class="w-full p-2 border rounded" />
             </div>
         
             <!-- Email de usuario -->
@@ -130,7 +130,7 @@
 
             <div>
                 <input type="submit" class="register-button mt-4" value="Registrarse">
-                <!-- <a href="./login.php" class="btn btn-secondary">Inicia sesión</a> -->
+                <!-- <a href="login.php" class="btn btn-secondary">Inicia sesión</a> -->
             </div>
         </form>
     </div>

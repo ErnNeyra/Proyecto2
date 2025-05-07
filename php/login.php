@@ -125,17 +125,17 @@
     <?php
         error_reporting( E_ALL );
         ini_set("display_errors", 1 );   
-        require('./config.php');
+        require('config.php');
     ?>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex items-center justify-center">
     <?php
         if($_SERVER["REQUEST_METHOD"] == "POST"){
-            $email = $_POST["email"];
+            $usuario = $_POST["usuario"];
             $contrasena = $_POST["contrasena"];
 
             //si el usuario existe va a devolver una fila con el usuario y contraseña
-            $sql = "SELECT * FROM usuario WHERE email = '$email'";
+            $sql = "SELECT * FROM usuario WHERE usuario = '$usuario'";
 
             //
             $resultado = $_conexion -> query($sql);
@@ -143,7 +143,7 @@
             //veo lo que muestra el resultado si no se detecta nombre de usuario
 
             if($resultado -> num_rows == 0){
-                echo "<h2>El usuario $email no existe</h2>";
+                echo "<h2>El usuario $usuario no existe</h2>";
             }else{
                 $datosUsuario = $resultado -> fetch_assoc();
                 /* Podemos acceder a:
@@ -159,11 +159,12 @@
                     //bien
                     session_start();
                     //La sesión se almacena en el servidor y guarda información del usuario
-                    $_SESSION["email"] = $email;
+                    $_SESSION["usuario"] = $usuario;
+                    $_SESSION["id_usuario"] = $datosUsuario["id_usuario"];
                     //Cookie en el cliente, guarda información del navegador
                     //$_COOKIE["usuario"] = "usuario";
 
-                    header("location: ../index.html");
+                    header("location: listado.php");
                     exit;
                 }else{
                     echo "<h2>La contraseña ese incorrecta.</h2>";
@@ -176,17 +177,17 @@
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Bienvenido de Nuevo a We-Connect</h2>
             <p class="mb-4">Conecta con una vibrante comunidad de emprendedores, comparte tus ideas, encuentra colaboradores y haz crecer tu proyecto.</p>
             <p class="mb-4">Accede a tu red de contactos y sigue construyendo relaciones valiosas en el mundo del emprendimiento.</p>
-            <p class="text-sm text-gray-600">¿Aún no eres parte de We-Connect? <a href="./registro.php" class="text-yellow-500 font-semibold hover:underline">Regístrate aquí</a>.</p><br><br>
-            <button type="button" onclick="window.location.href='../index.html'" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Volver</button>
+            <p class="text-sm text-gray-600">¿Aún no eres parte de We-Connect? <a href="registro.php" class="text-yellow-500 font-semibold hover:underline">Regístrate aquí</a>.</p><br><br>
+            <button type="button" onclick="window.location.href='../index.php'" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Volver</button>
         </div>
 
         <div class="login-form md:w-1/2 p-8">
             <h2 class="text-xl font-semibold text-gray-800 mb-6 text-center">Iniciar Sesión</h2>
-            <form class="space-y-4" method="post" action="">
+            <form class="space-y-4" method="post">
                 
                 <div class="form-group">
-                    <label for="email">Correo Electrónico:</label>
-                    <input type="email" name="email" id="email" placeholder="Tu dirección de correo electrónico">
+                    <label for="usuario">Nombre de usuario:</label>
+                    <input type="text" name="usuario" id="usuario" placeholder="Tu dirección de correo electrónico">
                 </div>
                 <div class="form-group">
                     <label for="contrasena">Contraseña:</label>
@@ -196,7 +197,7 @@
             </form>
 
             <div class="forgot-password mt-2">
-                <a href="./forgot_password.html">¿Olvidaste tu contraseña?</a>
+                <!-- <a href="forgotPassword.php">¿Olvidaste tu contraseña?</a>HACER ARCHIVOOOOOOOOOo -->
             </div>
 
             <p class="register-link mt-4">¿Aún no tienes una cuenta? <a href="registro.php">Regístrate aquí</a></p>
