@@ -22,10 +22,16 @@
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $nombre = $_POST['nombre'];
         $descripcion = $_POST['descripcion'];
-        $precio = $_POST['precio'];
-        $id_usuario = $_SESSION['id_usuario'];
-        
+        $precio = (float)$_POST['precio'];
+        $usuario = $_SESSION['usuario'];
+        $categoria = $_POST['categoria'];
 
+        $check = $_conexion->prepare("SELECT nombre FROM categoria WHERE nombre = ?");
+        $check->bind_param("s", $categoria);
+        $check->execute();
+        if (!$check->get_result()->num_rows > 0) {
+            die("Categoría inválida");
+        }
 
         $imagen = $_FILES["imagen"]["name"];
         $ubicacionTemporal = $_FILES["imagen"]["tmp_name"];
@@ -35,7 +41,7 @@
         //mueve el archivo que se ha cargado de una ubicación a otra
         move_uploaded_file($ubicacionTemporal, $ubicacionFinal);
 
-        if(isset($nombre) && isset($descripcion) && isset($precio) && isset($id_usuario) && isset($ubicacionFinal)){
+        if(isset($nombre) && isset($descripcion) && isset($precio) && isset($usuario) && isset($categoria) && isset($ubicacionFinal)){
                 
             /* $sql = "INSERT INTO animes (titulo, nombre_estudio, anno_estreno, num_temporadas, imagen)
                 VALUES ('$titulo','$nombreEstudio','$anioEstreno','$numeroTemporadas', '$ubicacionFinal')";
@@ -43,17 +49,29 @@
             
             //1. Preparar
             $sql = $_conexion -> prepare("INSERT INTO producto
-                (nombre, descripcion, precio, id_usuario, imagen)
-                VALUES (?, ?, ?, ?, ?)"
+                (nombre, descripcion, precio, usuario, categoria, imagen)
+                VALUES (?, ?, ?, ?, ?, ?)"
             );
             //2. Enlazado
-            $sql -> bind_param("ssiis",
-                $nombre, $descripcion, $precio,
-                $id_usuario, $ubicacionFinal
+            $sql -> bind_param("ssdsss",
+                $nombre, $descripcion, $precio, $usuario, $categoria, $ubicacionFinal
             );
             //3. Ejecución
-            $sql -> execute();
+            if ($sql -> execute()) {
+                echo "Producto creado con éxito.";
+            } else {
+                echo "Error al crear el producto: " . $_conexion->error;
+            }
         }
+    }
+
+    $sql = "SELECT nombre FROM categoria";
+    $resultado = $_conexion -> query($sql);
+    $categorias = [];
+    /* fetch_assoc() devuelve una fila de resultados como un array asociativo. Esto significa que podrás acceder
+    a cada columna de la fila por su nombre */
+    while($fila = $resultado -> fetch_assoc()){
+        array_push($categorias, $fila["nombre"]);
     }
 ?>
 
@@ -92,7 +110,7 @@
             <?php if ($success): ?>
                 <p class="text-green-500 mb-4"><?php echo $success; ?></p>
             <?php endif; ?>
-            <form action="/crear_producto.php" method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data">
                 <div class="mb-4">
                     <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Nombre:</label>
                     <input type="text" id="nombre" name="nombre" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
@@ -103,12 +121,21 @@
                 </div>
                 <div class="mb-4">
                     <label for="precio" class="block text-gray-700 text-sm font-bold mb-2">Precio:</label>
-                    <input type="text" id="precio" name="precio" step="0.01" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <input type="number" id="precio" name="precio" step="0.01" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                 </div>
                 <div class="mb-4">
                     <label for="imagen" class="block text-gray-700 text-sm font-bold mb-2">Imagen (opcional):</label>
                     <input type="file" id="imagen" name="imagen" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     <p class="text-gray-500 text-xs italic">Formatos permitidos: JPG, PNG. Tamaño máximo: [establecer límite].</p>
+                </div>
+                <div class="mb-4">
+                    <label for="categoria" class="block text-gray-700 text-sm font-bold mb-2">Categoría:</label>
+                    <select id="categoria" name="categoria" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        <option value="">-- Selecciona una categoría --</option>
+                        <?php foreach ($categorias as $categoria): ?>
+                            <option value="<?php echo $categoria;?>"><?= $categoria?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div class="flex items-center justify-between">
                     <button type="submit" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:shadow-outline">Crear Producto</button>
