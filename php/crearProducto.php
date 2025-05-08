@@ -5,7 +5,7 @@
     session_start();
 
     // Verificar si el usuario ha iniciado sesión
-    if (!isset($_SESSION['usuario'])) {
+    /*if (!isset($_SESSION['usuario'])) {
         // Si no ha iniciado sesión, redirigir a la página de inicio de sesión
         header("location: login.php"); // O una página de error de acceso no autorizado
         echo"<h2>Debes iniciar sesión para añadir un producto.</h2>";
@@ -15,7 +15,7 @@
         echo "<h2>Bienvenid@ ".$_SESSION["usuario"]."</h2>";
         echo "<h2>Tu ID de usuario es: ".$_SESSION["id_usuario"]."</h2>";
     }
-
+*/
     $error = "";
     $success = "";
 
@@ -26,53 +26,80 @@
         $usuario = $_SESSION['usuario'];
         $categoria = $_POST['categoria'];
 
-        $check = $_conexion->prepare("SELECT nombre FROM categoria WHERE nombre = ?");
-        $check->bind_param("s", $categoria);
-        $check->execute();
-        if (!$check->get_result()->num_rows > 0) {
-            die("Categoría inválida");
+        // Validación de campos
+        if (strlen($nombre) < 3 || strlen($nombre) > 100) {
+            $error = "El nombre debe tener entre 3 y 100 caracteres.";
+        } else if (strlen($descripcion) < 10 || strlen($descripcion) > 500) {
+            $error = "La descripción debe tener entre 10 y 500 caracteres.";
+        } else if ($precio <= 0) {
+            $error = "El precio debe ser mayor que 0.";
+        } else {
+            // Validación de categoría
+            $check = $_conexion->prepare("SELECT nombre FROM categoria WHERE nombre = ?");
+            $check->bind_param("s", $categoria);
+            $check->execute();
+            if (!$check->get_result()->num_rows > 0) {
+                $error = "Categoría inválida";
+            } else {
+                // Validación de imagen
+                if(isset($_FILES["imagen"]) && $_FILES["imagen"]["error"] == 0) {
+                    $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "png" => "image/png");
+                    $filename = $_FILES["imagen"]["name"];
+                    $filetype = $_FILES["imagen"]["type"];
+                    $filesize = $_FILES["imagen"]["size"];
+
+                    // Verificar extensión del archivo
+                    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                    if(!array_key_exists($ext, $allowed)) {
+                        $error = "Error: Por favor selecciona un formato válido de archivo (JPG o PNG).";
+                    }
+
+                    // Verificar tamaño (5MB máximo)
+                    $maxsize = 5 * 1024 * 1024;
+                    if($filesize > $maxsize) {
+                        $error = "Error: El tamaño del archivo supera el límite de 5MB.";
+                    }
+
+                    if(empty($error)) {
+                        $imagen = $filename;
+                        $ubicacionTemporal = $_FILES["imagen"]["tmp_name"];
+                        $ubicacionFinal = "../img/$imagen";
+                        move_uploaded_file($ubicacionTemporal, $ubicacionFinal);
+                    }
+                } else {
+                    // Si no hay imagen, usar una por defecto
+                    $ubicacionFinal = "../img/default-product.png";
+                }
+            }
         }
 
-        $imagen = $_FILES["imagen"]["name"];
-        $ubicacionTemporal = $_FILES["imagen"]["tmp_name"];
-        $ubicacionFinal = "../img/$imagen";
-        $imagenTipo = $_FILES["imagen"]["type"];
-
-        //mueve el archivo que se ha cargado de una ubicación a otra
-        move_uploaded_file($ubicacionTemporal, $ubicacionFinal);
-
-        if(isset($nombre) && isset($descripcion) && isset($precio) && isset($usuario) && isset($categoria) && isset($ubicacionFinal)){
-                
-            /* $sql = "INSERT INTO animes (titulo, nombre_estudio, anno_estreno, num_temporadas, imagen)
-                VALUES ('$titulo','$nombreEstudio','$anioEstreno','$numeroTemporadas', '$ubicacionFinal')";
-            $_conexion -> query($sql); */
-            
-            //1. Preparar
-            $sql = $_conexion -> prepare("INSERT INTO producto
-                (nombre, descripcion, precio, usuario, categoria, imagen)
-                VALUES (?, ?, ?, ?, ?, ?)"
-            );
-            //2. Enlazado
-            $sql -> bind_param("ssdsss",
-                $nombre, $descripcion, $precio, $usuario, $categoria, $ubicacionFinal
-            );
-            //3. Ejecución
-            if ($sql -> execute()) {
-                echo "Producto creado con éxito.";
-            } else {
-                echo "Error al crear el producto: " . $_conexion->error;
+        // Si no hay errores, proceder con la inserción
+        if(empty($error)) {
+            if(isset($nombre) && isset($descripcion) && isset($precio) && isset($usuario) && isset($categoria) && isset($ubicacionFinal)){
+                $sql = $_conexion->prepare("INSERT INTO producto
+                    (nombre, descripcion, precio, usuario, categoria, imagen)
+                    VALUES (?, ?, ?, ?, ?, ?)"
+                );
+                $sql->bind_param("ssdsss",
+                    $nombre, $descripcion, $precio, $usuario, $categoria, $ubicacionFinal
+                );
+                if ($sql->execute()) {
+                    $success = "Producto creado con éxito.";
+                } else {
+                    $error = "Error al crear el producto: " . $_conexion->error;
+                }
             }
         }
     }
 
-    $sql = "SELECT nombre FROM categoria";
+    /*$sql = "SELECT nombre FROM categoria";-------------------------------------------------------------------------------
     $resultado = $_conexion -> query($sql);
     $categorias = [];
     /* fetch_assoc() devuelve una fila de resultados como un array asociativo. Esto significa que podrás acceder
     a cada columna de la fila por su nombre */
-    while($fila = $resultado -> fetch_assoc()){
+    /*while($fila = $resultado -> fetch_assoc()){
         array_push($categorias, $fila["nombre"]);
-    }
+    }-----------------------------------------------------------------------------------------------------------------*/
 ?>
 
 <!DOCTYPE html>
@@ -104,11 +131,15 @@
     <main class="container mx-auto py-12 px-6 flex-grow">
         <div class="bg-white rounded-md shadow-md p-8 max-w-lg mx-auto border border-gray-200">
             <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Crear Nuevo Producto o Servicio</h1>
-            <?php if ($error): ?>
-                <p class="text-red-500 mb-4"><?php echo $error; ?></p>
+            <?php if (!empty($error)): ?>
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <span class="block sm:inline"><?php echo $error; ?></span>
+                </div>
             <?php endif; ?>
-            <?php if ($success): ?>
-                <p class="text-green-500 mb-4"><?php echo $success; ?></p>
+            <?php if (!empty($success)): ?>
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <span class="block sm:inline"><?php echo $success; ?></span>
+                </div>
             <?php endif; ?>
             <form method="post" enctype="multipart/form-data">
                 <div class="mb-4">
@@ -130,12 +161,7 @@
                 </div>
                 <div class="mb-4">
                     <label for="categoria" class="block text-gray-700 text-sm font-bold mb-2">Categoría:</label>
-                    <select id="categoria" name="categoria" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                        <option value="">-- Selecciona una categoría --</option>
-                        <?php foreach ($categorias as $categoria): ?>
-                            <option value="<?php echo $categoria;?>"><?= $categoria?></option>
-                        <?php endforeach; ?>
-                    </select>
+                
                 </div>
                 <div class="flex items-center justify-between">
                     <button type="submit" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:shadow-outline">Crear Producto</button>
@@ -148,5 +174,56 @@
     <footer class="bg-black py-4 text-center text-gray-400">
         &copy; 2025 We-Connect. Todos los derechos reservados.
     </footer>
+</body>
+</html>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const precioInput = document.getElementById('precio');
+    const nombreInput = document.getElementById('nombre');
+    const descripcionInput = document.getElementById('descripcion');
+
+    // Agregar div para mensajes de error antes del formulario
+    const errorContainer = document.createElement('div');
+    errorContainer.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 hidden';
+    errorContainer.setAttribute('role', 'alert');
+    form.parentNode.insertBefore(errorContainer, form);
+
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+        let errorMessages = [];
+
+        // Validación del nombre
+        if (nombreInput.value.length < 3 || nombreInput.value.length > 100) {
+            errorMessages.push('El nombre debe tener entre 3 y 100 caracteres.');
+            isValid = false;
+        }
+
+        // Validación de la descripción
+        if (descripcionInput.value.length < 10 || descripcionInput.value.length > 500) {
+            errorMessages.push('La descripción debe tener entre 10 y 500 caracteres.');
+            isValid = false;
+        }
+
+        // Validación del precio
+        if (precioInput.value <= 0) {
+            errorMessages.push('El precio debe ser mayor que 0.');
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+            errorContainer.innerHTML = errorMessages.map(msg => `<p>${msg}</p>`).join('');
+            errorContainer.classList.remove('hidden');
+            // Scroll hacia el mensaje de error
+            errorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+            errorContainer.classList.add('hidden');
+        }
+    });
+});
+</script>
+
 </body>
 </html>
