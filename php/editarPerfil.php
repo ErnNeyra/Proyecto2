@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require('config.php');
+    require('./util/config.php');
 ?>
 
 <!DOCTYPE html>

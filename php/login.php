@@ -125,7 +125,7 @@
     <?php
         error_reporting( E_ALL );
         ini_set("display_errors", 1 );   
-        require('config.php');
+        require('./util/config.php');
     ?>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex items-center justify-center">

@@ -29,7 +29,7 @@
         }
         error_reporting( E_ALL );
         ini_set("display_errors", 1 );   
-        require('config.php');
+        require('./util/config.php');
     ?>
     <main class="container mx-auto py-12 px-6 flex-grow">
         <div class="flex items-center justify-between mb-8">

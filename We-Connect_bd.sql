@@ -34,7 +34,7 @@ INSErt INTO categoria (nombre, descripcion) VALUES
 ('Deportes', 'Productos y servicios deportivos'),
 ('Moda', 'Ropa, accesorios y moda en general'),
 ('Alimentos', 'Productos alimenticios y bebidas'),
-('Automotriz', 'Productos y servicios para automóviles');
+('Automotriz', 'Productos y servicios para automóviles'),
 ('Otros', 'Otros productos y servicios no categorizados');
 
 

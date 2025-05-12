@@ -1,7 +1,7 @@
 <?php
     error_reporting(E_ALL);
     ini_set("display_errors",1);
-    require ('config.php');
+    require ('./util/config.php');
     session_start();
 
     // Verificar si el usuario ha iniciado sesión
@@ -20,13 +20,16 @@
     $success = "";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        
+        // Validación de campos recibidos
         $nombre = $_POST['nombre'];
         $descripcion = $_POST['descripcion'];
         $precio = (float)$_POST['precio'];
         $usuario = $_SESSION['usuario'];
         $categoria = $_POST['categoria'];
 
-        // Validación de campos
+        
+
         if (strlen($nombre) < 3 || strlen($nombre) > 100) {
             $error = "El nombre debe tener entre 3 y 100 caracteres.";
         } else if (strlen($descripcion) < 10 || strlen($descripcion) > 500) {
@@ -92,14 +95,14 @@
         }
     }
 
-    /*$sql = "SELECT nombre FROM categoria";-------------------------------------------------------------------------------
+    $sql = "SELECT nombre FROM categoria";
     $resultado = $_conexion -> query($sql);
     $categorias = [];
     /* fetch_assoc() devuelve una fila de resultados como un array asociativo. Esto significa que podrás acceder
     a cada columna de la fila por su nombre */
-    /*while($fila = $resultado -> fetch_assoc()){
+    while($fila = $resultado -> fetch_assoc()){
         array_push($categorias, $fila["nombre"]);
-    }-----------------------------------------------------------------------------------------------------------------*/
+    }
 ?>
 
 <!DOCTYPE html>
@@ -161,7 +164,15 @@
                 </div>
                 <div class="mb-4">
                     <label for="categoria" class="block text-gray-700 text-sm font-bold mb-2">Categoría:</label>
-                
+                    <select id="categoria" name="categoria" class="form-select form-select-lg">
+                    <option value="">---Selecciona una categoría---</option>
+                    <?php
+                    foreach ($categorias as $categoria): ?>
+                        <!-- Ambas formas php las interpreta de la misma manera, está creando un option con el valor $estudio e imprimiendolo en el select -->
+                        <option value="<?php echo $categoria;?>"><?= $categoria ?></option>
+                    <?php endforeach; ?>
+                    </select>
+                    <?php if (isset($errorCategoria)) echo "<span class='error'>$errorCategoria</span>"; ?>
                 </div>
                 <div class="flex items-center justify-between">
                     <button type="submit" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:shadow-outline">Crear Producto</button>
@@ -178,51 +189,51 @@
 </html>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form');
-    const precioInput = document.getElementById('precio');
-    const nombreInput = document.getElementById('nombre');
-    const descripcionInput = document.getElementById('descripcion');
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const precioInput = document.getElementById('precio');
+        const nombreInput = document.getElementById('nombre');
+        const descripcionInput = document.getElementById('descripcion');
 
-    // Agregar div para mensajes de error antes del formulario
-    const errorContainer = document.createElement('div');
-    errorContainer.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 hidden';
-    errorContainer.setAttribute('role', 'alert');
-    form.parentNode.insertBefore(errorContainer, form);
+        // Agregar div para mensajes de error antes del formulario
+        const errorContainer = document.createElement('div');
+        errorContainer.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 hidden';
+        errorContainer.setAttribute('role', 'alert');
+        form.parentNode.insertBefore(errorContainer, form);
 
-    form.addEventListener('submit', function(e) {
-        let isValid = true;
-        let errorMessages = [];
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+            let errorMessages = [];
 
-        // Validación del nombre
-        if (nombreInput.value.length < 3 || nombreInput.value.length > 100) {
-            errorMessages.push('El nombre debe tener entre 3 y 100 caracteres.');
-            isValid = false;
-        }
+            // Validación del nombre
+            if (nombreInput.value.length < 3 || nombreInput.value.length > 100) {
+                errorMessages.push('El nombre debe tener entre 3 y 100 caracteres.');
+                isValid = false;
+            }
 
-        // Validación de la descripción
-        if (descripcionInput.value.length < 10 || descripcionInput.value.length > 500) {
-            errorMessages.push('La descripción debe tener entre 10 y 500 caracteres.');
-            isValid = false;
-        }
+            // Validación de la descripción
+            if (descripcionInput.value.length < 10 || descripcionInput.value.length > 500) {
+                errorMessages.push('La descripción debe tener entre 10 y 500 caracteres.');
+                isValid = false;
+            }
 
-        // Validación del precio
-        if (precioInput.value <= 0) {
-            errorMessages.push('El precio debe ser mayor que 0.');
-            isValid = false;
-        }
+            // Validación del precio
+            if (precioInput.value <= 0) {
+                errorMessages.push('El precio debe ser mayor que 0.');
+                isValid = false;
+            }
 
-        if (!isValid) {
-            e.preventDefault();
-            errorContainer.innerHTML = errorMessages.map(msg => `<p>${msg}</p>`).join('');
-            errorContainer.classList.remove('hidden');
-            // Scroll hacia el mensaje de error
-            errorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else {
-            errorContainer.classList.add('hidden');
-        }
+            if (!isValid) {
+                e.preventDefault();
+                errorContainer.innerHTML = errorMessages.map(msg => `<p>${msg}</p>`).join('');
+                errorContainer.classList.remove('hidden');
+                // Scroll hacia el mensaje de error
+                errorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                errorContainer.classList.add('hidden');
+            }
+        });
     });
-});
 </script>
 
 </body>
