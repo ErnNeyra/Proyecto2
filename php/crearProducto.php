@@ -5,7 +5,7 @@
     session_start();
 
     // Verificar si el usuario ha iniciado sesión
-    /*if (!isset($_SESSION['usuario'])) {
+   if (!isset($_SESSION['usuario'])) {
         // Si no ha iniciado sesión, redirigir a la página de inicio de sesión
         header("location: login.php"); // O una página de error de acceso no autorizado
         echo"<h2>Debes iniciar sesión para añadir un producto.</h2>";
@@ -15,7 +15,6 @@
         echo "<h2>Bienvenid@ ".$_SESSION["usuario"]."</h2>";
         echo "<h2>Tu ID de usuario es: ".$_SESSION["id_usuario"]."</h2>";
     }
-*/
     $error = "";
     $success = "";
 
@@ -118,9 +117,7 @@
             <nav class="flex items-center">
                 <a href="listado.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
                 <a href="contacto.php" class="text-gray-700 hover:text-black mr-4">Contacto</a>
-                <a href="registro.php" class="bg-transparent text-gray-700 border border-gray-300 py-2 px-4 rounded-md hover:bg-gray-100 hover:border-gray-400 mr-4 transition duration-200">Registrarse</a>
-                <a href="login.php" class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">Iniciar Sesión</a>
-                <a class="btn btn-danger" href="logout.php">Cerrar sesión</a>
+                <a class="bg-red-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200" href="logout.php">Cerrar sesión</a>
                 <?php if (isset($_SESSION['usuario'])): ?>
                     <a href="panelUsuario.php" class="text-gray-700 hover:text-black mr-4">Mi Panel</a>
                 <?php endif; ?>
