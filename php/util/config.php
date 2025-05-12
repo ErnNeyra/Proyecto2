@@ -1,12 +1,15 @@
 <?php
-    // $servidor = "localhost";
-    // $usuario = "root";
-    // $contrasena = "";
-    // $BBDD = "weConnect_bd";
+
+    //CONEXION AGUSTIN
     $servidor = "localhost";
+    $usuario = "root";
+    $contrasena = "123456";
+    $BBDD = "weconnectdb";
+
+    /*$servidor = "localhost";
     $usuario = "u593365251_root";
     $contrasena = "Patatata12345!";
-    $BBDD = "u593365251_weConnect";
+    $BBDD = "u593365251_weConnect";*/
 
     //Mysqli ó PDO (nosotros vamos a usar Mysqli)
     //Intenta crear una conexion con la base de datos con los siguientes parámetros y en ese orden

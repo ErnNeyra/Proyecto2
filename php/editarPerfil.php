@@ -241,7 +241,7 @@
                 this.disabled = true;
                 this.textContent = 'Procesando...';
 
-                const response = await fetch('mejorar_descripcion.php', {
+                const response = await fetch('util/mejorar_descripcion.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
