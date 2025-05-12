@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require('config.php');
+    require('./util/config.php');
 ?>
 
 <!DOCTYPE html>
@@ -10,7 +10,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>We-Connect | Editar Perfil</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style2.css">
     <style>
         /* Estilos adicionales para el formulario de editar perfil */
         .edit-profile-panel {
@@ -262,7 +261,7 @@
                 alert('Error al procesar la solicitud');
             } finally {
                 this.disabled = false;
-                this.textContent = 'Mejorar Descripción con IA';
+                this.textContent = 'Mejorar Descripción';
             }
         });
 

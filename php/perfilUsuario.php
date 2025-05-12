@@ -1,6 +1,6 @@
 <?php
    /* session_start();
-    require('config.php');
+    require('./util/config.php');
 
     // Verificar si se ha proporcionado un ID de usuario
     $id_usuario = isset($_GET['id']) ? $_GET['id'] : $_SESSION['id_usuario'];
