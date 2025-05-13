@@ -42,18 +42,16 @@
             //En esta linea se indica que sobre el objeto $_conexion se ejecuta la función query() y se guarda en la variable $resultado
         ?>
         <section class="py-8">
-            <?php
-            if($resultado -> num_rows == 0){
-                echo "<h2 class='text-red-500'>No hay productos disponibles ahora mismo...</h2>";
-            }?>
             <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Algunos de nuestros emprendedores ofrecen...</h2>
             <div class="relative">
                 <div id="productos-carrusel-container" class="overflow-hidden relative">
                     <div id="productos-carrusel" class="whitespace-nowrap scroll-smooth transition-transform duration-300 py-4 -ml-4 pl-4">
                         <?php
                         while($producto = $resultado -> fetch_assoc()){ ?>
+                        <!--  var_dump($producto["imagen"]);  -->
+
                             <div class="inline-block mr-4 w-72 shadow-md rounded-md overflow-hidden border border-gray-200">
-                                <img src="<?php echo $producto["imagen"]?>" alt="<?php echo $producto["nombre"] ?>" class="w-full h-48 object-cover">
+                                <img src="php/<?php echo $producto["imagen"]?>" alt="<?php echo $producto["nombre"] ?>" class="w-full h-40 object-cover">
                                 <div class="p-4">
                                     <h3 class="font-semibold text-gray-700"><?php echo $producto["nombre"] ?></h3>
                                     <p class="text-gray-600 text-sm"><?php echo $producto["descripcion"] ?></p>
