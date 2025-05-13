@@ -48,65 +48,6 @@
 
     <section class="hero-section space-background text-white py-20 md:py-32 flex items-center relative overflow-hidden observe-section">
 
-<<<<<<< HEAD
-            $sql = "SELECT * FROM producto LIMIT 10";
-            $resultado = $_conexion -> query($sql);
-            
-            /*
-            Aplicamos la función query(es una consulta) a la conexión(es un objeto), donde se ejecuta la sentencia SQL hecha
-            El resultado se almacena en $resultado, que es un objeto con una estructura parecida a los arrays
-            */
-            //En esta linea se indica que sobre el objeto $_conexion se ejecuta la función query() y se guarda en la variable $resultado
-        ?>
-        <section class="py-8">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Algunos de nuestros emprendedores ofrecen...</h2>
-            <div class="relative">
-                <div id="productos-carrusel-container" class="overflow-hidden relative">
-                    <div id="productos-carrusel" class="whitespace-nowrap scroll-smooth transition-transform duration-300 py-4 -ml-4 pl-4">
-                        <?php
-                        while($producto = $resultado -> fetch_assoc()){ ?>
-                        <!--  var_dump($producto["imagen"]);  -->
-
-                            <div class="inline-block mr-4 w-72 shadow-md rounded-md overflow-hidden border border-gray-200">
-                                <img src="php/<?php echo $producto["imagen"]?>" alt="<?php echo $producto["nombre"] ?>" class="w-full h-40 object-cover">
-                                <div class="p-4">
-                                    <h3 class="font-semibold text-gray-700"><?php echo $producto["nombre"] ?></h3>
-                                    <p class="text-gray-600 text-sm"><?php echo $producto["descripcion"] ?></p>
-                                </div>
-                            </div>
-                        <?php
-                        }?>
-                        <!-- <div class="inline-block mr-4 w-72 shadow-md rounded-md overflow-hidden border border-gray-200">
-                            <img src="https://via.placeholder.com/300x200/aaaaaa/eeeeee?Text=Servicio%202" alt="Servicio 2" class="w-full h-40 object-cover">
-                            <div class="p-4">
-                                <h3 class="font-semibold text-gray-700">Servicio 2</h3>
-                                <p class="text-gray-600 text-sm">Descripción concisa de este servicio.</p>
-                            </div>
-                        </div>
-                        <div class="inline-block mr-4 w-72 shadow-md rounded-md overflow-hidden border border-gray-200">
-                            <img src="https://via.placeholder.com/300x200/bbbbbb/eeeeee?Text=Producto%203" alt="Producto 3" class="w-full h-40 object-cover">
-                            <div class="p-4">
-                                <h3 class="font-semibold text-gray-700">Producto 3</h3>
-                                <p class="text-gray-600 text-sm">Un vistazo a las características de este producto.</p>
-                            </div>
-                        </div>
-                        <div class="inline-block mr-4 w-72 shadow-md rounded-md overflow-hidden border border-gray-200">
-                            <img src="https://via.placeholder.com/300x200/dddddd/eeeeee?Text=Producto%204" alt="Producto 4" class="w-full h-40 object-cover">
-                            <div class="p-4">
-                                <h3 class="font-semibold text-gray-700">Producto/Servicio 4</h3>
-                                <p class="text-gray-600 text-sm">Otra oferta interesante.</p>
-                            </div>
-                        </div>
-                        <div class="inline-block mr-4 w-72 shadow-md rounded-md overflow-hidden border border-gray-200">
-                            <img src="https://via.placeholder.com/300x200/eeeeee/eeeeee?Text=Servicio%205" alt="Servicio 5" class="w-full h-40 object-cover">
-                            <div class="p-4">
-                                <h3 class="font-semibold text-gray-700">Servicio 5</h3>
-                                <p class="text-gray-600 text-sm">Un servicio más para explorar.</p>
-                            </div>
-                        </div> -->
-                    
-                    </div>
-=======
         <div class="stars"></div>
         <div class="twinkling"></div>
         <div class="container mx-auto px-4 text-center hero-content relative z-10">
@@ -127,41 +68,27 @@
             <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center js-fade-in-up" data-delay="0s">Productos Destacados</h2>
             <div id="productos-carrusel-container" class="relative overflow-hidden">
                 <div id="productos-carrusel" class="whitespace-nowrap scroll-smooth transition-transform duration-300 py-4 flex gap-4"> <?php
-                    // Ejemplo de cómo mostrar productos desde la base de datos
-                    // Asegúrate de que 'php/util/config.php' conecta y define $_conexion
-                    include 'php/util/config.php';
-                    $_conexion = null; // Inicializa para evitar warning si config no lo define
-                    if (file_exists('php/util/config.php')) {
-                         include 'php/util/config.php';
-                    } else {
-                         echo "<p class='text-center text-red-500'>Error: No se encontró el archivo de configuración de la base de datos.</p>";
-                    }
+                    // Check if $_conexion is set and valid
+                    $sql = "SELECT * FROM producto LIMIT 10"; // Ejemplo: los 10 primeros productos
+                    $result = $_conexion->query($sql);
 
-                    if (isset($_conexion) && $_conexion) { // Check if $_conexion is set and valid
-                         $query = "SELECT * FROM producto LIMIT 10"; // Ejemplo: los 10 primeros productos
-                         $result = $_conexion->query($query);
-
-                         if ($result && $result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                echo '<div class="producto-card inline-block w-72 shadow-md rounded-md overflow-hidden border border-gray-200 bg-white flex-shrink-0 js-fade-in-up">'; // Añadido flex-shrink-0 y js-fade-in-up
-                                echo '<img src="' . htmlspecialchars($row['imagen']) . '" alt="' . htmlspecialchars($row['nombre']) . '" class="w-full h-40 object-cover">';
-                                echo '<div class="producto-card-content p-4">';
-                                echo '<h3 class="font-semibold text-gray-700">' . htmlspecialchars($row['nombre']) . '</h3>';
-                                echo '<p class="text-gray-600 text-sm">' . htmlspecialchars(substr($row['descripcion'], 0, 100)) . '...</p>';
-                                echo '<a href="detalleProducto.php?id=' . $row['id_producto'] . '" class="text-yellow-600 hover:text-yellow-700 font-semibold mt-2 inline-block">Ver Detalles</a>';
-                                echo '</div>';
-                                echo '</div>';
-                            }
-                        } else {
-                            echo "<p class='text-center text-gray-600 w-full'>No hay productos destacados por el momento.</p>"; // width full para centrar
-                        }
-                         // No cierres la conexión aquí si la necesitas en otras partes de la página
-                         // $_conexion->close();
-                    } else {
-                         echo "<p class='text-center text-red-500 w-full'>Error: No se pudo establecer la conexión a la base de datos.</p>";
+                    if ($result && $result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo '<div class="producto-card inline-block w-72 shadow-md rounded-md overflow-hidden border border-gray-200 bg-white flex-shrink-0 js-fade-in-up">'; // Añadido flex-shrink-0 y js-fade-in-up
+                        echo '<img src="php/' . htmlspecialchars($row['imagen']) . '" alt="' . htmlspecialchars($row['nombre']) . '" class="w-full h-40 object-cover">';
+                        echo '<div class="producto-card-content p-4">';
+                        echo '<h3 class="font-semibold text-gray-700">' . htmlspecialchars($row['nombre']) . '</h3>';
+                        echo '<p class="text-gray-600 text-sm">' . htmlspecialchars(substr($row['descripcion'], 0, 100)) . '...</p>';
+                        echo '<a href="detalleProducto.php?id=' . $row['id_producto'] . '" class="text-yellow-600 hover:text-yellow-700 font-semibold mt-2 inline-block">Ver Detalles</a>';
+                        echo '</div>';
+                        echo '</div>';
                     }
+                    } else {
+                        echo "<p class='text-center text-gray-600 w-full'>No hay productos destacados por el momento.</p>"; // width full para centrar
+                    }
+                        // No cierres la conexión aquí si la necesitas en otras partes de la página
+                        // $_conexion->close();
                     ?>
->>>>>>> 7b5fc367b2ab917a3ab830c96c1783a04f77a404
                 </div>
                 <button id="prev-producto" class="carousel-control absolute left-0 top-1/2 transform -translate-y-1/2 ml-2 focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
