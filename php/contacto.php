@@ -6,14 +6,14 @@
     <title>Contacto | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css"> </head>
-<body class="bg-gray-100 font-sans min-h-screen flex flex-col">
+    <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
     <header class="bg-white shadow-md">
         <div class="container mx-auto py-4 px-6 flex items-center justify-between">
             <a href="../index.php" class="text-xl font-bold text-black">We-Connect</a>
             <nav class="flex items-center">
-                <a href="listado.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
-                <a href="registro.php" class="bg-transparent text-gray-700 border border-gray-300 py-2 px-4 rounded-md hover:bg-gray-100 hover:border-gray-400 mr-4 transition duration-200">Registrarse</a>
-                <a href="login.php" class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">Iniciar Sesión</a>
+                <a href="producto.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
+                <a href="servicio.php" class="text-gray-700 hover:text-black mr-4">Servicio</a>
+                <a href="perfilUsuario.php" class="text-gray-700 hover:text-black mr-4">Mi Panel</a><!--CAMBIAR A DESPLEGABLE -->
             </nav>
         </div>
     </header>

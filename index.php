@@ -21,20 +21,20 @@
         <div class="container mx-auto py-4 px-4 flex items-center justify-between">
             <a href="index.php" class="logo text-2xl font-bold text-gray-900 hover:text-marca-primario transition duration-200">We-Connect</a>
             <nav class="flex items-center space-x-6">
-                <a href="php/listado.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Productos</a>
+                <a href="php/producto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Productos</a>
                 <a href="php/servicio.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Servicios</a>
                 <a href="php/contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
 
                 <?php
                 session_start(); // Inicia la sesión
                 if (isset($_SESSION['usuario'])) {
-                    echo '<a href="panelUsuario.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Mi Cuenta</a>';
-                    // Usa la clase btn genérica o mantén clases Tailwind si lo prefieres
-                    echo '<a href="logout.php" class="cta-button bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-200 font-semibold">Cerrar Sesión</a>';
+                    //DESPLEGABLE
+                     echo '<a href="php/perfilUsuario.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Mi Cuenta</a>'; 
                 } else {
                     echo '<a href="php/login.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Iniciar Sesión</a>';
-                    // Usa la clase btn genérica o mantén clases Tailwind
                     echo '<a href="php/registro.php" class="cta-button bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold">Regístrate</a>';
+                    ?><a href="php/registro.php" class="bg-yellow-500 text-black py-3 px-6 rounded-md hover:bg-yellow-600 text-lg font-semibold btn-hero-animated js-fade-in-up animate-pulse-subtle" data-delay="0.6s">¡Únete ahora!</a>        
+                    <?php
                 }
                 ?>
             </nav>
@@ -57,9 +57,6 @@
             <p class="text-lg md:text-xl mb-10 max-w-3xl mx-auto js-fade-in-up" data-delay="0.3s">
                 Conecta con profesionales, encuentra servicios y descubre productos increíbles.
             </p>
-            <a href="php/registro.php" class="bg-yellow-500 text-black py-3 px-6 rounded-md hover:bg-yellow-600 text-lg font-semibold btn-hero-animated js-fade-in-up animate-pulse-subtle" data-delay="0.6s">
-                ¡Únete ahora!
-            </a>
             </div>
     </section>
 

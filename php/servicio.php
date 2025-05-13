@@ -11,16 +11,16 @@
         <div class="container mx-auto py-4 px-6 flex items-center justify-between">
             <a href="../index.php" class="text-xl font-bold text-black">We-Connect</a>
             <nav class="flex items-center">
-                <a href="./contacto.php" class="text-gray-700 hover:text-black mr-4">Contacto</a>
-                <a href="./registro.php" class="bg-transparent text-gray-700 border border-gray-300 py-2 px-4 rounded-md hover:bg-gray-100 hover:border-gray-400 mr-4 transition duration-200">Registrarse</a>
-                <a href="./login.php" class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">Iniciar Sesión</a>
+                <a href="producto.php" class="text-gray-700 hover:text-black mr-4">Producto</a>
+                <a href="contacto.php" class="text-gray-700 hover:text-black mr-4">Contacto</a>
+                <a href="panelUsuario.php" class="text-gray-700 hover:text-black mr-4">Mi Panel</a><!--CAMBIAR A DESPLEGABLE -->
             </nav>
         </div>
     </header>
 
     <main class="container mx-auto py-12 px-6 flex-grow">
         <div class="flex items-center justify-between mb-8">
-            <h1 class="text-3xl font-semibold text-gray-800">Explora las ofertas de servicios de nuestros emprendedores</h1> <a href="./crearServicio.php" class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 focus:outline-none focus:shadow-outline">Crear Servicio</a> </div>
+            <h1 class="text-3xl font-semibold text-gray-800">Explora las ofertas de servicios de nuestros emprendedores</h1> <a href="crearServicio.php" class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 focus:outline-none focus:shadow-outline">Crear Servicio</a> </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="bg-white rounded-md shadow-md overflow-hidden border border-gray-200">
@@ -37,7 +37,7 @@
                             <span class="text-gray-600 text-sm ml-2">(0 valoraciones)</span>
                         </div>
                     </div>
-                    <a href="../html/detalle-servicio.html" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4">Ver Detalles</a> </div>
+                    <a href="detalleServicio.php" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4">Ver Detalles</a> </div>
             </div>
             <div class="bg-white rounded-md shadow-md overflow-hidden border border-gray-200">
                 <img src="https://via.placeholder.com/400x300/fedcba/ffffff?Text=Otro%20Servicio%202" alt="Otro Servicio 2" class="w-full h-48 object-cover"> <div class="p-6">
@@ -53,7 +53,7 @@
                             <span class="text-gray-600 text-sm ml-2">(0 valoraciones)</span>
                         </div>
                     </div>
-                    <a href="../html/detalle-servicio.html" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4">Ver Detalles</a> </div>
+                    <a href="detalleServicio.php" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4">Ver Detalles</a> </div>
             </div>
             <div class="bg-white rounded-md shadow-md overflow-hidden border border-gray-200">
                 <img src="https://via.placeholder.com/400x300/cbaabc/ffffff?Text=Tercer%20Servicio%203" alt="Tercer Servicio 3" class="w-full h-48 object-cover"> <div class="p-6">
@@ -69,7 +69,7 @@
                             <span class="text-gray-600 text-sm ml-2">(0 valoraciones)</span>
                         </div>
                     </div>
-                    <a href="../html/detalle-servicio.html" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4">Ver Detalles</a> </div>
+                    <a href="detalleServicio.php" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4">Ver Detalles</a> </div>
             </div>
         </div>
     </main>
