@@ -128,12 +128,9 @@
         <div class="container mx-auto py-4 px-6 flex items-center justify-between">
             <a href="../index.php" class="text-xl font-bold text-black">We-Connect</a>
             <nav class="flex items-center">
-                <a href="listado.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
-                <a href="contacto.php" class="text-gray-700 hover:text-black mr-4">Contacto</a>
-                <a class="bg-red-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200" href="logout.php">Cerrar sesión</a>
-                <?php if (isset($_SESSION['usuario'])): ?>
-                    <a href="panelUsuario.php" class="text-gray-700 hover:text-black mr-4">Mi Panel</a>
-                <?php endif; ?>
+                <a href="producto.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
+                <a href="servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
+                <a href="perfilUsuario.php" class="text-gray-700 hover:text-black mr-4">Mi Panel</a><!-- CAMBIAR A DESPLEGABLE -->
             </nav>
         </div>
     </header>
@@ -176,7 +173,7 @@
                 </div>
                 <div class="flex items-center justify-between">
                     <button type="submit" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:shadow-outline">Crear Producto</button>
-                    <a href="listado.php" class="inline-block align-baseline font-semibold text-sm text-blue-500 hover:text-blue-800">Cancelar</a>
+                    <a href="producto.php" class="inline-block align-baseline font-semibold text-sm text-blue-500 hover:text-blue-800">Cancelar</a>
                 </div>
             </form>
         </div>

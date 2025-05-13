@@ -21,20 +21,20 @@
         <div class="container mx-auto py-4 px-4 flex items-center justify-between">
             <a href="index.php" class="logo text-2xl font-bold text-gray-900 hover:text-marca-primario transition duration-200">We-Connect</a>
             <nav class="flex items-center space-x-6">
-                <a href="php/listado.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Productos</a>
+                <a href="php/producto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Productos</a>
                 <a href="php/servicio.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Servicios</a>
                 <a href="php/contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
 
                 <?php
                 session_start(); // Inicia la sesión
                 if (isset($_SESSION['usuario'])) {
-                    echo '<a href="panelUsuario.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Mi Cuenta</a>';
-                    // Usa la clase btn genérica o mantén clases Tailwind si lo prefieres
-                    echo '<a href="logout.php" class="cta-button bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-200 font-semibold">Cerrar Sesión</a>';
+                    //DESPLEGABLE
+                     echo '<a href="php/perfilUsuario.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Mi Cuenta</a>'; 
                 } else {
                     echo '<a href="php/login.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Iniciar Sesión</a>';
-                    // Usa la clase btn genérica o mantén clases Tailwind
                     echo '<a href="php/registro.php" class="cta-button bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold">Regístrate</a>';
+                    ?><a href="php/registro.php" class="bg-yellow-500 text-black py-3 px-6 rounded-md hover:bg-yellow-600 text-lg font-semibold btn-hero-animated js-fade-in-up animate-pulse-subtle" data-delay="0.6s">¡Únete ahora!</a>        
+                    <?php
                 }
                 ?>
             </nav>
@@ -57,9 +57,6 @@
             <p class="text-lg md:text-xl mb-10 max-w-3xl mx-auto js-fade-in-up" data-delay="0.3s">
                 Conecta con profesionales, encuentra servicios y descubre productos increíbles.
             </p>
-            <a href="php/registro.php" class="bg-yellow-500 text-black py-3 px-6 rounded-md hover:bg-yellow-600 text-lg font-semibold btn-hero-animated js-fade-in-up animate-pulse-subtle" data-delay="0.6s">
-                ¡Únete ahora!
-            </a>
             </div>
     </section>
 
@@ -68,39 +65,26 @@
             <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center js-fade-in-up" data-delay="0s">Productos Destacados</h2>
             <div id="productos-carrusel-container" class="relative overflow-hidden">
                 <div id="productos-carrusel" class="whitespace-nowrap scroll-smooth transition-transform duration-300 py-4 flex gap-4"> <?php
-                    // Ejemplo de cómo mostrar productos desde la base de datos
-                    // Asegúrate de que 'php/util/config.php' conecta y define $_conexion
-                    include 'php/util/config.php';
-                    $_conexion = null; // Inicializa para evitar warning si config no lo define
-                    if (file_exists('php/util/config.php')) {
-                         include 'php/util/config.php';
-                    } else {
-                         echo "<p class='text-center text-red-500'>Error: No se encontró el archivo de configuración de la base de datos.</p>";
-                    }
+                    // Check if $_conexion is set and valid
+                    $sql = "SELECT * FROM producto LIMIT 10"; // Ejemplo: los 10 primeros productos
+                    $result = $_conexion->query($sql);
 
-                    if (isset($_conexion) && $_conexion) { // Check if $_conexion is set and valid
-                         $query = "SELECT * FROM producto LIMIT 10"; // Ejemplo: los 10 primeros productos
-                         $result = $_conexion->query($query);
-
-                         if ($result && $result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                echo '<div class="producto-card inline-block w-72 shadow-md rounded-md overflow-hidden border border-gray-200 bg-white flex-shrink-0 js-fade-in-up">'; // Añadido flex-shrink-0 y js-fade-in-up
-                                echo '<img src="' . htmlspecialchars($row['imagen']) . '" alt="' . htmlspecialchars($row['nombre']) . '" class="w-full h-40 object-cover">';
-                                echo '<div class="producto-card-content p-4">';
-                                echo '<h3 class="font-semibold text-gray-700">' . htmlspecialchars($row['nombre']) . '</h3>';
-                                echo '<p class="text-gray-600 text-sm">' . htmlspecialchars(substr($row['descripcion'], 0, 100)) . '...</p>';
-                                echo '<a href="detalleProducto.php?id=' . $row['id_producto'] . '" class="text-yellow-600 hover:text-yellow-700 font-semibold mt-2 inline-block">Ver Detalles</a>';
-                                echo '</div>';
-                                echo '</div>';
-                            }
-                        } else {
-                            echo "<p class='text-center text-gray-600 w-full'>No hay productos destacados por el momento.</p>"; // width full para centrar
-                        }
-                         // No cierres la conexión aquí si la necesitas en otras partes de la página
-                         // $_conexion->close();
-                    } else {
-                         echo "<p class='text-center text-red-500 w-full'>Error: No se pudo establecer la conexión a la base de datos.</p>";
+                    if ($result && $result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo '<div class="producto-card inline-block w-72 shadow-md rounded-md overflow-hidden border border-gray-200 bg-white flex-shrink-0 js-fade-in-up">'; // Añadido flex-shrink-0 y js-fade-in-up
+                        echo '<img src="php/' . htmlspecialchars($row['imagen']) . '" alt="' . htmlspecialchars($row['nombre']) . '" class="w-full h-40 object-cover">';
+                        echo '<div class="producto-card-content p-4">';
+                        echo '<h3 class="font-semibold text-gray-700">' . htmlspecialchars($row['nombre']) . '</h3>';
+                        echo '<p class="text-gray-600 text-sm">' . htmlspecialchars(substr($row['descripcion'], 0, 100)) . '...</p>';
+                        echo '<a href="detalleProducto.php?id=' . $row['id_producto'] . '" class="text-yellow-600 hover:text-yellow-700 font-semibold mt-2 inline-block">Ver Detalles</a>';
+                        echo '</div>';
+                        echo '</div>';
                     }
+                    } else {
+                        echo "<p class='text-center text-gray-600 w-full'>No hay productos destacados por el momento.</p>"; // width full para centrar
+                    }
+                        // No cierres la conexión aquí si la necesitas en otras partes de la página
+                        // $_conexion->close();
                     ?>
                 </div>
                 <button id="prev-producto" class="carousel-control absolute left-0 top-1/2 transform -translate-y-1/2 ml-2 focus:outline-none">

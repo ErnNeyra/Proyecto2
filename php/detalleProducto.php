@@ -11,7 +11,8 @@
         <div class="container mx-auto py-4 px-6 flex items-center justify-between">
             <a href="../index.php" class="text-xl font-bold text-black">We-Connect</a>
             <nav class="flex items-center">
-                <a href="listado.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
+                <a href="producto.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
+                <a href="servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
                 <a href="contacto.php" class="text-gray-700 hover:text-black mr-4">Contacto</a>
             </nav>
         </div>
