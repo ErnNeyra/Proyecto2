@@ -3,7 +3,7 @@
 function loadEnv() {
 
 
-    $envFile = __DIR__ . '.env';
+    $envFile = __DIR__ . '/.env';
     if (file_exists($envFile)) {
         $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         foreach ($lines as $line) {
@@ -47,7 +47,7 @@ function mejorarDescripcion($descripcion) {
             ],
             [
                 'role' => 'user',
-                'content' => 'Mejora esta descripción de negocio manteniendo la misma información pero haciéndola más atractiva y profesional. No coloques nada extra al texto mejorado: ' . $descripcion
+                'content' => 'Mejora esta descripción de negocio manteniendo la misma información pero haciéndola más atractiva y profesional. No coloques nada extra al texto mejorado y que la respuesta nunca se vea como una respuesta de ia, sino el texto mejorado directamente: ' . $descripcion
             ]
         ],
         'max_tokens' => 500,
@@ -65,13 +65,42 @@ function mejorarDescripcion($descripcion) {
         
         $responseData = json_decode($response, true);
         
+        // Guardar la respuesta completa para debugging
+        $debugResponse = [
+            'respuesta_completa' => $responseData,
+            'respuesta_raw' => $response
+        ];
+        
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return [
+                'error' => 'Error al decodificar la respuesta JSON: ' . json_last_error_msg(),
+                'debug' => $debugResponse
+            ];
+        }
+        
+        if (isset($responseData['error'])) {
+            return [
+                'error' => 'Error de OpenAI: ' . $responseData['error']['message'],
+                'debug' => $debugResponse
+            ];
+        }
+        
         if (isset($responseData['choices'][0]['message']['content'])) {
-            return ['success' => $responseData['choices'][0]['message']['content']];
+            return [
+                'success' => $responseData['choices'][0]['message']['content'],
+                'debug' => $debugResponse
+            ];
         } else {
-            return ['error' => 'No se pudo procesar la respuesta de OpenAI'];
+            return [
+                'error' => 'No se pudo procesar la respuesta de OpenAI: Estructura de respuesta inesperada',
+                'debug' => $debugResponse
+            ];
         }
     } catch (Exception $e) {
-        return ['error' => 'Error al comunicarse con OpenAI: ' . $e->getMessage()];
+        return [
+            'error' => 'Error al comunicarse con OpenAI: ' . $e->getMessage(),
+            'debug' => isset($debugResponse) ? $debugResponse : ['error' => 'No se pudo obtener respuesta']
+        ];
     } finally {
         curl_close($ch);
     }

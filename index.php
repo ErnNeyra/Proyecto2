@@ -48,65 +48,6 @@
 
     <section class="hero-section space-background text-white py-20 md:py-32 flex items-center relative overflow-hidden observe-section">
 
-<<<<<<< HEAD
-            $sql = "SELECT * FROM producto LIMIT 10";
-            $resultado = $_conexion -> query($sql);
-            
-            /*
-            Aplicamos la función query(es una consulta) a la conexión(es un objeto), donde se ejecuta la sentencia SQL hecha
-            El resultado se almacena en $resultado, que es un objeto con una estructura parecida a los arrays
-            */
-            //En esta linea se indica que sobre el objeto $_conexion se ejecuta la función query() y se guarda en la variable $resultado
-        ?>
-        <section class="py-8">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Algunos de nuestros emprendedores ofrecen...</h2>
-            <div class="relative">
-                <div id="productos-carrusel-container" class="overflow-hidden relative">
-                    <div id="productos-carrusel" class="whitespace-nowrap scroll-smooth transition-transform duration-300 py-4 -ml-4 pl-4">
-                        <?php
-                        while($producto = $resultado -> fetch_assoc()){ ?>
-                        <!--  var_dump($producto["imagen"]);  -->
-
-                            <div class="inline-block mr-4 w-72 shadow-md rounded-md overflow-hidden border border-gray-200">
-                                <img src="php/<?php echo $producto["imagen"]?>" alt="<?php echo $producto["nombre"] ?>" class="w-full h-40 object-cover">
-                                <div class="p-4">
-                                    <h3 class="font-semibold text-gray-700"><?php echo $producto["nombre"] ?></h3>
-                                    <p class="text-gray-600 text-sm"><?php echo $producto["descripcion"] ?></p>
-                                </div>
-                            </div>
-                        <?php
-                        }?>
-                        <!-- <div class="inline-block mr-4 w-72 shadow-md rounded-md overflow-hidden border border-gray-200">
-                            <img src="https://via.placeholder.com/300x200/aaaaaa/eeeeee?Text=Servicio%202" alt="Servicio 2" class="w-full h-40 object-cover">
-                            <div class="p-4">
-                                <h3 class="font-semibold text-gray-700">Servicio 2</h3>
-                                <p class="text-gray-600 text-sm">Descripción concisa de este servicio.</p>
-                            </div>
-                        </div>
-                        <div class="inline-block mr-4 w-72 shadow-md rounded-md overflow-hidden border border-gray-200">
-                            <img src="https://via.placeholder.com/300x200/bbbbbb/eeeeee?Text=Producto%203" alt="Producto 3" class="w-full h-40 object-cover">
-                            <div class="p-4">
-                                <h3 class="font-semibold text-gray-700">Producto 3</h3>
-                                <p class="text-gray-600 text-sm">Un vistazo a las características de este producto.</p>
-                            </div>
-                        </div>
-                        <div class="inline-block mr-4 w-72 shadow-md rounded-md overflow-hidden border border-gray-200">
-                            <img src="https://via.placeholder.com/300x200/dddddd/eeeeee?Text=Producto%204" alt="Producto 4" class="w-full h-40 object-cover">
-                            <div class="p-4">
-                                <h3 class="font-semibold text-gray-700">Producto/Servicio 4</h3>
-                                <p class="text-gray-600 text-sm">Otra oferta interesante.</p>
-                            </div>
-                        </div>
-                        <div class="inline-block mr-4 w-72 shadow-md rounded-md overflow-hidden border border-gray-200">
-                            <img src="https://via.placeholder.com/300x200/eeeeee/eeeeee?Text=Servicio%205" alt="Servicio 5" class="w-full h-40 object-cover">
-                            <div class="p-4">
-                                <h3 class="font-semibold text-gray-700">Servicio 5</h3>
-                                <p class="text-gray-600 text-sm">Un servicio más para explorar.</p>
-                            </div>
-                        </div> -->
-                    
-                    </div>
-=======
         <div class="stars"></div>
         <div class="twinkling"></div>
         <div class="container mx-auto px-4 text-center hero-content relative z-10">
@@ -161,7 +102,6 @@
                          echo "<p class='text-center text-red-500 w-full'>Error: No se pudo establecer la conexión a la base de datos.</p>";
                     }
                     ?>
->>>>>>> 7b5fc367b2ab917a3ab830c96c1783a04f77a404
                 </div>
                 <button id="prev-producto" class="carousel-control absolute left-0 top-1/2 transform -translate-y-1/2 ml-2 focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
