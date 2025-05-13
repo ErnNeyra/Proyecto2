@@ -15,14 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let isDragging = false;
     let startX;
     let scrollLeft;
+    const productoAncho = productos?.[0]?.offsetWidth + 16 || 0; // Ancho de un producto + margen
 
     if (!carrusel || !prevButton || !nextButton || !indicatorsContainer || !pausePlayButton) {
-        return; // Si los elementos no existen, no ejecutar el script del carrusel
+        console.error('Elementos del carrusel no encontrados.');
+        return;
     }
 
-    const productoAncho = productos[0]?.offsetWidth + 16 || 0; // Ancho de un producto + margen
-
     // Inicializar indicadores
+    const indicators = [];
     for (let i = 0; i < numProductos; i++) {
         const indicator = document.createElement('button');
         indicator.classList.add('w-3', 'h-3', 'rounded-full', 'bg-gray-400', 'focus:outline-none');
@@ -34,9 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
             restartAutoSlide();
         });
         indicatorsContainer.appendChild(indicator);
+        indicators.push(indicator);
     }
 
-    const indicators = indicatorsContainer.querySelectorAll('button');
     const updateIndicators = () => {
         indicators.forEach((indicator, index) => {
             indicator.classList.toggle('bg-yellow-500', index === currentIndex);
@@ -49,20 +50,20 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const scrollToNext = () => {
-        currentIndex = (currentIndex + 1) % numProductos;
+        currentIndex = (currentIndex + 1) % numProductos; // Esta línea asegura el reinicio
         scrollToIndex(currentIndex);
         updateIndicators();
     };
 
     const scrollToPrev = () => {
-        currentIndex = (currentIndex - 1 + numProductos) % numProductos;
+        currentIndex = (currentIndex - 1 + numProductos) % numProductos; // Esta línea asegura el reinicio
         scrollToIndex(currentIndex);
         updateIndicators();
     };
 
     // Deslizamiento automático
     const startAutoSlide = () => {
-        autoSlideInterval = setInterval(scrollToNext, 3000); // Cambia cada 3 segundos
+        autoSlideInterval = setInterval(scrollToNext, 3000);
         isAutoSliding = true;
         playIcon.classList.add('hidden');
         pauseIcon.classList.remove('hidden');
@@ -80,12 +81,12 @@ document.addEventListener('DOMContentLoaded', () => {
         startAutoSlide();
     };
 
-    // Inicializar el carrusel
+    // Inicializar
     scrollToIndex(currentIndex);
     updateIndicators();
     startAutoSlide();
 
-    // Eventos de los botones de navegación
+    // Event listeners para los botones
     prevButton.addEventListener('click', () => {
         scrollToPrev();
         restartAutoSlide();
@@ -96,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         restartAutoSlide();
     });
 
-    // Pausa/Reproducción del automático
+    // Pausa / Play
     pausePlayButton.addEventListener('click', () => {
         if (isAutoSliding) {
             stopAutoSlide();
@@ -105,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Deslizamiento con el ratón
+    // Drag events
     carruselContainer.addEventListener('mousedown', (e) => {
         isDragging = true;
         startX = e.pageX - carrusel.offsetLeft;
@@ -117,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
     carruselContainer.addEventListener('mousemove', (e) => {
         if (!isDragging) return;
         const x = e.pageX - carrusel.offsetLeft;
-        const walk = (x - startX) * 1; // Ajustar la sensibilidad del arrastre
+        const walk = (x - startX) * 1; //scroll speed
         carrusel.scrollLeft = scrollLeft - walk;
     });
 
@@ -128,230 +129,190 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     carruselContainer.addEventListener('mouseleave', () => {
-        if (isDragging) {
-            isDragging = false;
-            carruselContainer.classList.remove('cursor-grab');
-            restartAutoSlide();
-        }
+        isDragging = false;
+        carruselContainer.classList.remove('cursor-grab');
+        restartAutoSlide();
     });
 
-    // Efecto de "peek" (opcional, requiere ajustar el CSS si no se ve bien)
-    carruselContainer.style.paddingLeft = `${(carruselContainer.offsetWidth - productoAncho) / 2}px`;
-    carruselContainer.style.paddingRight = `${(carruselContainer.offsetWidth - productoAncho) / 2}px`;
-    carrusel.style.marginLeft = `-${(carruselContainer.offsetWidth - productoAncho) / 2}px`;
-    carrusel.style.marginRight = `-${(carruselContainer.offsetWidth - productoAncho) / 2}px`;
+    // Opcional: Efecto "peek"
+    if (carruselContainer && productoAncho > 0) {
+        const peekAmount = (carruselContainer.offsetWidth - productoAncho) / 2;
+        carruselContainer.style.paddingLeft = `${peekAmount}px`;
+        carruselContainer.style.paddingRight = `${peekAmount}px`;
+        carrusel.style.marginLeft = `-${peekAmount}px`;
+        carrusel.style.marginRight = `-${peekAmount}px`;
+    }
 });
+
 document.addEventListener('DOMContentLoaded', () => {
-    const contenedorImagenPrincipal = document.getElementById('contenedor-imagen-principal');
-    const imagenPrincipal = document.getElementById('imagen-principal');
+    const mainImageContainer = document.getElementById('main-image-container');
+    const mainImage = document.getElementById('main-image');
     const lightbox = document.getElementById('lightbox');
-    const lightboxImagen = document.getElementById('lightbox-imagen');
-    const cerrarLightboxButton = document.getElementById('cerrar-lightbox');
-    const anteriorImagenButton = document.getElementById('anterior-imagen');
-    const siguienteImagenButton = document.getElementById('siguiente-imagen');
-    const lightboxIndicadores = document.getElementById('lightbox-indicadores');
-    const miniImagenes = document.querySelectorAll('.mini-imagen');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const closeLightboxButton = document.getElementById('close-lightbox');
+    const prevImageButton = document.getElementById('prev-image');
+    const nextImageButton = document.getElementById('next-image');
+    const lightboxCounter = document.getElementById('lightbox-counter');
+    const miniImages = document.querySelectorAll('.mini-image');
 
-    let listaImagenesLightbox = [];
-    let indiceImagenActual = 0;
+    if (!mainImageContainer || !lightbox || !lightboxImage || !closeLightboxButton ||
+        !prevImageButton || !nextImageButton || !lightboxCounter) {
+        console.error('Elementos del lightbox no encontrados.');
+        return;
+    }
 
-    // Obtener la lista de URLs de las imágenes grandes
-    miniImagenes.forEach(miniatura => {
-        listaImagenesLightbox.push(miniatura.dataset.src);
+    let lightboxImages = Array.from(miniImages).map(mini => mini.dataset.src);
+    // Añade la imagen principal al inicio si no está ya en las miniaturas
+    if (!lightboxImages.includes(mainImage.src)) {
+        lightboxImages.unshift(mainImage.src);
+    }
+
+    const showLightboxImage = (index) => {
+        if (index >= 0 && index < lightboxImages.length) {
+            lightboxImage.src = lightboxImages[index];
+            updateLightboxCounter(index + 1, lightboxImages.length);
+            updateMiniImageActiveState(lightboxImages[index], miniImages);
+        }
+    };
+
+    const updateLightboxCounter = (current, total) => {
+        if (lightboxCounter) {
+            lightboxCounter.textContent = `${current} / ${total}`;
+        }
+    };
+
+    const updateMiniImageActiveState = (activeImageUrl, miniImages) => {
+        miniImages.forEach(mini => {
+            mini.classList.toggle('active', mini.dataset.src === activeImageUrl);
+        });
+    };
+
+    let currentImageIndex = 0;
+
+    // Eventos
+    mainImageContainer.addEventListener('click', () => {
+        currentImageIndex = lightboxImages.indexOf(mainImage.src);
+        showLightboxImage(currentImageIndex);
+        lightbox.classList.remove('hidden');
     });
-    // Añadir también la imagen principal inicial a la lista si no está ya
-    if (!listaImagenesLightbox.includes(imagenPrincipal.src)) {
-        listaImagenesLightbox.unshift(imagenPrincipal.src);
-    }
 
-    function mostrarImagenLightbox(indice) {
-        if (indice >= 0 && indice < listaImagenesLightbox.length) {
-            lightboxImagen.src = listaImagenesLightbox[indice];
-            actualizarIndicadoresLightbox(indice + 1, listaImagenesLightbox.length);
-            actualizarMiniaturaActiva(listaImagenesLightbox[indice]);
-        }
-    }
+    closeLightboxButton.addEventListener('click', () => lightbox.classList.add('hidden'));
 
-    function actualizarIndicadoresLightbox(actual, total) {
-        if (lightboxIndicadores) {
-            lightboxIndicadores.textContent = `${actual} / ${total}`;
-        }
-    }
+    prevImageButton.addEventListener('click', () => {
+        currentImageIndex = Math.max(currentImageIndex - 1, 0);
+        showLightboxImage(currentImageIndex);
+    });
 
-    function actualizarMiniaturaActiva(urlImagenActiva) {
-        miniImagenes.forEach(miniatura => {
-            miniatura.classList.remove('activa');
-            if (miniatura.dataset.src === urlImagenActiva) {
-                miniatura.classList.add('activa');
-            }
-        });
-    }
+    nextImageButton.addEventListener('click', () => {
+        currentImageIndex = Math.min(currentImageIndex + 1, lightboxImages.length - 1);
+        showLightboxImage(currentImageIndex);
+    });
 
-    if (contenedorImagenPrincipal && lightbox && lightboxImagen && cerrarLightboxButton && anteriorImagenButton && siguienteImagenButton && lightboxIndicadores) {
-        contenedorImagenPrincipal.addEventListener('click', () => {
-            const srcPrincipal = imagenPrincipal.src;
-            indiceImagenActual = listaImagenesLightbox.indexOf(srcPrincipal);
-            mostrarImagenLightbox(indiceImagenActual);
-            lightbox.classList.remove('hidden');
-        });
-
-        cerrarLightboxButton.addEventListener('click', () => {
+    lightbox.addEventListener('click', (event) => {
+        if (event.target === lightbox) {
             lightbox.classList.add('hidden');
-        });
+        }
+    });
 
-        anteriorImagenButton.addEventListener('click', () => {
-            indiceImagenActual = Math.max(indiceImagenActual - 1, 0);
-            mostrarImagenLightbox(indiceImagenActual);
-        });
-
-        siguienteImagenButton.addEventListener('click', () => {
-            indiceImagenActual = Math.min(indiceImagenActual + 1, listaImagenesLightbox.length - 1);
-            mostrarImagenLightbox(indiceImagenActual);
-        });
-
-        // Opcional: Cerrar el lightbox al hacer clic fuera de la imagen
-        lightbox.addEventListener('click', (event) => {
-            if (event.target === lightbox) {
-                lightbox.classList.add('hidden');
+    miniImages.forEach(mini => {
+        mini.addEventListener('click', function () {
+            const newImageSrc = this.dataset.src;
+            mainImage.src = newImageSrc;
+            updateMiniImageActiveState(newImageSrc, miniImages);
+            currentImageIndex = lightboxImages.indexOf(newImageSrc);
+            if (!lightbox.classList.contains('hidden')) {
+                showLightboxImage(currentImageIndex);
             }
         });
+    });
 
-        // Actualizar la imagen principal, la miniatura activa y, si el lightbox está abierto, su imagen e indicador también
-        miniImagenes.forEach(miniatura => {
-            miniatura.addEventListener('click', function() {
-                const nuevaImagenSrc = this.dataset.src;
-                imagenPrincipal.src = nuevaImagenSrc;
-                actualizarMiniaturaActiva(nuevaImagenSrc);
-                const nuevoIndice = listaImagenesLightbox.indexOf(nuevaImagenSrc);
-                if (!lightbox.classList.contains('hidden')) {
-                    indiceImagenActual = nuevoIndice;
-                    mostrarImagenLightbox(indiceImagenActual);
+    // Inicializar estado activo de la miniatura
+    updateMiniImageActiveState(mainImage.src, miniImages);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const elementsToReveal = document.querySelectorAll('[data-reveal]');
+
+    const revealElementsOnScroll = () => {
+        elementsToReveal.forEach(element => {
+            const topElement = element.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+            const pointOfReveal = 150; // Ajusta este valor según sea necesario
+
+            element.classList.toggle('reveal', topElement < windowHeight - pointOfReveal);
+        });
+    };
+
+    window.addEventListener('load', revealElementsOnScroll);
+    window.addEventListener('scroll', revealElementsOnScroll);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.body.classList.add('loaded');
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const registroForm = document.getElementById('registro-form');
+    const mensajeRegistro = document.querySelector('.mensaje-registro');
+
+    if (registroForm) {
+        registroForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(registroForm);
+            fetch('php/login.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Respuesta del servidor (Registro):', data);
+                mensajeRegistro.innerHTML = '';
+                mensajeRegistro.classList.remove('success');
+                if (data.success) {
+                    mensajeRegistro.classList.add('success');
+                    mensajeRegistro.textContent = data.message;
+                    registroForm.reset();
+                } else if (data.message) {
+                    mensajeRegistro.textContent = data.message;
                 }
+            })
+            .catch(error => {
+                console.error('Error al enviar la solicitud de registro:', error);
+                mensajeRegistro.textContent = 'Error al comunicarse con el servidor.';
             });
         });
-
-        // Inicializar la miniatura activa al cargar la página
-        actualizarMiniaturaActiva(imagenPrincipal.src);
     }
 });
-document.addEventListener('DOMContentLoaded', () => {
-    document.body.classList.add('loaded');
-});
-function revealElements() {
-    const revealElements = document.querySelectorAll('[data-reveal]');
 
-    revealElements.forEach(element => {
-        const elementTop = element.getBoundingClientRect().top;
-        const windowHeight = window.innerHeight;
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('login-form');
+    const mensajeLogin = document.querySelector('.mensaje-login');
 
-        // Ajusta este valor para controlar cuándo se activa la animación (ej: 150px antes de que el elemento llegue al borde inferior)
-        const revealPoint = 150;
-
-        if (elementTop < windowHeight - revealPoint) {
-            element.classList.add('reveal');
-        }
-    });
-}
-
-// Llama a la función al cargar la página y al hacer scroll
-window.addEventListener('load', revealElements);
-window.addEventListener('scroll', revealElements);
-document.addEventListener('DOMContentLoaded', () => {
-    document.body.classList.add('loaded');
-
-    function revealElements() {
-        const revealElements = document.querySelectorAll('[data-reveal]');
-        revealElements.forEach(element => {
-            const elementTop = element.getBoundingClientRect().top;
-            const windowHeight = window.innerHeight;
-            const revealPoint = 150;
-            if (elementTop < windowHeight - revealPoint) {
-                element.classList.add('reveal');
-            }
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(loginForm);
+            fetch('ruta/a/tu/login.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Respuesta del servidor (Login):', data);
+                mensajeLogin.innerHTML = '';
+                mensajeLogin.classList.remove('success');
+                if (data.success) {
+                    mensajeLogin.classList.add('success');
+                    mensajeLogin.textContent = data.message;
+                    window.location.href = '/dashboard.php'; // Reemplaza con la URL deseada
+                } else if (data.message) {
+                    mensajeLogin.textContent = data.message;
+                }
+            })
+            .catch(error => {
+                console.error('Error al enviar la solicitud de inicio de sesión:', error);
+                mensajeLogin.textContent = 'Error al comunicarse con el servidor.';
+            });
         });
-    }
-    window.addEventListener('load', revealElements);
-    window.addEventListener('scroll', revealElements);
-
-    // Carrusel de productos
-    const carruselContainer = document.getElementById('productos-carrusel-container');
-    const carrusel = document.getElementById('productos-carrusel');
-    const prevButton = document.getElementById('prev-producto');
-    const nextButton = document.getElementById('next-producto');
-    const indicadoresContainer = document.getElementById('carousel-indicators');
-    const pausePlayButton = document.getElementById('pause-play-button');
-    const playIcon = document.getElementById('play-icon');
-    const pauseIcon = document.getElementById('pause-icon');
-
-    if (carrusel && prevButton && nextButton && indicadoresContainer && pausePlayButton) {
-        const productos = carrusel.children;
-        const productoWidth = productos[0].offsetWidth + parseInt(getComputedStyle(productos[0]).marginRight);
-        let currentIndex = 0;
-        let isAutoplay = false;
-        let autoplayInterval;
-
-        function updateCarousel() {
-            carrusel.style.transform = `translateX(-${currentIndex * productoWidth}px)`;
-            updateIndicators();
-        }
-
-        function goToSlide(index) {
-            currentIndex = Math.max(0, Math.min(index, productos.length - 1));
-            updateCarousel();
-        }
-
-        function nextSlide() {
-            goToSlide(currentIndex + 1);
-        }
-
-        function prevSlide() {
-            goToSlide(currentIndex - 1);
-        }
-
-        function createIndicators() {
-            for (let i = 0; i < productos.length; i++) {
-                const indicator = document.createElement('button');
-                indicator.classList.add('w-3', 'h-3', 'rounded-full', 'bg-gray-400', 'focus:outline-none');
-                indicator.addEventListener('click', () => goToSlide(i));
-                indicadoresContainer.appendChild(indicator);
-            }
-            updateIndicators();
-        }
-
-        function updateIndicators() {
-            const indicators = indicadoresContainer.children;
-            for (let i = 0; i < indicators.length; i++) {
-                indicators[i].classList.toggle('bg-yellow-500', i === currentIndex);
-                indicators[i].classList.toggle('bg-gray-400', i !== currentIndex);
-            }
-        }
-
-        function startAutoplay() {
-            isAutoplay = true;
-            playIcon.classList.add('hidden');
-            pauseIcon.classList.remove('hidden');
-            autoplayInterval = setInterval(nextSlide, 3000); // Cambia de slide cada 3 segundos
-        }
-
-        function stopAutoplay() {
-            isAutoplay = false;
-            playIcon.classList.remove('hidden');
-            pauseIcon.classList.add('hidden');
-            clearInterval(autoplayInterval);
-        }
-
-        pausePlayButton.addEventListener('click', () => {
-            if (isAutoplay) {
-                stopAutoplay();
-            } else {
-                startAutoplay();
-            }
-        });
-
-        prevButton.addEventListener('click', prevSlide);
-        nextButton.addEventListener('click', nextSlide);
-
-        createIndicators();
-        // startAutoplay(); // Iniciar autoplay por defecto si lo deseas
     }
 });
