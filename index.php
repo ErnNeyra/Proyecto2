@@ -3,18 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>We-Connect | Conecta con otros emprendedores</title>
+    <title>We-Connect: Tu Plataforma de Conexión Profesional</title>
+
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style2.css"> </head>
-    <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
-    <header class="bg-white shadow-md">
-        <div class="container mx-auto py-4 px-6 flex items-center justify-between">
-            <a href="index.php" class="text-xl font-bold text-black">We-Connect</a>
-            <nav class="flex items-center">
-                <a href="php/listado.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
-                <a href="php/contacto.php" class="text-gray-700 hover:text-black mr-4">Contacto</a>
-                <a href="php/registro.php" class="bg-transparent text-gray-700 border border-gray-300 py-2 px-4 rounded-md hover:bg-gray-100 hover:border-gray-400 mr-4 transition duration-200">Registrarse</a>
-                <a href="php/login.php" class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">Iniciar Sesión</a>
+
+    <link rel="stylesheet" href="css/styles.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+<body class="bg-gray-100 font-sans min-h-screen flex flex-col">
+
+    <header class="shadow-md sticky top-0 z-50">
+        <div class="container mx-auto py-4 px-4 flex items-center justify-between">
+            <a href="index.php" class="logo text-2xl font-bold text-gray-900 hover:text-marca-primario transition duration-200">We-Connect</a>
+            <nav class="flex items-center space-x-6">
+                <a href="php/listado.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Productos</a>
+                <a href="php/servicio.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Servicios</a>
+                <a href="php/contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
+
+                <?php
+                session_start(); // Inicia la sesión
+                if (isset($_SESSION['usuario'])) {
+                    echo '<a href="panelUsuario.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Mi Cuenta</a>';
+                    // Usa la clase btn genérica o mantén clases Tailwind si lo prefieres
+                    echo '<a href="logout.php" class="cta-button bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-200 font-semibold">Cerrar Sesión</a>';
+                } else {
+                    echo '<a href="php/login.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Iniciar Sesión</a>';
+                    // Usa la clase btn genérica o mantén clases Tailwind
+                    echo '<a href="php/registro.php" class="cta-button bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold">Regístrate</a>';
+                }
+                ?>
             </nav>
         </div>
         <?php
@@ -24,14 +46,9 @@
         ?>
     </header>
 
-    <main class="container mx-auto py-12 px-6 flex-grow">
-        <section class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-800 mb-6">Conecta y crece con otros emprendedores</h1>
-            <p class="text-lg text-gray-600 mb-8">La plataforma ideal para que nuevos emprendedores colaboren, encuentren soluciones y hagan crecer sus negocios.</p>
-            <a href="php/registro.php" class="bg-yellow-500 text-black py-3 px-6 rounded-md hover:bg-yellow-600 text-lg">¡Únete ahora!</a>
-        </section>
-        <?php
+    <section class="hero-section space-background text-white py-20 md:py-32 flex items-center relative overflow-hidden observe-section">
 
+<<<<<<< HEAD
             $sql = "SELECT * FROM producto LIMIT 10";
             $resultado = $_conexion -> query($sql);
             
@@ -89,69 +106,170 @@
                         </div> -->
                     
                     </div>
+=======
+        <div class="stars"></div>
+        <div class="twinkling"></div>
+        <div class="container mx-auto px-4 text-center hero-content relative z-10">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight js-fade-in-up" data-delay="0s">
+                Bienvenido a We-Connect
+            </h1>
+            <p class="text-lg md:text-xl mb-10 max-w-3xl mx-auto js-fade-in-up" data-delay="0.3s">
+                Conecta con profesionales, encuentra servicios y descubre productos increíbles.
+            </p>
+            <a href="php/registro.php" class="bg-yellow-500 text-black py-3 px-6 rounded-md hover:bg-yellow-600 text-lg font-semibold btn-hero-animated js-fade-in-up animate-pulse-subtle" data-delay="0.6s">
+                ¡Únete ahora!
+            </a>
+            </div>
+    </section>
+
+    <section id="featured-products" class="featured-products py-8 observe-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center js-fade-in-up" data-delay="0s">Productos Destacados</h2>
+            <div id="productos-carrusel-container" class="relative overflow-hidden">
+                <div id="productos-carrusel" class="whitespace-nowrap scroll-smooth transition-transform duration-300 py-4 flex gap-4"> <?php
+                    // Ejemplo de cómo mostrar productos desde la base de datos
+                    // Asegúrate de que 'php/util/config.php' conecta y define $_conexion
+                    include 'php/util/config.php';
+                    $_conexion = null; // Inicializa para evitar warning si config no lo define
+                    if (file_exists('php/util/config.php')) {
+                         include 'php/util/config.php';
+                    } else {
+                         echo "<p class='text-center text-red-500'>Error: No se encontró el archivo de configuración de la base de datos.</p>";
+                    }
+
+                    if (isset($_conexion) && $_conexion) { // Check if $_conexion is set and valid
+                         $query = "SELECT * FROM producto LIMIT 10"; // Ejemplo: los 10 primeros productos
+                         $result = $_conexion->query($query);
+
+                         if ($result && $result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                echo '<div class="producto-card inline-block w-72 shadow-md rounded-md overflow-hidden border border-gray-200 bg-white flex-shrink-0 js-fade-in-up">'; // Añadido flex-shrink-0 y js-fade-in-up
+                                echo '<img src="' . htmlspecialchars($row['imagen']) . '" alt="' . htmlspecialchars($row['nombre']) . '" class="w-full h-40 object-cover">';
+                                echo '<div class="producto-card-content p-4">';
+                                echo '<h3 class="font-semibold text-gray-700">' . htmlspecialchars($row['nombre']) . '</h3>';
+                                echo '<p class="text-gray-600 text-sm">' . htmlspecialchars(substr($row['descripcion'], 0, 100)) . '...</p>';
+                                echo '<a href="detalleProducto.php?id=' . $row['id_producto'] . '" class="text-yellow-600 hover:text-yellow-700 font-semibold mt-2 inline-block">Ver Detalles</a>';
+                                echo '</div>';
+                                echo '</div>';
+                            }
+                        } else {
+                            echo "<p class='text-center text-gray-600 w-full'>No hay productos destacados por el momento.</p>"; // width full para centrar
+                        }
+                         // No cierres la conexión aquí si la necesitas en otras partes de la página
+                         // $_conexion->close();
+                    } else {
+                         echo "<p class='text-center text-red-500 w-full'>Error: No se pudo establecer la conexión a la base de datos.</p>";
+                    }
+                    ?>
+>>>>>>> 7b5fc367b2ab917a3ab830c96c1783a04f77a404
                 </div>
-                <button id="prev-producto" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-300 hover:bg-gray-400 text-black rounded-full w-10 h-10 flex items-center justify-center -ml-2 focus:outline-none">
+                <button id="prev-producto" class="carousel-control absolute left-0 top-1/2 transform -translate-y-1/2 ml-2 focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 </button>
-                <button id="next-producto" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-300 hover:bg-gray-400 text-black rounded-full w-10 h-10 flex items-center justify-center -mr-2 focus:outline-none">
+                <button id="next-producto" class="carousel-control absolute right-0 top-1/2 transform -translate-y-1/2 mr-2 focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </button>
                 <div id="carousel-indicators" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                </div>
-                <button id="pause-play-button" class="absolute bottom-10 right-4 bg-gray-300 hover:bg-gray-400 text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none">
-                    <svg id="play-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A3 3 0 0010 9.87v4.263a3 3 0 001.555 2.606l3.197-2.132a3 3 0 000-4.264z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <svg id="pause-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6"></path></svg>
+                    </div>
+                <button id="pause-play-button" class="carousel-control absolute bottom-10 right-4 focus:outline-none">
+                    <i id="play-icon" class="fas fa-play"></i>
+                    <i id="pause-icon" class="fas fa-pause" style="display:none;"></i>
                 </button>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="py-12 bg-gray-200 rounded-md">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Lo que dicen otros emprendedores...</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-6">
-                <div class="bg-white rounded-md shadow-md p-6 text-center border border-gray-200">
-                    <svg class="mx-auto h-8 w-8 text-yellow-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <p class="text-gray-700 mb-4">"We-Connect ha sido fundamental para encontrar colaboradores en áreas que no domino. ¡Altamente recomendado!"</p>
-                    <p class="font-semibold text-black">- Carlos Pérez, Fundador de Tech Solutions</p>
+    <section class="why-choose-us py-12 bg-white observe-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center js-fade-in-up" data-delay="0s">¿Por Qué Elegirnos?</h2>
+            <div class="why-choose-us-grid grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="why-choose-us-item text-center p-6 border border-gray-200 rounded-md shadow-sm js-fade-in-up" data-delay="0.1s">
+                    <i class="fas fa-users text-4xl text-yellow-500 mb-3"></i>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Amplia Red</h3>
+                    <p class="text-gray-600">Conecta con profesionales de diversas industrias y expande tu red de contactos.</p>
                 </div>
-                <div class="bg-white rounded-md shadow-md p-6 text-center border border-gray-200">
-                    <svg class="mx-auto h-8 w-8 text-yellow-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <p class="text-gray-700 mb-4">"La posibilidad de ver los servicios de otros emprendedores me ha dado nuevas ideas para mi propio negocio."</p>
-                    <p class="font-semibold text-black">- Ana Gómez, Emprendedora Textil</p>
+                <div class="why-choose-us-item text-center p-6 border border-gray-200 rounded-md shadow-sm js-fade-in-up" data-delay="0.2s">
+                    <i class="fas fa-briefcase text-4xl text-yellow-500 mb-3"></i>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Oportunidades de Negocio</h3>
+                    <p class="text-gray-600">Encuentra nuevas oportunidades de negocio, colaboraciones y proyectos emocionantes.</p>
                 </div>
-                <div class="bg-white rounded-md shadow-md p-6 text-center border border-gray-200">
-                    <svg class="mx-auto h-8 w-8 text-yellow-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <p class="text-gray-700 mb-4">"Una plataforma muy útil para conectar con gente que entiende los desafíos de emprender."</p>
-                    <p class="font-semibold text-black">- Javier López, Consultor de Marketing</p>
+                <div class="why-choose-us-item text-center p-6 border border-gray-200 rounded-md shadow-sm js-fade-in-up" data-delay="0.3s">
+                    <i class="fas fa-tools text-4xl text-yellow-500 mb-3"></i>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Servicios Especializados</h3>
+                    <p class="text-gray-600">Accede a una amplia gama de servicios especializados para impulsar tu crecimiento profesional.</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="py-12">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">¿Cómo funciona?</h2>
+    <section class="testimonials py-12 bg-gray-200 observe-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center js-fade-in-up" data-delay="0s">Testimonios</h2>
+            <div class="testimonial-grid grid grid-cols-1 md:grid-cols-2 gap-8">
+                 <div class="testimonial-card bg-white rounded-md shadow-md p-6 text-center border border-gray-200 js-fade-in-up" data-delay="0.1s">
+                    <img src="php/util/img/susuan.jpg" alt="Ana Rodríguez" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Ana Rodríguez</h3>
+                    <p class="quote text-gray-600 italic">"We-Connect ha sido fundamental para mi negocio. He encontrado clientes y colaboradores increíbles."</p>
+                </div>
+                <div class="testimonial-card bg-white rounded-md shadow-md p-6 text-center border border-gray-200 js-fade-in-up" data-delay="0.2s">
+                     <img src="php/util/img/pruano.jpg" alt="Carlos Pérez" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Carlos Pérez</h3>
+                    <p class="quote text-gray-600 italic">"La plataforma es muy fácil de usar y me ha permitido ampliar mi red de contactos de manera significativa."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works py-12 observe-section"> <div class="container mx-auto px-6">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center js-fade-in-up" data-delay="0s">¿Cómo funciona?</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="text-center">
-                    <svg class="mx-auto h-12 w-12 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354l-2.894 5.788a2 2 0 001.167 2.588l6.723 1.94a2 2 0 001.167-2.588L12 4.354z"></path></svg>
+                <div class="how-it-works-item text-center js-fade-in-up" data-delay="0.1s">
+                    <i class="mx-auto h-12 w-12 text-yellow-500 fas fa-user-plus"></i>
                     <h3 class="font-semibold text-black mt-2">Regístrate</h3>
                     <p class="text-gray-600">Crea tu perfil y cuéntale a la comunidad sobre tu emprendimiento.</p>
                 </div>
-                <div class="text-center">
-                    <svg class="mx-auto h-12 w-12 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7m0 0l2 2m-2-2h2a2 2 0 012 2v1h1m-1-1H9a2 2 0 00-2 2v1h1m-1-1l2-2m-2-2l7-7 7 7m-2-2h2a2 2 0 012 2v1h1m-1-1H9a2 2 0 00-2 2v1h1m-1-1l2-2m-2-2l7-7 7 7"></path></svg>
+                <div class="how-it-works-item text-center js-fade-in-up" data-delay="0.2s">
+                    <i class="mx-auto h-12 w-12 text-yellow-500 fas fa-search"></i>
                     <h3 class="font-semibold text-black mt-2">Explora</h3>
                     <p class="text-gray-600">Descubre perfiles de otros emprendedores y sus ofertas de productos o servicios.</p>
                 </div>
-                <div class="text-center">
-                    <svg class="mx-auto h-12 w-12 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg>
+                <div class="how-it-works-item text-center js-fade-in-up" data-delay="0.3s">
+                    <i class="mx-auto h-12 w-12 text-yellow-500 fas fa-handshake"></i>
                     <h3 class="font-semibold text-black mt-2">Conecta</h3>
                     <p class="text-gray-600">Accede a herramientas premium para contactar y colaborar directamente (próximamente).</p>
                 </div>
             </div>
-        </section>
-    </main>
+         </div>
+     </section>
+    </main> 
 
-    <footer class="bg-black py-4 text-center text-gray-400">
-        <p>&copy; 2025 We-Connect. Todos los derechos reservados.</p>
+    <footer class="bg-black py-8 text-center text-gray-400">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left mb-8">
+                <div class="footer-section">
+                    <h3 class="text-lg font-semibold text-white mb-4">We-Connect</h3>
+                    <p>Conectando profesionales y oportunidades en un solo lugar.</p>
+                </div>
+                <div class="footer-section footer-links">
+                    <h3 class="text-lg font-semibold text-white mb-4">Enlaces Útiles</h3>
+                    <ul>
+                        <li><a href="#" class="hover:text-marca-secundaria transition duration-200">Términos de Servicio</a></li>
+                        <li><a href="#" class="hover:text-marca-secundaria transition duration-200">Política de Privacidad</a></li>
+                        <li><a href="#" class="hover:text-marca-secundaria transition duration-200">Ayuda</a></li>
+                        <li><a href="php/contacto.php" class="hover:text-marca-secundaria transition duration-200">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section social-icons-footer"> <h3 class="text-lg font-semibold text-white mb-4">Síguenos</h3>
+                    <div class="flex justify-center md:justify-start space-x-4 text-xl"> <a href="#" class="hover:text-marca-secundaria transition duration-200"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="hover:text-marca-secundaria transition duration-200"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-marca-secundaria transition duration-200"><i class="fab fa-linkedin-in"></i></a>
+                         </div>
+                </div>
+            </div>
+            <div class="copyright border-t border-gray-700 pt-8"> <p>&copy; <?php echo date('Y'); ?> We-Connect. Todos los derechos reservados.</p> </div>
+        </div>
     </footer>
 
-    <script src="../js/script2.js"></script>
+    <script src="script2.js"></script>
 </body>
 </html>

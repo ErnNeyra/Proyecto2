@@ -3,6 +3,7 @@
     //CONEXION AGUSTIN
     /*$servidor = "localhost";
     $usuario = "root";
+<<<<<<< HEAD
     $contrasena = "123456";
     $BBDD = "weconnectdb";*/
 
