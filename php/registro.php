@@ -242,7 +242,7 @@
                             <li>Mensajes limitados</li>
                         </ul>
                     </div>
-                    <div id="plan-premium" class="plan-card border border-yellow-400 bg-yellow-100 p-4 rounded cursor-pointer">
+                    <div id="plan-premium" class="plan-card border border-yellow-400 bg-yellow-100 p-4 rounded cursor-pointer"> // FALTA CONECTAR PARA REGISTAR EL PAGO EN LA BD
                         <h3 class="text-lg font-semibold text-yellow-800">Plan Premium - $5 USD</h3>
                         <ul class="text-sm text-gray-700 list-disc pl-5 mt-2">
                             <li>Acceso completo</li>
@@ -303,7 +303,7 @@
                 return actions.order.create({
                     purchase_units: [{
                         amount: {
-                            value: '5.00'
+                            value: '1.00'
                         }
                     }]
                 });
