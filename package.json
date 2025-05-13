@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@talkjs/react": "^0.1.11",
-    "talkjs": "^0.37.0"
-  }
-}
