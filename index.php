@@ -39,6 +39,11 @@
                 ?>
             </nav>
         </div>
+        <?php
+            error_reporting( E_ALL );
+            ini_set("display_errors", 1 );   
+            require('php/util/config.php');
+        ?>
     </header>
 
     <section class="hero-section space-background text-white py-20 md:py-32 flex items-center relative overflow-hidden observe-section">
