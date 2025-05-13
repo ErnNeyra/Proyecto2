@@ -6,7 +6,7 @@
     <title>We-Connect | Conecta con otros emprendedores</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style2.css"> </head>
-<body class="bg-gray-100 font-sans min-h-screen flex flex-col">
+    <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
     <header class="bg-white shadow-md">
         <div class="container mx-auto py-4 px-6 flex items-center justify-between">
             <a href="index.php" class="text-xl font-bold text-black">We-Connect</a>
@@ -17,6 +17,11 @@
                 <a href="php/login.php" class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">Iniciar Sesión</a>
             </nav>
         </div>
+        <?php
+            error_reporting( E_ALL );
+            ini_set("display_errors", 1 );   
+            require('php/util/config.php');
+        ?>
     </header>
 
     <main class="container mx-auto py-12 px-6 flex-grow">
@@ -25,20 +30,38 @@
             <p class="text-lg text-gray-600 mb-8">La plataforma ideal para que nuevos emprendedores colaboren, encuentren soluciones y hagan crecer sus negocios.</p>
             <a href="php/registro.php" class="bg-yellow-500 text-black py-3 px-6 rounded-md hover:bg-yellow-600 text-lg">¡Únete ahora!</a>
         </section>
+        <?php
 
+            $sql = "SELECT * FROM producto LIMIT 10";
+            $resultado = $_conexion -> query($sql);
+            
+            /*
+            Aplicamos la función query(es una consulta) a la conexión(es un objeto), donde se ejecuta la sentencia SQL hecha
+            El resultado se almacena en $resultado, que es un objeto con una estructura parecida a los arrays
+            */
+            //En esta linea se indica que sobre el objeto $_conexion se ejecuta la función query() y se guarda en la variable $resultado
+        ?>
         <section class="py-8">
+            <?php
+            if($resultado -> num_rows == 0){
+                echo "<h2 class='text-red-500'>No hay productos disponibles ahora mismo...</h2>";
+            }?>
             <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Algunos de nuestros emprendedores ofrecen...</h2>
             <div class="relative">
                 <div id="productos-carrusel-container" class="overflow-hidden relative">
                     <div id="productos-carrusel" class="whitespace-nowrap scroll-smooth transition-transform duration-300 py-4 -ml-4 pl-4">
-                        <div class="inline-block mr-4 w-72 shadow-md rounded-md overflow-hidden border border-gray-200">
-                            <img src="https://via.placeholder.com/300x200/cccccc/eeeeee?Text=Producto%201" alt="Producto 1" class="w-full h-40 object-cover">
-                            <div class="p-4">
-                                <h3 class="font-semibold text-gray-700">Producto/Servicio 1</h3>
-                                <p class="text-gray-600 text-sm">Breve descripción del producto o servicio.</p>
+                        <?php
+                        while($producto = $resultado -> fetch_assoc()){ ?>
+                            <div class="inline-block mr-4 w-72 shadow-md rounded-md overflow-hidden border border-gray-200">
+                                <img src="<?php echo $producto["imagen"]?>" alt="<?php echo $producto["nombre"] ?>" class="w-full h-48 object-cover">
+                                <div class="p-4">
+                                    <h3 class="font-semibold text-gray-700"><?php echo $producto["nombre"] ?></h3>
+                                    <p class="text-gray-600 text-sm"><?php echo $producto["descripcion"] ?></p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="inline-block mr-4 w-72 shadow-md rounded-md overflow-hidden border border-gray-200">
+                        <?php
+                        }?>
+                        <!-- <div class="inline-block mr-4 w-72 shadow-md rounded-md overflow-hidden border border-gray-200">
                             <img src="https://via.placeholder.com/300x200/aaaaaa/eeeeee?Text=Servicio%202" alt="Servicio 2" class="w-full h-40 object-cover">
                             <div class="p-4">
                                 <h3 class="font-semibold text-gray-700">Servicio 2</h3>
@@ -65,7 +88,8 @@
                                 <h3 class="font-semibold text-gray-700">Servicio 5</h3>
                                 <p class="text-gray-600 text-sm">Un servicio más para explorar.</p>
                             </div>
-                        </div>
+                        </div> -->
+                    
                     </div>
                 </div>
                 <button id="prev-producto" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-300 hover:bg-gray-400 text-black rounded-full w-10 h-10 flex items-center justify-center -ml-2 focus:outline-none">
