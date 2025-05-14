@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de registro</title>
-    <!-- Aplico CSS de BOOTSTRAP -->
     <script src="https://www.paypal.com/sdk/js?client-id=AWrC9V-h8MeR2Pif0XqXYIYjnS7TsU-hIrTfp500af2-QelD_uy0wTLT-0k2irrQjV8MjFWjGmkKoVLn"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
     <style>
@@ -138,6 +137,9 @@
     error_reporting(E_ALL);
     ini_set("display_errors", 1);
     require('./util/config.php');
+
+    // Definir la carpeta donde se guardarán las fotos de perfil
+    $uploadDir = 'util/img/';
     ?>
 </head>
 
@@ -176,61 +178,130 @@
             $errores[] = "Este email ya está registrado";
         }
 
+        // Validación de la contraseña (la misma que en tu script)
+        if (strlen($tmpContrasena) < 8 || !preg_match('/[a-z]/', $tmpContrasena) || !preg_match('/[A-Z]/', $tmpContrasena) || !preg_match('/[0-9]/', $tmpContrasena)) {
+            $errores[] = "La contraseña debe tener al menos 8 caracteres y contener al menos una mayúscula, una minúscula y un número";
+        }
+
+        // Procesamiento de la foto de perfil
+        $fotoPerfil = '';
+        if (isset($_FILES['foto_perfil']) && $_FILES['foto_perfil']['error'] === UPLOAD_ERR_OK) {
+            $nombreArchivo = basename($_FILES['foto_perfil']['name']);
+            $rutaArchivo = $uploadDir . uniqid() . '_' . $nombreArchivo;
+            $rutaCompleta = __DIR__ . '/' . $rutaArchivo;
+
+            // Validar el tipo de archivo
+            $tiposPermitidos = ['image/jpeg', 'image/png', 'image/gif'];
+            if (in_array($_FILES['foto_perfil']['type'], $tiposPermitidos)) {
+                // Validar el tamaño del archivo
+                $maxTamano = 2 * 1024 * 1024; // 2MB
+                if ($_FILES['foto_perfil']['size'] <= $maxTamano) {
+                    if (move_uploaded_file($_FILES['foto_perfil']['tmp_name'], $rutaCompleta)) {
+                        $fotoPerfil = $rutaArchivo; // Guardar la ruta relativa
+                    } else {
+                        $errores[] = "Error al subir la foto de perfil";
+                    }
+                } else {
+                    $errores[] = "La foto de perfil es demasiado grande (máximo 2MB)";
+                }
+            } else {
+                $errores[] = "Formato de foto de perfil no permitido. Solo se aceptan JPEG, PNG y GIF";
+            }
+        } else {
+            // Si no se subió ninguna foto, asignamos la ruta por defecto
+            $fotoPerfil = 'util/img/usuario.jpg';
+        }
+
         if (empty($errores)) {
             $contrasena_cifrada = password_hash($tmpContrasena, PASSWORD_DEFAULT);
-            $sql = "INSERT INTO usuario (nombre, usuario, email, contrasena) VALUES (?, ?, ?, ?)";
+            $sql = "INSERT INTO usuario (nombre, usuario, email, contrasena, foto_perfil) VALUES (?, ?, ?, ?, ?)";
             $stmt = $_conexion->prepare($sql);
-            $stmt->bind_param("ssss", $tmpNombre, $tmpUsuario, $tmpEmail, $contrasena_cifrada);
+            $stmt->bind_param("sssss", $tmpNombre, $tmpUsuario, $tmpEmail, $contrasena_cifrada, $fotoPerfil);
 
             if ($stmt->execute()) {
-                header("location: login.php");
-                exit;
+                // Obtener el ID del usuario recién registrado
+                $user_id = $_conexion->insert_id;
+
+                // Recuperar la información del usuario para la sesión
+                $sql_sesion = "SELECT id_usuario, usuario, nombre, email, foto_perfil FROM usuario WHERE id_usuario = ?";
+                $stmt_sesion = $_conexion->prepare($sql_sesion);
+                $stmt_sesion->bind_param("i", $user_id);
+                $stmt_sesion->execute();
+                $resultado_sesion = $stmt_sesion->get_result();
+                if ($row_sesion = $resultado_sesion->fetch_assoc()) {
+                    // Iniciar la sesión y guardar la información del usuario
+                    session_start();
+                    $_SESSION['usuario'] = array(
+                        'id_usuario' => $row_sesion['id_usuario'],
+                        'usuario' => $row_sesion['usuario'],
+                        'nombre' => $row_sesion['nombre'],
+                        'email' => $row_sesion['email'],
+                        'foto_perfil' => $row_sesion['foto_perfil']
+                    );
+                    // Redirección al index.php después del registro:
+                    header("location: ../index.php");
+                    exit;
+                } else {
+                    $errores[] = "Error al iniciar sesión después del registro";
+                }
             } else {
-                $errores[] = "Error al registrar el usuario";
+                $errores[] = "Error al registrar el usuario en la base de datos";
             }
+        }
+
+        // Mostrar errores si existen
+        if (!empty($errores)) {
+            echo '<div class="server-errors">';
+            foreach ($errores as $error) {
+                echo '<p>' . htmlspecialchars($error) . '</p>';
+            }
+            echo '</div>';
         }
     }
     ?>
 
     <div class="registration-container max-w-2xl w-full p-8">
         <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Crea tu Cuenta en We-Connect</h2>
-        
-        <!-- enctype="multipart/form-data" para que el formulario pueda leer imagenes -->
-        <form id="registro-form" class="space-y-4" method="post">
 
-            <!-- Nombre del usuario -->
+        <form id="registro-form" class="space-y-4" method="post" enctype="multipart/form-data">
+
             <div>
                 <label for="nombre" class="block text-sm text-gray-700 mb-1">Nombre :</label>
                 <input type="text" id="nombre" name="nombre" required class="w-full p-2 border rounded" />
+                <div class="error-message" id="error-nombre"></div>
             </div>
 
-            <!-- Nombre de usuario alias -->
             <div>
                 <label for="usuario" class="block text-sm text-gray-700 mb-1">Nombre de usuario ó alias:</label>
                 <input type="text" id="usuario" name="usuario" required class="w-full p-2 border rounded" />
+                <div class="error-message" id="error-usuario"></div>
             </div>
 
-            <!-- Email de usuario -->
             <div>
                 <label for="email" class="block text-sm text-gray-700 mb-1">Email:</label>
-                <input type="email" class="w-full p-2 border rounded" name="email" id="email">
-                <?php if (isset($errorEmail)) echo "<span class='error'>$errorEmail</span>"; ?>
+                <input type="email" class="w-full p-2 border rounded" name="email" id="email" required>
+                <div class="error-message" id="error-email"></div>
             </div>
 
-            <!-- Contraseña de usuario -->
             <div>
                 <label for="contrasena" class="block text-sm text-gray-700 mb-1">Contraseña:</label>
-                <input type="password" class="w-full p-2 border rounded" name="contrasena" id="contrasena">
+                <input type="password" class="w-full p-2 border rounded" name="contrasena" id="contrasena" required>
                 <p class="text-sm text-gray-600 mt-1">La contraseña debe contener:
                     • Mínimo 8 caracteres
                     • Al menos una letra mayúscula
                     • Al menos una letra minúscula
                     • Al menos un número
                 </p>
-                <?php if (isset($errorContrasena)) echo "<span class='error'>$errorContrasena</span>"; ?>
+                <div class="error-message" id="error-contrasena"></div>
             </div>
 
-            <!-- Planes como tarjetas -->
+            <div>
+                <label for="foto_perfil" class="block text-sm text-gray-700 mb-1">Foto de perfil (Opcional):</label>
+                <input type="file" class="w-full p-2 border rounded" name="foto_perfil" id="foto_perfil" accept="image/*">
+                <p class="text-xs text-gray-500 mt-1">Formatos permitidos: JPEG, PNG, GIF. Tamaño máximo: 2MB.</p>
+                <div class="error-message" id="error-foto_perfil"></div>
+            </div>
+
             <div class="mt-6">
                 <p class="mb-2 font-medium text-gray-700">Selecciona un plan:</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -242,7 +313,7 @@
                             <li>Mensajes limitados</li>
                         </ul>
                     </div>
-                    <div id="plan-premium" class="plan-card border border-yellow-400 bg-yellow-100 p-4 rounded cursor-pointer"> // FALTA CONECTAR PARA REGISTAR EL PAGO EN LA BD
+                    <div id="plan-premium" class="plan-card border border-yellow-400 bg-yellow-100 p-4 rounded cursor-pointer">
                         <h3 class="text-lg font-semibold text-yellow-800">Plan Premium - $5 USD</h3>
                         <ul class="text-sm text-gray-700 list-disc pl-5 mt-2">
                             <li>Acceso completo</li>
@@ -255,15 +326,13 @@
                 <input type="hidden" id="plan" name="plan" value="free" />
             </div>
 
-            <!-- PayPal -->
             <div id="paypal-button-container" class="hidden mt-4"></div>
 
             <div>
-                <input type="submit" class="register-button mt-4" value="Registrarse">
+                <button type="submit" class="register-button mt-4">Registrarse</button>
             </div>
         </form>
 
-        <!-- Botón Volver movido al final -->
         <div class="mt-6 text-center">
             <button type="button" onclick="window.location.href='../index.php'" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Volver</button>
         </div>
@@ -274,6 +343,17 @@
         const paypalContainer = document.getElementById('paypal-button-container');
         const planInput = document.getElementById('plan');
         const registerButton = document.querySelector('.register-button');
+        const registroForm = document.getElementById('registro-form');
+        const nombreInput = document.getElementById('nombre');
+        const usuarioInput = document.getElementById('usuario');
+        const emailInput = document.getElementById('email');
+        const contrasenaInput = document.getElementById('contrasena');
+        const fotoPerfilInput = document.getElementById('foto_perfil'); // Nuevo input
+        const errorNombreDiv = document.getElementById('error-nombre'); // Nuevos divs de error
+        const errorUsuarioDiv = document.getElementById('error-usuario');
+        const errorEmailDiv = document.getElementById('error-email');
+        const errorContrasenaDiv = document.getElementById('error-contrasena');
+        const errorFotoPerfilDiv = document.getElementById('error-foto_perfil');
 
         function seleccionarPlan(tipo) {
             if (tipo === 'premium') {
@@ -281,8 +361,7 @@
                 planFree.classList.remove('selected');
                 paypalContainer.classList.remove('hidden');
                 registerButton.style.display = 'none';
-                planInput.value = 'premium';
-            } else {
+                planInput.value = 'premium';} else {
                 planFree.classList.add('selected');
                 planPremium.classList.remove('selected');
                 paypalContainer.classList.add('hidden');
@@ -320,85 +399,80 @@
                 console.error('Error PayPal:', err);
             }
         }).render('#paypal-button-container');
+
+        function mostrarError(input, mensaje, errorDiv) {
+            errorDiv.textContent = mensaje;
+            input.classList.add('input-error');
+        }
+
+        function limpiarError(input, errorDiv) {
+            errorDiv.textContent = '';
+            input.classList.remove('input-error');
+        }
+
+        function validarFormulario(e) {
+            let esValido = true;
+
+            // Validar nombre (sin números)
+            if (nombreInput.value.trim().length < 2) {
+                mostrarError(nombreInput, 'El nombre debe tener al menos 2 caracteres', errorNombreDiv);
+                esValido = false;
+            } else if (/\d/.test(nombreInput.value.trim())) {
+                mostrarError(nombreInput, 'El nombre no puede contener números', errorNombreDiv);
+                esValido = false;
+            } else {
+                limpiarError(nombreInput, errorNombreDiv);
+            }
+
+            // Validar usuario (mínimo 3 caracteres)
+            if (!/^[a-zA-Z0-9_]{3,20}$/.test(usuarioInput.value.trim())) {
+                mostrarError(usuarioInput, 'El nombre de usuario debe tener entre 3 y 20 caracteres y solo puede contener letras, números y guiones bajos', errorUsuarioDiv);
+                esValido = false;
+            } else {
+                limpiarError(usuarioInput, errorUsuarioDiv);
+            }
+
+            // Validar email
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+                mostrarError(emailInput, 'Por favor, introduce un email válido', errorEmailDiv);
+                esValido = false;
+            } else {
+                limpiarError(emailInput, errorEmailDiv);
+            }
+
+            // Validar contraseña
+            if (contrasenaInput.value.length < 8) {
+                mostrarError(contrasenaInput, 'La contraseña debe tener al menos 8 caracteres', errorContrasenaDiv);
+                esValido = false;
+            } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(contrasenaInput.value)) {
+                mostrarError(contrasenaInput, 'La contraseña debe contener al menos una mayúscula, una minúscula y un número', errorContrasenaDiv);
+                esValido = false;
+            } else {
+                limpiarError(contrasenaInput, errorContrasenaDiv);
+            }
+
+            // Validar foto de perfil (opcional, pero si se selecciona, validar tamaño)
+            if (fotoPerfilInput.files.length > 0) {
+                const maxSize = 2 * 1024 * 1024; // 2MB
+                if (fotoPerfilInput.files[0].size > maxSize) {
+                    mostrarError(fotoPerfilInput, 'La foto de perfil es demasiado grande (máximo 2MB)', errorFotoPerfilDiv);
+                    esValido = false;
+                } else {
+                    limpiarError(fotoPerfilInput, errorFotoPerfilDiv);
+                }
+                // No validamos el tipo aquí, ya se hace en PHP
+            } else {
+                limpiarError(fotoPerfilInput, errorFotoPerfilDiv); // Limpiar error si antes hubo uno
+            }
+
+
+            if (!esValido) {
+                e.preventDefault();
+            }
+        }
+
+        registroForm.addEventListener('submit', validarFormulario);
     </script>
 </body>
 
 </html>
-
-<script>
-    // Validación del formulario
-    const form = document.getElementById('registro-form');
-    const nombre = document.getElementById('nombre');
-    const usuario = document.getElementById('usuario');
-    const email = document.getElementById('email');
-    const contrasena = document.getElementById('contrasena');
-
-    function mostrarError(input, mensaje) {
-        const formControl = input.parentElement;
-        const errorDiv = formControl.querySelector('.error-message') || document.createElement('div');
-        errorDiv.className = 'error-message text-red-500 text-sm mt-1';
-        errorDiv.textContent = mensaje;
-        if (!formControl.querySelector('.error-message')) {
-            formControl.appendChild(errorDiv);
-        }
-    }
-
-    function limpiarError(input) {
-        const formControl = input.parentElement;
-        const errorDiv = formControl.querySelector('.error-message');
-        if (errorDiv) {
-            errorDiv.remove();
-        }
-    }
-
-    function validarFormulario(e) {
-        let esValido = true;
-
-        // Validar nombre (sin números)
-        if (nombre.value.trim().length < 2) {
-            mostrarError(nombre, 'El nombre debe tener al menos 2 caracteres');
-            esValido = false;
-        } else if (/\d/.test(nombre.value.trim())) {
-            mostrarError(nombre, 'El nombre no puede contener números');
-            esValido = false;
-        } else {
-            limpiarError(nombre);
-        }
-
-        // Validar usuario (mínimo 5 caracteres)
-        if (!/^[a-zA-Z0-9_]{5,20}$/.test(usuario.value.trim())) {
-            mostrarError(usuario, 'El nombre de usuario debe tener entre 5 y 20 caracteres y solo puede contener letras, números y guiones bajos');
-            esValido = false;
-        } else {
-            limpiarError(usuario);
-        }
-
-        // Validar email
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
-            mostrarError(email, 'Por favor, introduce un email válido');
-            esValido = false;
-        } else {
-            limpiarError(email);
-        }
-
-        // Validar contraseña
-        if (contrasena.value.length < 8) {
-            mostrarError(contrasena, 'La contraseña debe tener al menos 8 caracteres');
-            esValido = false;
-        } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(contrasena.value)) {
-            mostrarError(contrasena, 'La contraseña debe contener al menos una mayúscula, una minúscula y un número');
-            esValido = false;
-        } else {
-            limpiarError(contrasena);
-        }
-
-        if (!esValido) {
-            e.preventDefault();
-        }
-    }
-
-    form.addEventListener('submit', validarFormulario);
-
-    // Resto del código de PayPal y selección de plan
-    // ... existing code ...
-</script>

@@ -24,34 +24,42 @@
                 <a href="php/producto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Productos</a>
                 <a href="php/servicio.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Servicios</a>
                 <a href="php/contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
+<?php
+session_start(); // Inicia la sesión
+if (isset($_SESSION['usuario'])) {
+    $nombreUsuario = htmlspecialchars($_SESSION['usuario']['usuario']); // Usamos 'usuario'
+    $imagenPerfil = ''; // Inicializamos la variable de la imagen de perfil
 
-                <?php
-                session_start(); // Inicia la sesión
-                if (isset($_SESSION['usuario'])) {
-                    $nombreUsuario = htmlspecialchars($_SESSION['usuario']['usuario']); // Usamos 'usuario' en lugar de 'nombre'
-                    $imagenPerfil = isset($_SESSION['usuario']['imagen_perfil']) ? htmlspecialchars($_SESSION['usuario']['imagen_perfil']) : 'php/util/img/camion.png'; // Ruta a la imagen por defecto
+    // Verificamos si existe la foto de perfil del usuario en la sesión y no está vacía
+    if (isset($_SESSION['usuario']['foto_perfil']) && !empty($_SESSION['usuario']['foto_perfil'])) {
+        $imagenPerfil = htmlspecialchars($_SESSION['usuario']['foto_perfil']);
+    } else {
+        // Si no hay foto de perfil del usuario, usamos la imagen por defecto
+        $imagenPerfil = 'php/util/img/usuario.jpg'; // Ruta por defecto corregida
+    }
 
-                    // Estructura del desplegable
-                    echo '<div class="relative">';
-                    echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-marca-primario transition duration-200 focus:outline-none" aria-expanded="false" aria-haspopup="true">';
-                    echo '        <img class="h-8 w-8 rounded-full mr-2 object-cover" src="' . $imagenPerfil . '" alt="Imagen de Perfil">';
-                    echo '        <span>' . $nombreUsuario . '</span>';
-                    echo '        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
-                    echo '    </button>';
+    // Estructura del desplegable
+    echo '<div class="relative">';
+    echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-marca-primario transition duration-200 focus:outline-none" aria-expanded="false" aria-haspopup="true">';
+    // Mostrar la foto de perfil
+    echo '        <img class="h-8 w-8 rounded-full mr-2 object-cover" src="' . $imagenPerfil . '" alt="Imagen de Perfil de ' . $nombreUsuario . '">';
+    echo '        <span>' . $nombreUsuario . '</span>';
+    echo '        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
+    echo '    </button>';
 
-                    // Contenido del desplegable (oculto por defecto)
-                    echo '    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-10 hidden">';
-                    echo '        <a href="php/perfilUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Perfil</a>';
-                    echo '        <a href="php/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
-                    echo '        <hr class="border-gray-200">';
-                    echo '        <a href="php/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
-                    echo '    </div>';
-                    echo '</div>';
-                } else {
-                    echo '<a href="php/login.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Iniciar Sesión</a>';
-                    echo '<a href="php/registro.php" class="cta-button bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold">Regístrate</a>';
-                }
-                ?>
+    // Contenido del desplegable (oculto por defecto)
+    echo '    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-10 hidden">';
+    echo '        <a href="php/perfilUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Perfil</a>';
+    echo '        <a href="php/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
+    echo '        <hr class="border-gray-200">';
+    echo '        <a href="php/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
+    echo '    </div>';
+    echo '</div>';
+} else {
+    echo '<a href="php/login.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Iniciar Sesión</a>';
+    echo '<a href="php/registro.php" class="cta-button bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold">Regístrate</a>';
+}
+?>
             </nav>
         </div>
         <?php
@@ -98,8 +106,8 @@
                     } else {
                         echo "<p class='text-center text-gray-600 w-full'>No hay productos destacados por el momento.</p>"; // width full para centrar
                     }
-                                // No cierres la conexión aquí si la necesitas en otras partes de la página
-                                // $_conexion->close();
+                                            // No cierres la conexión aquí si la necesitas en otras partes de la página
+                                            // $_conexion->close();
                     ?>
                 </div>
                 <button id="prev-producto" class="carousel-control absolute left-0 top-1/2 transform -translate-y-1/2 ml-2 focus:outline-none">
@@ -184,13 +192,12 @@
 
     <footer class="bg-black py-8 text-center text-gray-400">
         <div class="container mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left mb-8">
-                <div class="footer-section">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left mb-8"><div class="footer-section">
                     <h3 class="text-lg font-semibold text-white mb-4">We-Connect</h3>
                     <p>Conectando profesionales y oportunidades en un solo lugar.</p>
                 </div>
                 <div class="footer-section footer-links">
-                    <h3class="text-lg font-semibold text-white mb-4">Enlaces Útiles</h3>
+                    <h3 class="text-lg font-semibold text-white mb-4">Enlaces Útiles</h3>
                     <ul>
                         <li><a href="#" class="hover:text-marca-secundaria transition duration-200">Términos de Servicio</a></li>
                         <li><a href="#" class="hover:text-marca-secundaria transition duration-200">Política de Privacidad</a></li>
@@ -202,7 +209,7 @@
                     <div class="flex justify-center md:justify-start space-x-4 text-xl"> <a href="#" class="hover:text-marca-secundaria transition duration-200"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="hover:text-marca-secundaria transition duration-200"><i class="fab fa-twitter"></i></a>
                         <a href="#" class="hover:text-marca-secundaria transition duration-200"><i class="fab fa-linkedin-in"></i></a>
-                            </div>
+                                </div>
                 </div>
             </div>
             <div class="copyright border-t border-gray-700 pt-8"> <p>&copy; <?php echo date('Y'); ?> We-Connect. Todos los derechos reservados.</p> </div>

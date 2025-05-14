@@ -14,8 +14,8 @@
         if (empty($username) || empty($password)) {
             $error_message = "Por favor, introduce tu nombre de usuario y contraseña.";
         } else {
-            // Consulta a la base de datos para verificar las credenciales
-            $sql = "SELECT id_usuario, usuario, nombre, email, contrasena FROM usuario WHERE usuario = ?";
+            // Consulta a la base de datos para verificar las credenciales, incluyendo la foto de perfil
+            $sql = "SELECT id_usuario, usuario, nombre, email, contrasena, foto_perfil FROM usuario WHERE usuario = ?";
             $stmt = $_conexion->prepare($sql);
             $stmt->bind_param("s", $username);
             $stmt->execute();
@@ -25,12 +25,13 @@
                 $row = $resultado->fetch_assoc();
                 // Verificar la contraseña (usando password_verify si has hasheado las contraseñas)
                 if (password_verify($password, $row['contrasena'])) {
-                    // La autenticación fue exitosa, guardar la información del usuario en la sesión
+                    // La autenticación fue exitosa, guardar la información del usuario en la sesión, incluyendo la foto de perfil
                     $_SESSION['usuario'] = array(
                         'id_usuario' => $row['id_usuario'],
                         'usuario' => $row['usuario'],
                         'nombre' => $row['nombre'],
-                        'email' => $row['email']
+                        'email' => $row['email'],
+                        'foto_perfil' => $row['foto_perfil'] // Guardar la ruta o nombre del archivo de la foto de perfil
                         // Puedes guardar más información si es necesario
                     );
 
