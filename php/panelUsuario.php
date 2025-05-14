@@ -85,8 +85,6 @@
             <nav class="flex items-center">
                 <a href="listado.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
                 <a href="contacto.php" class="text-gray-700 hover:text-black mr-4">Contacto</a>
-                <a href="registro.php" class="bg-transparent text-gray-700 border border-gray-300 py-2 px-4 rounded-md hover:bg-gray-100 hover:border-gray-400 mr-4 transition duration-200">Registrarse</a>
-                <a href="login.php" class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">Iniciar Sesión</a>
             </nav>
         </div>
     </header>
@@ -102,7 +100,10 @@
             <div class="mb-4 actions">
                 <h3 class="text-lg font-medium text-gray-700 mb-2">Acciones</h3>
                 <ul class="space-y-2">
-                    <li><a href="editarPerfil.php">Editar Perfil</a></li>
+                    <li> <a href="editarPerfil.php"
+     class="block w-full text-center bg-blue-600 text-white text-lg font-bold py-3 px-6 rounded-lg shadow hover:bg-blue-700 transition-all duration-200">
+     Editar Perfil
+  </a></li>
                     <li><button id="logout-button" class="logout-button">Cerrar Sesión</button></li>
                 </ul>
             </div>
