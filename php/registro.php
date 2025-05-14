@@ -48,8 +48,9 @@
             background-color: #e0ac28;
         }
 
-        /* Estilos para los mensajes de error */
+        /* Modificación de los estilos de mensajes de error */
         .error-message {
+            display: none; /* Ocultar por defecto */
             background-color: #FEE2E2;
             border: 1px solid #F87171;
             color: #DC2626;
@@ -57,8 +58,11 @@
             border-radius: 0.375rem;
             margin-top: 0.5rem;
             font-size: 0.875rem;
-            display: flex;
             align-items: center;
+        }
+
+        .error-message.visible {
+            display: flex; /* Mostrar solo cuando tenga la clase visible */
         }
 
         .error-message::before {
@@ -402,13 +406,29 @@
 
         function mostrarError(input, mensaje, errorDiv) {
             errorDiv.textContent = mensaje;
+            errorDiv.classList.add('visible');
             input.classList.add('input-error');
         }
 
         function limpiarError(input, errorDiv) {
             errorDiv.textContent = '';
+            errorDiv.classList.remove('visible');
             input.classList.remove('input-error');
         }
+
+        // Limpiar todos los errores al cargar la página
+        window.addEventListener('load', function() {
+            const errorDivs = document.querySelectorAll('.error-message');
+            const inputs = document.querySelectorAll('input');
+            
+            errorDivs.forEach(div => {
+                div.classList.remove('visible');
+            });
+            
+            inputs.forEach(input => {
+                input.classList.remove('input-error');
+            });
+        });
 
         function validarFormulario(e) {
             let esValido = true;
@@ -451,7 +471,7 @@
                 limpiarError(contrasenaInput, errorContrasenaDiv);
             }
 
-            // Validar foto de perfil (opcional, pero si se selecciona, validar tamaño)
+            // Validar foto de perfil (opcional)
             if (fotoPerfilInput.files.length > 0) {
                 const maxSize = 2 * 1024 * 1024; // 2MB
                 if (fotoPerfilInput.files[0].size > maxSize) {
@@ -460,11 +480,7 @@
                 } else {
                     limpiarError(fotoPerfilInput, errorFotoPerfilDiv);
                 }
-                // No validamos el tipo aquí, ya se hace en PHP
-            } else {
-                limpiarError(fotoPerfilInput, errorFotoPerfilDiv); // Limpiar error si antes hubo uno
             }
-
 
             if (!esValido) {
                 e.preventDefault();
