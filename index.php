@@ -52,7 +52,7 @@ if (isset($_SESSION['usuario'])) {
     echo '        <a href="php/perfilUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Perfil</a>';
     echo '        <a href="php/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
     echo '        <hr class="border-gray-200">';
-    echo '        <a href="php/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
+    echo '        <a href="php/util/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
     echo '    </div>';
     echo '</div>';
 } else {
