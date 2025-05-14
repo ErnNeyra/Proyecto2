@@ -67,51 +67,11 @@
                                 <span class="text-gray-600 text-sm ml-2">(0 valoraciones)</span>
                             </div>
                         </div>
-                        <a href="detalleProducto.php" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4">Ver Detalles</a>
+                        <a href="detalleProducto.php?id_producto=<?php echo $producto['id_producto']; ?>" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4">Ver Detalles</a>
                     </div>
                 </div>
             <?php
             } ?>
-            <!-- <div class="bg-white rounded-md shadow-md overflow-hidden border border-gray-200">
-                <img src="https://via.placeholder.com/400x300/fedcba/ffffff?Text=Otro%20Producto%202" alt="Otro Producto 2" class="w-full h-48 object-cover">
-                <div class="p-6">
-                    <h3 class="font-semibold text-gray-700 mb-2">Otro Producto/Servicio Genial 2</h3>
-                    <p class="text-gray-600 text-sm mb-2">Una descripción más de esta increíble oferta 2.</p>
-                    <p class="text-gray-500 text-xs mb-2">Ofrecido por: Emprendedor B</p>
-                    <div class="mb-2">
-                        <label class="block text-gray-700 text-sm font-bold mb-1">Valorar:</label>
-                        <div class="flex items-center">
-                            <button class="star-button text-gray-300 hover:text-yellow-500 focus:outline-none text-xl mr-1" data-value="1">&#9733;</button>
-                            <button class="star-button text-gray-300 hover:text-yellow-500 focus:outline-none text-xl mr-1" data-value="2">&#9733;</button>
-                            <button class="star-button text-gray-300 hover:text-yellow-500 focus:outline-none text-xl mr-1" data-value="3">&#9733;</button>
-                            <button class="star-button text-gray-300 hover:text-yellow-500 focus:outline-none text-xl mr-1" data-value="4">&#9733;</button>
-                            <button class="star-button text-gray-300 hover:text-yellow-500 focus:outline-none text-xl mr-1" data-value="5">&#9733;</button>
-                            <span class="text-gray-600 text-sm ml-2">(0 valoraciones)</span>
-                        </div>
-                    </div>
-                    <a href="detalleProducto.php" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4">Ver Detalles</a>
-                </div>
-            </div>
-            <div class="bg-white rounded-md shadow-md overflow-hidden border border-gray-200">
-                <img src="https://via.placeholder.com/400x300/cbaabc/ffffff?Text=Tercer%20Item%203" alt="Tercer Item 3" class="w-full h-48 object-cover">
-                <div class="p-6">
-                    <h3 class="font-semibold text-gray-700 mb-2">Tercer Producto/Servicio 3</h3>
-                    <p class="text-gray-600 text-sm mb-2">Descripción breve del tercer elemento 3.</p>
-                    <p class="text-gray-500 text-xs mb-2">Ofrecido por: Emprendedor C</p>
-                    <div class="mb-2">
-                        <label class="block text-gray-700 text-sm font-bold mb-1">Valorar:</label>
-                        <div class="flex items-center">
-                            <button class="star-button text-gray-300 hover:text-yellow-500 focus:outline-none text-xl mr-1" data-value="1">&#9733;</button>
-                            <button class="star-button text-gray-300 hover:text-yellow-500 focus:outline-none text-xl mr-1" data-value="2">&#9733;</button>
-                            <button class="star-button text-gray-300 hover:text-yellow-500 focus:outline-none text-xl mr-1" data-value="3">&#9733;</button>
-                            <button class="star-button text-gray-300 hover:text-yellow-500 focus:outline-none text-xl mr-1" data-value="4">&#9733;</button>
-                            <button class="star-button text-gray-300 hover:text-yellow-500 focus:outline-none text-xl mr-1" data-value="5">&#9733;</button>
-                            <span class="text-gray-600 text-sm ml-2">(0 valoraciones)</span>
-                        </div>
-                    </div>
-                    <a href="detalleProducto.php" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4">Ver Detalles</a>
-                </div>
-            </div> -->
         </div>
     </main>
 
