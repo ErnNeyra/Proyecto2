@@ -13,13 +13,32 @@
             <nav class="flex items-center">
                 <a href="producto.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
                 <a href="servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
+                <?php
+                session_start();
+                if(isset($_SESSION["usuario"]["usuario"])){
+                    $aliasUsuario = htmlspecialchars($_SESSION['usuario']['usuario']);
+                    echo '<div class="relative">';
+                    echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-black focus:outline-none" aria-expanded="false" aria-haspopup="true">';
+                    echo '        <span>' . $aliasUsuario . '</span>';
+                    echo '        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
+                    echo '    </button>';
+                    echo '    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-10 hidden">';
+                    echo '        <a href="panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Panel</a>';
+                    echo '        <a href="editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
+                    echo '        <hr class="border-gray-200">';
+                    echo '        <a href="util/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
+                    echo '    </div>';
+                    echo '</div>';
+                } else {
+                    echo '<a href="login.php" class="text-gray-700 hover:text-black">Iniciar Sesión</a>';
+                }
+                ?>
             </nav>
         </div>
     </header>
 
     <main class="container mx-auto py-12 px-6 flex-grow">
     <?php
-
         error_reporting( E_ALL );
         ini_set("display_errors", 1 );   
         require('util/config.php');
@@ -36,8 +55,6 @@
             $imagen = $producto["imagen"];
             $usuario = $producto["usuario"];
         }
-            
-        
     ?>
         <div class="bg-white rounded-lg shadow-md p-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">

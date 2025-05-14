@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require('./util/config.php'); // Asegúrate de que este archivo contiene tu conexión a la base de datos ($_conexion)
+    require('util/config.php'); // Asegúrate de que este archivo contiene tu conexión a la base de datos ($_conexion)
 
     // Inicializar variables para mensajes de error
     $error_message = "";
@@ -36,7 +36,7 @@
                     );
 
                     // Redirigir al usuario a la página de perfil o a la página principal
-                    header("location: perfilUsuario.php");
+                    header("location: ../index.php");
                     exit;
                 } else {
                     $error_message = "Contraseña incorrecta.";

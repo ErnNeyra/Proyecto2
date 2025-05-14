@@ -49,7 +49,7 @@
     ?>
     <main class="container mx-auto py-12 px-6 flex-grow">
         <div class="flex items-center justify-between mb-8">
-            <h1 class="text-3xl font-semibold text-gray-800">Explora las ofertas de nuestros emprendedores</h1>
+            <h1 class="text-3xl font-semibold text-gray-800">Explora los productos que ofrecen nuestros emprendedores</h1>
             <a href="crearProducto.php" class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 focus:outline-none focus:shadow-outline">Crear Producto</a>
         </div>
         <?php
