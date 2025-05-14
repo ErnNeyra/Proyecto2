@@ -13,10 +13,9 @@
             <a href="../index.php" class="text-xl font-bold text-black">We-Connect</a>
             <nav class="flex items-center">
                 <a href="servicio.php" class="text-gray-700 hover:text-black mr-4">Servicio</a>
-                <a href="contacto.php" class="text-gray-700 hover:text-black mr-4">Contacto</a>
                 <?php
                 session_start();
-                if(isset($_SESSION["usuario"]["usuario"])){
+                if(isset($_SESSION["usuario"])){
                     $aliasUsuario = htmlspecialchars($_SESSION['usuario']['usuario']);
                     echo '<div class="relative">';
                     echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-black focus:outline-none" aria-expanded="false" aria-haspopup="true">';
@@ -27,7 +26,7 @@
                     echo '        <a href="panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Panel</a>';
                     echo '        <a href="editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
                     echo '        <hr class="border-gray-200">';
-                    echo '        <a href="logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
+                    echo '        <a href="util/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
                     echo '    </div>';
                     echo '</div>';
                 } else {

@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require('./util/config.php');
+    require('util/config.php');
 ?>
 
 <!DOCTYPE html>
@@ -89,9 +89,6 @@
         <div class="container mx-auto py-4 px-6 flex items-center justify-between">
             <a href="../index.php" class="text-xl font-bold text-black">We-Connect</a>
             <nav class="flex items-center">
-                <a href="listado.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
-                <a href="contacto.php" class="text-gray-700 hover:text-black mr-4">Contacto</a>
-
                 <?php if (isset($_SESSION['usuario']['usuario'])): ?>
                     <div class="relative">
                         <button id="dropdownBtn" class="text-gray-700 hover:text-black focus:outline-none flex items-center">
@@ -101,8 +98,7 @@
                         <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg origin-top-right hidden">
                             <div class="py-1">
                                 <a href="panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Mi Panel</a>
-                                <a href="editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Editar Perfil</a>
-                                <a href="logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100">Cerrar Sesión</a>
+                                <a href="util/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100">Cerrar Sesión</a>
                             </div>
                         </div>
                     </div>
