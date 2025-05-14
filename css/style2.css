@@ -1,367 +1,1041 @@
-/* El Mejor CSS Jamás Creado (¡Para tu Página Web Profesional y Distinguida!) */
+/* ==========================================================================
+   1.  Estilos Generales (Reset y Base)
+   ========================================================================== */
 
+/* :root (Variables CSS Semánticas) */
 :root {
-    --primario: #2c3e50; /* Azul oscuro profesional */
-    --secundario: #3498db; /* Azul moderno */
-    --terciario: #e67e22; /* Naranja quemado (acento) */
-    --acento: #f39c12; /* Amarillo mostaza (destaque) */
-    --texto-principal: #333333;
-    --texto-secundario: #555555;
-    --fondo-claro: #ffffff; /* Blanco puro como fondo base */
-    --fondo-oscuro: #222222;
-    --borde-claro: #dcdcdc;
+    /* Colores Primarios */
+    --color-primario: #2c3e50; /* Azul oscuro (Encabezados, textos importantes) */
+    --color-secundario: #3498db; /* Azul (Acciones, enlaces) */
+    --color-terciario: #e67e22; /* Naranja (Acentos) */
+    --color-acento: #f39c12; /* Amarillo (Destacados) */
+
+    /* Colores de Texto */
+    --color-texto-principal: #333333;
+    --color-texto-secundario: #555555;
+
+    /* Colores de Fondo */
+    --color-fondo-principal: #ffffff; /* Fondo de la página, tarjetas */
+    --color-fondo-alternativo: #f9f9f9; /* Fondos sutiles para secciones */
+    --color-fondo-oscuro: #222222; /* Pie de página, barras laterales oscuras */
+
+    /* Bordes y Sombras */
+    --color-borde-claro: #dcdcdc;
     --sombra-pequena: 0 2px 5px rgba(0, 0, 0, 0.08);
     --sombra-mediana: 0 4px 10px rgba(0, 0, 0, 0.12);
+    --sombra-header: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra específica para el header */
+
+    /* Transiciones */
     --transicion-rapida: 0.2s ease-in-out;
     --transicion-suave: 0.3s ease-in-out;
+
+    /* Tipografía */
+    --fuente-principal: 'Open Sans', sans-serif;
+    --fuente-titulos: 'Poppins', sans-serif;
+    --tamano-texto-base: 16px;
+    --linea-altura-base: 1.6;
 }
 
+/* body */
 body {
-    font-family: 'Open Sans', sans-serif;
-    background-color: var(--fondo-claro); /* Fondo blanco puro */
-    color: var(--texto-principal);
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    font-family: var(--fuente-principal);
+    background-color: var(--color-fondo-principal);
+    color: var(--color-texto-principal);
+    line-height: var(--linea-altura-base);
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
+/* container */
 .container {
+    width: 90%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 1rem;
 }
 
-header {
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 1rem 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    border-bottom: 1px solid var(--borde-claro);
-}
-
-header .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-}
-
-header .logo {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--primario);
-    text-decoration: none;
-    transition: color var(--transicion-rapida), transform var(--transicion-rapida);
-}
-
-header .logo:hover {
-    color: var(--secundario);
-    transform: scale(1.03);
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-}
-
-nav ul li {
-    margin-left: 1.2rem;
-}
-
-nav ul li:first-child {
-    margin-left: 0;
-}
-
-nav a {
-    text-decoration: none;
-    color: var(--texto-principal);
-    font-weight: 500;
-    transition: color var(--transicion-rapida);
-    padding: 0.4rem 0.8rem;
-    border-radius: 4px;
-}
-
-nav a:hover {
-    color: var(--secundario);
-    background-color: var(--fondo-claro);
-}
-
-nav a.activo {
-    color: var(--primario);
-    font-weight: 600;
-}
-
-section {
-    padding: 5rem 0;
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-}
-
-section.fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-}
-
-/* Estilos específicos para las secciones clave */
-.seccion-emprendedores {
-    background-color: #f9f9f9; /* Gris claro suave */
-    border-top: 1px solid #e0e0e0;
-    border-bottom: 1px solid #e0e0e0;
-    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); O una sombra sutil */
-}
-
-.seccion-conecta {
-    background-color: #e3f2fd; /* Azul claro suave */
-    /* Ejemplo de patrón sutil (necesitarías la imagen 'pattern-conecta.png'): */
-    /* background-image: url('img/pattern-conecta.png');
-    background-repeat: repeat;
-    background-size: 20px 20px;
-    opacity: 0.8; */
-    /* Ejemplo de degradado sutil: */
-    /* background: linear-gradient(to bottom, #e3f2fd, #d0e9fc); */
-}
-
-.seccion-crece {
-    background-color: #f0fbe5; /* Verde menta suave */
-    /* Ejemplo de degradado direccional: */
-    background: linear-gradient(to top, #f0fbe5, #e6f4ea);
-}
-
-.seccion-titulo {
+/* Estilos para los títulos de sección */
+.section__titulo {
     font-size: 2rem;
-    font-weight: 600;
-    color: var(--primario);
-    text-align: center;
+    font-weight: bold;
+    color: var(--color-primario);
     margin-bottom: 2rem;
+    text-align: center;
     position: relative;
-    padding-bottom: 0.6rem;
+    padding-bottom: 0.5rem;
+    font-family: var(--fuente-titulos);
 }
 
-.seccion-titulo::after {
-    content: '';
+.section__titulo::after {
+    content: "";
     position: absolute;
-    bottom: 0;
     left: 50%;
+    bottom: 0;
     transform: translateX(-50%);
-    width: 30px;
     height: 3px;
-    background-color: var(--secundario);
+    width: 60px;
+    background-color: var(--color-acento);
     border-radius: 1.5px;
 }
 
-.hero {
-    background: linear-gradient(135deg, var(--primario) 0%, var(--secundario) 100%);
-    color: #fff;
-    padding: 5rem 0;
+.section__descripcion {
+    color: var(--color-texto-secundario);
     text-align: center;
-    position: relative;
-    overflow: hidden;
+    margin-bottom: 2rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.hero::before {
-    background-color: rgba(0, 0, 0, 0.1);
+
+/* ==========================================================================
+   2.  Estilos de la Cabecera (header) - DISTINCIÓN Y PANEL DE USUARIO
+   ========================================================================== */
+
+header {
+    /* Tailwind maneja: sticky top-0 z-50 */
+    background-color: var(--color-fondo-principal);
+    box-shadow: var(--sombra-header);
+    border-bottom: none;
+    transition: background-color var(--transicion-rapida), box-shadow var(--transicion-rapida);
+}
+
+header.scrolled {
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: var(--sombra-mediana);
+    backdrop-filter: blur(5px);
+}
+
+.header__container {
+     padding: 0.75rem 1rem;
+}
+
+.header__logo {
+    font-family: var(--fuente-titulos);
+    /* Mantén tus clases de Tailwind */
+}
+
+/* Estilos de la navegación principal (excluye el panel de usuario para desktop) */
+/* Tailwind maneja hidden y md:flex para mostrar/ocultar #main-nav */
+#main-nav {
+    display: flex; /* Aseguramos flexbox por si acaso */
+    align-items: center; /* Alineamos verticalmente */
+    /* Tailwind maneja space-x-6 */
+}
+
+#main-nav a {
+    font-weight: 600;
+    position: relative;
+    transition: color var(--transicion-rapida);
+    /* Tailwind maneja text-gray-700 hover:text-marca-primario */
+}
+
+#main-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--color-secundario);
+    transition: width var(--transicion-rapida);
+}
+
+#main-nav a:hover::after {
+    width: 100%;
+}
+
+/* Estilos para el Panel de Usuario Desplegable */
+.user-panel {
+    position: relative; /* Contenedor del botón y el menú */
+    display: inline-block; /* Para que no ocupe todo el ancho */
+    margin-left: 1.5rem; /* Espacio a la izquierda, ajusta si usas space-x */
+}
+
+#user-dropdown-button {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 0.75rem; /* Padding para el área clickeable */
+    border-radius: 0.25rem;
+    transition: background-color var(--transicion-rapida);
+    /* Tailwind maneja text-gray-700 hover:text-marca-primario */
+}
+
+#user-dropdown-button:hover {
+     background-color: var(--color-fondo-alternativo); /* Fondo sutil al pasar el ratón */
+}
+
+/* Estilo para la imagen del usuario en el header */
+.user-avatar {
+    width: 32px; /* Tamaño de la imagen */
+    height: 32px;
+    border-radius: 50%; /* Imagen redonda */
+    object-fit: cover; /* Asegura que la imagen cubra el área sin distorsionarse */
+    margin-right: 0.5rem; /* Espacio entre la imagen y el nombre */
+    border: 2px solid var(--color-secundario); /* Borde sutil */
+}
+
+
+#user-dropdown-button span {
+    font-weight: 600;
+    /* Color heredado de #user-dropdown-button */
+}
+
+#user-dropdown-button svg {
+     margin-left: 0.25rem;
+     transition: transform var(--transicion-rapida);
+     /* Color heredado de #user-dropdown-button */
+}
+
+/* Opcional: rotar el icono al abrir */
+/*
+#user-dropdown-button[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+}
+*/
+
+
+.user-dropdown-menu {
+    position: absolute;
+    top: 100%; /* Posiciona justo debajo del botón */
+    right: 0; /* Alineado a la derecha */
+    min-width: 160px; /* Ancho mínimo del menú */
+    background-color: var(--color-fondo-principal);
+    border-radius: 0.25rem;
+    box-shadow: var(--sombra-mediana);
+    overflow: hidden; /* Para que los bordes redondeados funcionen bien */
+    z-index: 20; /* Asegura que esté por encima de otros elementos */
+
+    /* Animación de entrada */
+    opacity: 0;
+    transform: translateY(10px); /* Inicia ligeramente hacia abajo */
+    transition: opacity var(--transicion-rapida), transform var(--transicion-rapida);
+    pointer-events: none; /* No interactuable cuando está oculto */
+}
+
+/* Clase para mostrar el menú (toggleada por JS) */
+.user-dropdown-menu:not(.hidden) {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto; /* Interactuable cuando está visible */
+}
+
+.user-dropdown-menu a {
+    display: block; /* Cada enlace en una línea */
+    padding: 0.5rem 1rem; /* Padding dentro de cada enlace */
+    text-decoration: none;
+    color: var(--color-texto-principal);
+    transition: background-color var(--transicion-rapida), color var(--transicion-rapida);
+    font-size: 0.9rem;
+}
+
+.user-dropdown-menu a:hover {
+    background-color: var(--color-fondo-alternativo);
+    color: var(--color-primario);
+}
+
+/* Estilos del menú móvil - Ajustamos para que no interfiera */
+/* Tailwind maneja hidden y md:hidden para mostrar/ocultar #mobile-nav */
+#mobile-nav {
+    background-color: var(--color-fondo-principal);
+    box-shadow: var(--sombra-mediana);
+    position: absolute; /* Posición absoluta para que caiga debajo del header */
+    top: 100%; /* Justo debajo del header */
+    left: 0;
+    right: 0;
+    z-index: 40; /* Menor que el header, mayor que el contenido */
+    /* Tailwind maneja hidden por defecto */
+
+    /* Animación de entrada (opcional) */
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity var(--transicion-rapida), transform var(--transicion-rapida);
+    pointer-events: none;
+}
+
+/* Clase para mostrar el menú móvil */
+#mobile-nav:not(.hidden) {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+#mobile-nav ul {
+    list-style: none;
+    padding: 0.5rem 0; /* Padding vertical */
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#mobile-nav li {
+    width: 100%; /* Ocupa todo el ancho para el padding */
+    text-align: center; /* Centra el texto */
+}
+
+#mobile-nav a {
+     display: block; /* Para que el padding funcione */
+     padding: 0.75rem 1rem; /* Padding clickeable */
+     text-decoration: none;
+     color: var(--color-texto-principal);
+     font-weight: 600;
+     transition: background-color var(--transicion-rapida), color var(--transicion-rapida);
+}
+ #mobile-nav a:hover {
+     background-color: var(--color-fondo-alternativo);
+     color: var(--color-secundario);
+ }
+
+/* ==========================================================================
+   3.  Estilos de las Secciones (section) - Generales
+   ========================================================================== */
+
+/* Mantén como antes */
+section {
+    /* Tailwind maneja el padding en el HTML */
+}
+
+/* Grids - Mantén como antes o usa solo Tailwind */
+.grid-2-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.grid-3-col {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+
+/* ==========================================================================
+   4.  Estilos de los Formularios (form) - ANIMACIONES EN BOTONES
+   ========================================================================== */
+
+/* Mantén como antes */
+form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--color-texto-principal);
+}
+
+form input,
+form textarea,
+form select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--color-borde-claro);
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+    font-family: inherit;
+    font-size: inherit;
+    color: var(--color-texto-principal);
+    transition: border-color var(--transicion-rapida), box-shadow var(--transicion-rapida);
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+    outline: none;
+    border-color: var(--color-secundario);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+}
+
+form button[type="submit"] {
+    background-color: var(--color-secundario);
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    display: inline-block;
+    text-align: center;
+
+    transition: background-color var(--transicion-rapida),
+                transform var(--transicion-rapida),
+                box-shadow var(--transicion-rapida);
+}
+
+form button[type="submit"]:hover {
+    background-color: #2980b9;
+    transform: translateY(-3px);
+    box-shadow: var(--sombra-pequena);
+}
+
+form button[type="submit"]:active {
+    transform: translateY(-1px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.form__error {
+    color: #c0392b;
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.form__success {
+    color: #27ae60;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    animation: fadeIn 0.3s ease-out;
+}
+
+
+/* ==========================================================================
+   5.  Estilos de las Tarjetas de Producto (producto-card) - ANIMACIONES EN BOTONES
+   ========================================================================== */
+
+/* Mantén como antes */
+.producto-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform var(--transicion-suave), box-shadow var(--transicion-suave);
+    box-shadow: var(--sombra-pequena);
+}
+
+.producto-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--sombra-mediana);
+}
+
+.producto-card__imagen-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5rem 0.5rem 0 0;
+    height: 200px;
+    flex-shrink: 0;
+}
+
+.producto-card__imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.producto-card:hover .producto-card__imagen {
+    transform: scale(1.1);
+}
+
+.producto-card__contenido {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.producto-card__titulo {
+    font-family: var(--fuente-titulos);
+    font-size: 1.1rem;
+    color: var(--color-primario);
+    margin-bottom: 0.5rem;
+}
+
+.producto-card__descripcion {
+    color: var(--color-texto-secundario);
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+    flex-grow: 1;
+}
+
+.producto-card__precio {
+    color: var(--color-secundario);
+    font-weight: bold;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    margin-top: auto;
+}
+
+.producto-card__boton-detalles {
+    background-color: var(--color-acento);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    transition: background-color var(--transicion-rapida),
+                transform var(--transicion-rapida),
+                box-shadow var(--transicion-rapida);
+}
+
+.producto-card__boton-detalles:hover {
+    background-color: #d35400;
+    transform: translateY(-3px);
+    box-shadow: var(--sombra-pequena);
+}
+
+.producto-card__boton-detalles:active {
+    transform: translateY(-1px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Clase general para botones CTA */
+.cta-button {
+     transition: background-color var(--transicion-suave),
+                 transform var(--transicion-suave),
+                 box-shadow var(--transicion-suave);
+}
+
+.cta-button:hover {
+     box-shadow: var(--sombra-mediana);
+}
+
+.cta-button:active {
+     transform: scale(0.98);
+     box-shadow: var(--sombra-pequena);
+}
+
+
+/* ==========================================================================
+   6.  Estilos del Pie de Página (footer) - Mantén como antes
+   ========================================================================== */
+
+/* Mantén como antes */
+footer {
+    background-color: var(--color-fondo-oscuro);
+    color: var(--color-texto-secundario);
+    padding: 2rem 0;
+    font-size: 0.95rem;
+}
+
+.footer-section h3 {
+     font-family: var(--fuente-titulos);
+     font-weight: 700;
+     color: #fff;
+}
+
+.footer-section p {
+    margin-bottom: 1rem;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-section a {
+    color: var(--color-texto-secundario);
+    text-decoration: none;
+    transition: color var(--transicion-rapida);
+}
+
+.footer-section a:hover {
+    color: var(--color-secundario);
+}
+
+.social-icons-footer a {
+     color: var(--color-texto-secundario);
+     margin-right: 0.75rem;
+     font-size: 1.5rem;
+     transition: color var(--transicion-rapida);
+}
+
+.social-icons-footer a:hover {
+     color: var(--color-secundario);
+}
+
+.copyright {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+/* ==========================================================================
+   7.  Animaciones (keyframes)
+   ========================================================================== */
+
+/* Mantén como antes */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pulse-subtle {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+.animate-pulse-subtle {
+    animation: pulse-subtle 2s infinite ease-in-out;
+}
+
+@keyframes move-twinkling {
+    from { background-position: 0 0; }
+    to { background-position: -10000px 5000px; }
+}
+
+@keyframes animate-twinkling {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+/*
+@keyframes move-clouds {
+    from { background-position: 0 0; }
+    to { background-position: 10000px 0; }
+}
+*/
+
+/* ==========================================================================
+   8.  Estilos Específicos de Páginas (Ejemplos)
+   ========================================================================== */
+
+/* Estilos para la página de inicio (index.php) - Hero Section */
+/* Mantén como antes */
+.hero-section {
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    color: var(--color-fondo-principal);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    padding-top: 80px;
+}
+
+.space-background {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #0a1f44, #112b52);
+    z-index: 0;
+}
+
+.stars, .twinkling, .clouds {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 10000px;
+    height: 100%;
+    background: transparent url('../img/stars.png') repeat top center;
     z-index: 1;
+    animation: move-twinkling 200s linear infinite;
 }
 
-.hero-contenido {
-    max-width: 800px;
-    margin: 0 auto;
-    position: relative;
+.twinkling {
+    background: transparent url('../img/twinkling.png') repeat top center;
     z-index: 2;
-    opacity: 1;
-    transform: scale(1);
+    animation: move-twinkling 200s linear infinite, animate-twinkling 5s linear infinite;
 }
 
-.hero h1 {
-    font-size: 2.8rem;
-    font-weight: 700;
+/*
+.clouds {
+    background: transparent url('../img/clouds.png') repeat top center;
+    z-index: 3;
+    opacity: 0.6;
+    animation: move-clouds 150s linear infinite;
+}
+*/
+
+.hero-content {
+     z-index: 10;
+     position: relative;
+     max-width: 960px;
+     margin-left: auto;
+     margin-right: auto;
+     padding: 0 1rem;
+}
+
+.hero__titulo {
+    color: var(--color-fondo-principal);
+    font-family: var(--fuente-titulos);
     margin-bottom: 1rem;
-    line-height: 1.2;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-.hero p {
-    font-size: 1.1rem;
+.hero__descripcion {
+    color: var(--color-fondo-principal);
+    margin-bottom: 2rem;
+}
+
+/* Estilos para la página de contacto (contacto.php) - ¡Ejemplo! */
+.contacto-form {
+    background-color: var(--color-fondo-principal);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: var(--sombra-mediana);
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+.contacto-form__titulo {
+    font-size: 2.25rem;
+    font-weight: bold;
+    color: var(--color-primario);
     margin-bottom: 1.5rem;
-    opacity: 0.85;
-    text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    font-family: var(--fuente-titulos);
 }
 
-.boton-primario {
-    display: inline-block;
-    background-color: var(--acento);
-    color: var(--texto-principal);
-    padding: 0.9rem 2rem;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: background-color var(--transicion-suave), transform var(--transicion-suave), box-shadow var(--transicion-suave);
-    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.1);
-}
-
-.boton-primario:hover {
-    background-color: #e68a00;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
-}
-
-.hero::after {
-    display: none;
-}
-
-@keyframes onda {
-    0% {
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
-    100% {
-        transform: translate(-50%, -50%) rotate(360deg);
-    }
-}
-
-.card {
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 8px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-    padding: 2.2rem;
-    transition: transform var(--transicion-rapida), box-shadow var(--transicion-rapida), border-color var(--transicion-rapida);
-    border: 1px solid transparent;
-}
-
-.card:hover {
-    transform: translateY(-5px) scale(1.01);
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
-    border-color: var(--secundario);
-}
-
-.card h3 {
-    color: var(--primario);
-    margin-bottom: 1rem;
-    font-size: 1.4rem;
-}
-
-.card p {
-    color: var(--texto-secundario);
-    line-height: 1.7;
-    margin-bottom: 1rem;
-}
-
-.grid-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    padding: 1rem;
-}
-
-form label {
-    display: block;
-    margin-bottom: 0.6rem;
-    color: var(--texto-principal);
-    font-weight: 500;
-}
-
-form input[type="text"],
-form input[type="email"],
-form textarea {
+/* Estilos para el carrusel de productos */
+/* Mantén como antes */
+.carrusel-container {
+    position: relative;
     width: 100%;
-    padding: 0.9rem;
-    margin-bottom: 1.2rem;
-    border: 1px solid var(--borde-claro);
-    border-radius: 6px;
-    font-size: 1rem;
-    transition: border-color var(--transicion-rapida), box-shadow var(--transicion-rapida);
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+    margin: 2rem 0;
+    box-shadow: var(--sombra-mediana);
+    border-radius: 0.5rem;
+    /* Ajustes para el efecto "peek" en JS */
+    /* padding-left y padding-right se añadirán en JS */
 }
 
-form input[type="text"]:focus,
-form input[type="email"]:focus,
-form textarea:focus {
-    border-color: var(--secundario);
-    outline: none;
-    box-shadow: 0 0 6px rgba(var(--secundario-rgb), 0.15);
+.carrusel {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    /* margin-left y margin-right se añadirán en JS */
 }
 
-form button[type="submit"] {
-    background-color: var(--secundario);
-    color: #fff;
-    padding: 1rem 2.2rem;
+.carrusel-item {
+    flex: 0 0 auto;
+    width: 288px;
+    margin-right: 1rem;
+    box-sizing: border-box;
+}
+.carrusel-item:last-child {
+    margin-right: 0;
+}
+
+
+.carrusel-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
     border: none;
-    border-radius: 6px;
-    font-size: 1.1rem;
+    padding: 0.75rem;
+    font-size: 1.5rem;
     cursor: pointer;
-    font-weight: 600;
-    transition: background-color var(--transicion-suave), transform var(--transicion-suave), box-shadow var(--transicion-suave);
-    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.1);
+    transition: background-color var(--transicion-rapida), opacity var(--transicion-rapida);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+    opacity: 0.7;
 }
 
-form button[type="submit"]:hover {
-    background-color: #2980b9;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+.carrusel-control:hover {
+    background-color: rgba(255, 255, 255, 1);
+    opacity: 1;
 }
 
-footer {
-    background-color: var(--fondo-oscuro);
-    color: #fff;
-    padding: 3rem 0;
+.carrusel-control svg {
+    width: 1.2rem;
+    height: 1.2rem;
+    stroke: var(--color-primario);
+}
+
+.prev {
+    left: 0.5rem;
+}
+
+.next {
+    right: 0.5rem;
+}
+
+.carrusel-indicadores {
     text-align: center;
-    font-size: 0.9rem;
-    border-top: 2px solid var(--acento);
-    box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
+    margin-top: 1.5rem;
+    z-index: 50;
+    position: relative;
 }
 
-footer a {
-    color: var(--acento);
-    text-decoration: underline;
-    transition: color var(--transicion-rapida);
+.carrusel-indicador {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--color-borde-claro);
+    margin: 0 0.4rem;
+    cursor: pointer;
+    transition: background-color var(--transicion-rapida), transform var(--transicion-rapida);
+    border: 2px solid transparent;
 }
 
-footer a:hover {
-    color: var(--secundario);
+.carrusel-indicador.activo {
+    background-color: var(--color-secundario);
+    border-color: var(--color-fondo-principal);
+    transform: scale(1.2);
 }
 
-.text-center {
-    text-align: center;
+.carrusel-pausa-play {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    padding: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color var(--transicion-rapida), opacity var(--transicion-rapida);
+    z-index: 50;
+    opacity: 0.7;
 }
 
-.mt-2 { margin-top: 0.5rem; }
-.mt-4 { margin-top: 1rem; }
-.mb-2 { margin-bottom: 0.5rem; }
-.mb-4 { margin-bottom: 1rem; }
+.carrusel-pausa-play:hover {
+    background-color: rgba(255, 255, 255, 1);
+    opacity: 1;
+}
 
-/* Animaciones de entrada al hacer scroll */
-.fade-in {
+.carrusel-pausa-play i {
+    color: var(--color-primario);
+}
+
+
+/* Estilos para la sección "Why Choose Us" */
+/* Mantén como antes */
+.why-choose-us-item {
+    transition: transform var(--transicion-rapida), box-shadow var(--transicion-rapida);
+}
+
+.why-choose-us-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--sombra-mediana);
+}
+
+.why-choose-us-item i {
+    color: var(--color-acento);
+    margin-bottom: 1rem;
+}
+
+.why-choose-us-item h3 {
+     font-family: var(--fuente-titulos);
+     font-weight: 700;
+     color: var(--color-primario);
+     margin-bottom: 0.5rem;
+}
+
+.why-choose-us-item p {
+    color: var(--color-texto-secundario);
+}
+
+/* Estilos para la sección de Testimonios */
+/* Mantén como antes */
+.testimonial-card {
+     transition: transform var(--transicion-rapida), box-shadow var(--transicion-rapida);
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--sombra-mediana);
+}
+
+.testimonial-card img {
+    margin-bottom: 1rem;
+}
+
+.testimonial-card h3 {
+     font-family: var(--fuente-titulos);
+     font-weight: 700;
+     color: var(--color-primario);
+     margin-bottom: 0.5rem;
+}
+
+.testimonial-card .quote {
+    color: var(--color-texto-secundario);
+    font-style: italic;
+    margin-bottom: 0;
+}
+
+/* Estilos para la sección "How it Works" */
+/* Mantén como antes */
+.how-it-works-item {
+     transition: transform var(--transicion-rapida);
+     padding: 1rem;
+}
+
+.how-it-works-item:hover {
+    transform: translateY(-5px);
+}
+
+.how-it-works-item i {
+    color: var(--color-acento);
+    margin-bottom: 0.5rem;
+}
+
+.how-it-works-item h3 {
+     font-family: var(--fuente-titulos);
+     font-weight: 700;
+     color: var(--color-primario);
+     margin-top: 0.5rem;
+     margin-bottom: 0.5rem;
+}
+
+.how-it-works-item p {
+    color: var(--color-texto-secundario);
+}
+
+
+/* ==========================================================================
+   9.  Responsivo
+   ========================================================================== */
+
+/* Media Query para pantallas medianas (ejemplo, basado en Tailwind md) */
+@media (min-width: 768px) {
+    .container {
+        padding: 1rem 2rem;
+    }
+    .grid-2-col {
+        grid-template-columns: repeat(2, 1fr);
+    }
+     .grid-3-col {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .testimonial-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+     .how-it-works-grid {
+         grid-template-columns: repeat(3, 1fr);
+     }
+     #mobile-menu-button {
+         display: none;
+     }
+     /* Asegura que el panel de usuario se muestre en escritorio */
+     .user-panel {
+         display: inline-block;
+     }
+}
+
+/* Media Query para pantallas pequeñas */
+@media (max-width: 767px) {
+    .grid-2-col,
+    .grid-3-col,
+    .testimonial-grid,
+    .how-it-works-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    #main-nav {
+        display: none;
+    }
+
+     #mobile-nav {
+        background-color: var(--color-fondo-principal);
+        box-shadow: var(--sombra-mediana);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 40;
+
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity var(--transicion-rapida), transform var(--transicion-rapida);
+        pointer-events: none;
+    }
+
+    #mobile-nav:not(.hidden) {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    #mobile-nav ul {
+        list-style: none;
+        padding: 0.5rem 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #mobile-nav li {
+        width: 100%;
+        text-align: center;
+    }
+
+    #mobile-nav a {
+         display: block;
+         padding: 0.75rem 1rem;
+         text-decoration: none;
+         color: var(--color-texto-principal);
+         font-weight: 600;
+         transition: background-color var(--transicion-rapida), color var(--transicion-rapida);
+    }
+     #mobile-nav a:hover {
+         background-color: var(--color-fondo-alternativo);
+         color: var(--color-secundario);
+     }
+
+     /* Oculta el panel de usuario desplegable en móviles */
+     .user-panel {
+         display: none;
+     }
+}
+
+/* Estilos para animaciones al scroll */
+.js-fade-in-up {
     opacity: 0;
-    transform: translateY(15px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
 }
 
-.slide-in-left {
-    transform: translateX(-50px);
-    opacity: 0;
-    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.6s ease-out;
-}
-
-.slide-in-right {
-    transform: translateX(50px);
-    opacity: 0;
-    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.6s ease-out;
-}
-
-.animated {
+.js-fade-in-up.reveal {
     opacity: 1;
     transform: translateY(0);
-    transform: translateX(0);
+}
+
+.js-fade-in-up[data-delay="0s"].reveal { transition-delay: 0s; }
+.js-fade-in-up[data-delay="0.1s"].reveal { transition-delay: 0.1s; }
+.js-fade-in-up[data-delay="0.2s"].reveal { transition-delay: 0.2s; }
+.js-fade-in-up[data-delay="0.3s"].reveal { transition-delay: 0.3s; }
+.js-fade-in-up[data-delay="0.4s"].reveal { transition-delay: 0.4s; }
+.js-fade-in-up[data-delay="0.5s"].reveal { transition-delay: 0.5s; }
+.js-fade-in-up[data-delay="0.6s"].reveal { transition-delay: 0.6s; }
+
+/* Clase para el menú móvil (necesitarás JS para togglear esta clase en el body) */
+.nav-mobile-open {
+    overflow: hidden;
 }

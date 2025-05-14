@@ -91,9 +91,24 @@
             <nav class="flex items-center">
                 <a href="listado.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
                 <a href="contacto.php" class="text-gray-700 hover:text-black mr-4">Contacto</a>
-                <a href="registro.php" class="bg-transparent text-gray-700 border border-gray-300 py-2 px-4 rounded-md hover:bg-gray-100 hover:border-gray-400 mr-4 transition duration-200">Registrarse</a>
-                <a href="login.php" class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">Iniciar Sesión</a>
-                <a href="panelUsuario.php" class="text-gray-700 hover:text-black mr-4">Mi Panel</a>
+
+                <?php if (isset($_SESSION['usuario']['usuario'])): ?>
+                    <div class="relative">
+                        <button id="dropdownBtn" class="text-gray-700 hover:text-black focus:outline-none flex items-center">
+                            <span class="mr-2"><?php echo htmlspecialchars($_SESSION['usuario']['usuario']); ?></span>
+                            <svg class="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                        </button>
+                        <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg origin-top-right hidden">
+                            <div class="py-1">
+                                <a href="panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Mi Panel</a>
+                                <a href="editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Editar Perfil</a>
+                                <a href="logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100">Cerrar Sesión</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <a href="login.php" class="text-gray-700 hover:text-black">Iniciar Sesión</a>
+                <?php endif; ?>
             </nav>
         </div>
     </header>
@@ -117,10 +132,10 @@
             <form method="post" action="" enctype="multipart/form-data" novalidate>
                 <div class="form-group">
                     <label for="nombre">Nombre:</label>
-                    <input 
-                        type="text" 
-                        id="nombre" 
-                        name="nombre" 
+                    <input
+                        type="text"
+                        id="nombre"
+                        name="nombre"
                         value="<?php echo isset($usuario['nombre']) ? htmlspecialchars($usuario['nombre']) : ''; ?>"
                         pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{3,50}$"
                         required
@@ -130,10 +145,10 @@
 
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
                         value="<?php echo isset($usuario['email']) ? htmlspecialchars($usuario['email']) : ''; ?>"
                         required
                         pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
@@ -143,9 +158,9 @@
 
                 <div class="form-group">
                     <label for="password_actual">Contraseña Actual (requerida para cambios):</label>
-                    <input 
-                        type="password" 
-                        id="password_actual" 
+                    <input
+                        type="password"
+                        id="password_actual"
                         name="password_actual"
                         required
                         class="focus:border-yellow-500 focus:ring-yellow-500">
@@ -153,9 +168,9 @@
 
                 <div class="form-group">
                     <label for="password_nuevo">Nueva Contraseña (dejar en blanco si no desea cambiarla):</label>
-                    <input 
-                        type="password" 
-                        id="password_nuevo" 
+                    <input
+                        type="password"
+                        id="password_nuevo"
                         name="password_nuevo"
                         pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
                         title="La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial"
@@ -164,9 +179,9 @@
 
                 <div class="form-group">
                     <label for="confirmar_password_nuevo">Confirmar Nueva Contraseña:</label>
-                    <input 
-                        type="password" 
-                        id="confirmar_password_nuevo" 
+                    <input
+                        type="password"
+                        id="confirmar_password_nuevo"
                         name="confirmar_password_nuevo"
                         oninput="this.setCustomValidity(this.value != document.getElementById('password_nuevo').value ? 'Las contraseñas no coinciden' : '')"
                         class="focus:border-yellow-500 focus:ring-yellow-500">
@@ -174,22 +189,22 @@
 
                 <div class="form-group">
                     <label for="descripcion">Descripción del Negocio:</label>
-                    <textarea 
-                        id="descripcion" 
+                    <textarea
+                        id="descripcion"
                         name="descripcion"
                         maxlength="500"
                         class="w-full p-3 border border-gray-300 rounded-md focus:border-yellow-500 focus:ring-yellow-500"
                         rows="4"><?php echo isset($usuario['descripcion']) ? htmlspecialchars($usuario['descripcion']) : ''; ?></textarea>
-                    <button type="button" 
-                            id="mejorarDescripcion" 
+                    <button type="button"
+                            id="mejorarDescripcion"
                             class="mt-2 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200">
                         Mejorar Descripción
                     </button>
                     <div id="sugerenciaDescripcion" class="mt-3 p-3 border rounded-md hidden">
                         <h4 class="font-semibold mb-2">Sugerencia de mejora:</h4>
                         <p id="textoSugerencia" class="text-gray-700"></p>
-                        <button type="button" 
-                                id="aplicarSugerencia" 
+                        <button type="button"
+                                id="aplicarSugerencia"
                                 class="mt-2 bg-green-500 text-white py-1 px-3 rounded-md hover:bg-green-600 transition duration-200">
                             Aplicar Sugerencia
                         </button>
@@ -198,9 +213,9 @@
 
                 <div class="form-group">
                     <label for="ciudad">Ciudad:</label>
-                    <input 
-                        type="text" 
-                        id="ciudad" 
+                    <input
+                        type="text"
+                        id="ciudad"
                         name="ciudad"
                         value="<?php echo isset($usuario['ciudad']) ? htmlspecialchars($usuario['ciudad']) : ''; ?>"
                         maxlength="100"
@@ -209,36 +224,34 @@
 
                 <div class="form-group">
                     <label for="imagen">Imagen de Perfil:</label>
-                    <input 
-                        type="file" 
-                        id="imagen" 
+                    <input
+                        type="file"
+                        id="imagen"
                         name="imagen"
                         accept="image/jpeg,image/png"
                         class="w-full p-3 border border-gray-300 rounded-md focus:border-yellow-500 focus:ring-yellow-500">
                     <p class="text-sm text-gray-500 mt-1">Formatos permitidos: JPG, PNG. Tamaño máximo: 5MB</p>
-                    
-                    <!-- Botón para generar logo -->
-                    <button type="button" 
-                            id="generarLogo" 
+
+                    <button type="button"
+                            id="generarLogo"
                             class="mt-2 bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">
                         Generar Logo con IA
                     </button>
 
-                    <!-- Modal para generar logo -->
                     <div id="modalGenerarLogo" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
                         <div class="bg-white p-6 rounded-lg max-w-md w-full relative">
                             <h3 class="text-lg font-semibold mb-4">Generar Logo con IA</h3>
-                            
+
                             <div id="paso1" class="space-y-4">
                                 <div class="form-group">
                                     <label for="logoDescripcion" class="block mb-2">Describe cómo quieres que sea tu logo:</label>
-                                    <textarea 
-                                        id="logoDescripcion" 
+                                    <textarea
+                                        id="logoDescripcion"
                                         class="w-full p-3 border border-gray-300 rounded-md focus:border-yellow-500 focus:ring-yellow-500"
                                         rows="4"
                                         placeholder="Ejemplo: Un logo minimalista para una tienda de ropa, con tonos azules y blancos..."></textarea>
                                 </div>
-                                <button type="button" 
+                                <button type="button"
                                         id="generarLogoBtn"
                                         class="w-full bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600">
                                     Generar Logo
@@ -250,12 +263,12 @@
                                     <img id="logoGenerado" class="max-w-full h-auto mb-4 rounded-lg shadow-lg" src="" alt="Logo generado">
                                 </div>
                                 <div class="flex space-x-2">
-                                    <button type="button" 
+                                    <button type="button"
                                             id="regenerarLogo"
                                             class="flex-1 bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600">
                                         Generar Otro
                                     </button>
-                                    <button type="button" 
+                                    <button type="button"
                                             id="guardarLogo"
                                             class="flex-1 bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600">
                                         Usar Este Logo
@@ -263,7 +276,7 @@
                                 </div>
                             </div>
 
-                            <button type="button" 
+                            <button type="button"
                                     id="cerrarModal"
                                     class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl"
                                     aria-label="Cerrar">
@@ -286,11 +299,27 @@
         </div>
     </main>
     <script>
+        const dropdownBtn = document.getElementById('dropdownBtn');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        if (dropdownBtn && dropdownMenu) {
+            dropdownBtn.addEventListener('click', () => {
+                dropdownMenu.classList.toggle('hidden');
+            });
+
+            // Cerrar el desplegable si se hace clic fuera
+            document.addEventListener('click', (event) => {
+                if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.add('hidden');
+                }
+            });
+        }
+
         document.getElementById('mejorarDescripcion').addEventListener('click', async function() {
             const descripcion = document.getElementById('descripcion').value;
             const sugerenciaDiv = document.getElementById('sugerenciaDescripcion');
             const textoSugerencia = document.getElementById('textoSugerencia');
-            
+
             if (!descripcion.trim()) {
                 alert('Por favor, ingrese una descripción primero.');
                 return;
@@ -346,7 +375,7 @@
         document.getElementById('generarLogoBtn').addEventListener('click', async function() {
             const descripcion = document.getElementById('logoDescripcion').value;
             const loadingIndicator = document.getElementById('loadingIndicator');
-            
+
             if (!descripcion.trim()) {
                 alert('Por favor, describe cómo quieres que sea tu logo.');
                 return;
@@ -388,24 +417,24 @@
 
         document.getElementById('guardarLogo').addEventListener('click', async function() {
             const logoUrl = document.getElementById('logoGenerado').src;
-            
+
             try {
                 const response = await fetch(logoUrl);
                 const blob = await response.blob();
-                
+
                 // Crear un objeto File
                 const file = new File([blob], 'logo.png', { type: 'image/png' });
-                
+
                 // Crear un objeto DataTransfer y agregar el archivo
                 const dataTransfer = new DataTransfer();
                 dataTransfer.items.add(file);
-                
+
                 // Asignar el archivo al input de imagen
                 document.getElementById('imagen').files = dataTransfer.files;
-                
+
                 // Cerrar el modal
                 document.getElementById('modalGenerarLogo').classList.add('hidden');
-                
+
                 // Opcional: Mostrar mensaje de éxito
                 alert('Logo agregado correctamente. No olvides guardar los cambios.');
             } catch (error) {

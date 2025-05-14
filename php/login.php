@@ -1,207 +1,97 @@
+<?php
+    session_start();
+    require('./util/config.php'); // Asegúrate de que este archivo contiene tu conexión a la base de datos ($_conexion)
+
+    // Inicializar variables para mensajes de error
+    $error_message = "";
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Obtener datos del formulario
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
+        // Realizar validaciones básicas (puedes añadir más)
+        if (empty($username) || empty($password)) {
+            $error_message = "Por favor, introduce tu nombre de usuario y contraseña.";
+        } else {
+            // Consulta a la base de datos para verificar las credenciales, incluyendo la foto de perfil
+            $sql = "SELECT id_usuario, usuario, nombre, email, contrasena, foto_perfil FROM usuario WHERE usuario = ?";
+            $stmt = $_conexion->prepare($sql);
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
+
+            if ($resultado->num_rows == 1) {
+                $row = $resultado->fetch_assoc();
+                // Verificar la contraseña (usando password_verify si has hasheado las contraseñas)
+                if (password_verify($password, $row['contrasena'])) {
+                    // La autenticación fue exitosa, guardar la información del usuario en la sesión, incluyendo la foto de perfil
+                    $_SESSION['usuario'] = array(
+                        'id_usuario' => $row['id_usuario'],
+                        'usuario' => $row['usuario'],
+                        'nombre' => $row['nombre'],
+                        'email' => $row['email'],
+                        'foto_perfil' => $row['foto_perfil'] // Guardar la ruta o nombre del archivo de la foto de perfil
+                        // Puedes guardar más información si es necesario
+                    );
+
+                    // Redirigir al usuario a la página de perfil o a la página principal
+                    header("location: perfilUsuario.php");
+                    exit;
+                } else {
+                    $error_message = "Contraseña incorrecta.";
+                }
+            } else {
+                $error_message = "Nombre de usuario no encontrado.";
+            }
+
+            $stmt->close();
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>We-Connect | Iniciar Sesión</title>
+    <title>Iniciar Sesión | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style2.css">
-    <style>
-        /* Estilos adicionales para este ejemplo (puedes moverlos a style.css) */
-        body {
-            background-image: linear-gradient(135deg, #fbc02d 0%, #ffeb3b 100%); /* Un fondo llamativo */
-        }
-        .login-container {
-            background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-        .login-info {
-            background-color: #f9f9f9;
-            padding: 4rem;
-            border-right: 1px solid #eee;
-        }
-        .login-info h2 {
-            color: #333;
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-        }
-        .login-form {
-            padding: 3rem;
-        }
-        .login-form h2 {
-            color: #333;
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        .form-group label {
-            display: block;
-            color: #777;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-        .form-group input:focus {
-            outline: none;
-            border-color: #fbc02d;
-            box-shadow: 0 0 0 0.2rem rgba(251, 192, 45, 0.25);
-        }
-        .login-button {
-            background-color: #fbc02d;
-            color: #333;
-            font-weight: bold;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 1.1rem;
-            transition: background-color 0.3s ease;
-        }
-        .login-button:hover {
-            background-color: #e0ac28;
-        }
-        .social-login {
-            margin-top: 2rem;
-            text-align: center;
-        }
-        .social-login p {
-            color: #777;
-            margin-bottom: 1rem;
-        }
-        .social-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            padding: 0.6rem 1rem;
-            margin: 0 0.5rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-        .social-button:hover {
-            background-color: #eee;
-            border-color: #ccc;
-        }
-        .social-button svg {
-            margin-right: 0.5rem;
-        }
-        .register-link {
-            margin-top: 1.5rem;
-            text-align: center;
-            color: #777;
-            font-size: 0.9rem;
-        }
-        .register-link a {
-            color: #fbc02d;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-        .forgot-password a {
-            color: #fbc02d;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        .forgot-password a:hover {
-            text-decoration: underline;
-        }
-    </style>
-    <?php
-        error_reporting( E_ALL );
-        ini_set("display_errors", 1 );   
-        require('./util/config.php');
-    ?>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex items-center justify-center">
-    <?php
-        if($_SERVER["REQUEST_METHOD"] == "POST"){
-            $usuario = $_POST["usuario"];
-            $contrasena = $_POST["contrasena"];
-
-            //si el usuario existe va a devolver una fila con el usuario y contraseña
-            $sql = "SELECT * FROM usuario WHERE usuario = '$usuario'";
-
-            //
-            $resultado = $_conexion -> query($sql);
-
-            //veo lo que muestra el resultado si no se detecta nombre de usuario
-
-            if($resultado -> num_rows == 0){
-                echo "<h2>El usuario $usuario no existe</h2>";
-            }else{
-                $datosUsuario = $resultado -> fetch_assoc();
-                /* Podemos acceder a:
-                $datosUsuario["usuario"]
-                $datosContrasena["contrasena"]
-                */
-                //password_verify es la función inversa a el hash
-                $accesoConcedido = password_verify($contrasena,$datosUsuario["contrasena"]);
-                //compruebo que salga correcto (saldría un booleano TRUE si la contraseña es correcta)
-                //var_dump($accesoConcedido);   Si no está la contraseña y el usuario sale FALSE
-
-                if($accesoConcedido){
-                    //bien
-                    session_start();
-                    //La sesión se almacena en el servidor y guarda información del usuario
-                    $_SESSION["usuario"] = $usuario;
-                    $_SESSION["id_usuario"] = $datosUsuario["id_usuario"];
-                    //Cookie en el cliente, guarda información del navegador
-                    //$_COOKIE["usuario"] = "usuario";
-
-                    header("location: listado.php");
-                    exit;
-                }else{
-                    echo "<h2>La contraseña ese incorrecta.</h2>";
-                }
-            }
-        }
-    ?>
-    <div class="login-container w-full max-w-screen-md shadow-lg rounded-lg overflow-hidden md:flex">
-        <div class="login-info md:w-1/2 p-8">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Bienvenido de Nuevo a We-Connect</h2>
-            <p class="mb-4">Conecta con una vibrante comunidad de emprendedores, comparte tus ideas, encuentra colaboradores y haz crecer tu proyecto.</p>
-            <p class="mb-4">Accede a tu red de contactos y sigue construyendo relaciones valiosas en el mundo del emprendimiento.</p>
-            <p class="text-sm text-gray-600">¿Aún no eres parte de We-Connect? <a href="registro.php" class="text-yellow-500 font-semibold hover:underline">Regístrate aquí</a>.</p><br><br>
-            <button type="button" onclick="window.location.href='../index.php'" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Volver</button>
-        </div>
-
-        <div class="login-form md:w-1/2 p-8">
-            <h2 class="text-xl font-semibold text-gray-800 mb-6 text-center">Iniciar Sesión</h2>
-            <form class="space-y-4" method="post">
-                
-                <div class="form-group">
-                    <label for="usuario">Nombre de usuario:</label>
-                    <input type="text" name="usuario" id="usuario" placeholder="Tu dirección de correo electrónico">
-                </div>
-                <div class="form-group">
-                    <label for="contrasena">Contraseña:</label>
-                    <input type="password" name="contrasena" id="contrasena" placeholder="Tu contraseña">
-                </div>
-                <button type="submit" class="login-button">Iniciar Sesión</button>
-            </form>
-
-            <div class="forgot-password mt-2">
-                <!-- <a href="forgotPassword.php">¿Olvidaste tu contraseña?</a>HACER ARCHIVOOOOOOOOOo -->
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <h2 class="block text-gray-700 text-xl font-bold mb-4 text-center">Iniciar Sesión</h2>
+        <?php if (!empty($error_message)): ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <span class="block sm:inline"><?php echo $error_message; ?></span>
             </div>
-
-            <p class="register-link mt-4">¿Aún no tienes una cuenta? <a href="registro.php">Regístrate aquí</a></p>
-        </div>
+        <?php endif; ?>
+        <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+                    Nombre de Usuario
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Nombre de Usuario" name="username">
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+                    Contraseña
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="Contraseña" name="password">
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Iniciar Sesión
+                </button>
+                <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
+                    ¿Olvidaste tu contraseña?
+                </a>
+            </div>
+        </form>
+        <p class="text-center text-gray-500 text-xs mt-4">
+            &copy; 2025 We-Connect. Todos los derechos reservados.
+        </p>
     </div>
 </body>
 </html>

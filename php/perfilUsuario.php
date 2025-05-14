@@ -1,10 +1,18 @@
 <?php
-   /* session_start();
+    session_start();
     require('./util/config.php');
 
-    // Verificar si se ha proporcionado un ID de usuario
-    $id_usuario = isset($_GET['id']) ? $_GET['id'] : $_SESSION['id_usuario'];
-    
+    // Verificar si el usuario está logueado Y si la información del usuario está completa en la sesión
+    if (!isset($_SESSION['usuario']) || !isset($_SESSION['usuario']['id_usuario'])) {
+        // Si falta la información esencial del usuario en la sesión, redirigir a la página de inicio de sesión
+        header("location: login.php");
+        exit;
+    }
+
+    // Obtener el ID del usuario de la sesión de forma segura
+    $id_usuario = $_SESSION['usuario']['id_usuario'];
+    $aliasUsuario = htmlspecialchars($_SESSION['usuario']['usuario']);
+
     // Obtener información del usuario
     $sql = "SELECT * FROM usuario WHERE id_usuario = ?";
     $stmt = $_conexion->prepare($sql);
@@ -12,18 +20,22 @@
     $stmt->execute();
     $resultado = $stmt->get_result();
     $usuario = $resultado->fetch_assoc();
-    
+
+    // Verificar si se encontró el usuario en la base de datos
+    if (!$usuario) {
+        echo "Error: No se encontró información del usuario en la base de datos.";
+        exit;
+    }
 
     // Obtener productos del usuario
-    $sql_productos = "SELECT * FROM producto WHERE usuario = ? ORDER BY fecha_creacion DESC";
+    // *** Línea modificada ***
+    $sql_productos = "SELECT * FROM producto WHERE usuario = ? ORDER BY fecha_agregado DESC";
     $stmt_productos = $_conexion->prepare($sql_productos);
     $stmt_productos->bind_param("s", $usuario['usuario']);
     $stmt_productos->execute();
     $productos = $stmt_productos->get_result();
 
-    */
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -38,7 +50,7 @@
             border-radius: 50%;
             object-fit: cover;
         }
-        
+
         @media (max-width: 768px) {
             .profile-image {
                 width: 100px;
@@ -62,7 +74,24 @@
             <nav class="flex items-center">
                 <a href="producto.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
                 <a href="servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
-                <!--  -->
+                <?php
+                if(isset($_SESSION["usuario"]["usuario"])){
+                    echo '<div class="relative">';
+                    echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-black focus:outline-none" aria-expanded="false" aria-haspopup="true">';
+                    echo '        <span>' . $aliasUsuario . '</span>';
+                    echo '        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
+                    echo '    </button>';
+                    echo '    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-10 hidden">';
+                    echo '        <a href="perfilUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Panel</a>';
+                    echo '        <a href="editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
+                    echo '        <hr class="border-gray-200">';
+                    echo '        <a href="logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
+                    echo '    </div>';
+                    echo '</div>';
+                } else {
+                    echo '<a href="login.php" class="text-gray-700 hover:text-black">Iniciar Sesión</a>';
+                }
+                ?>
             </nav>
         </div>
     </header>
@@ -71,19 +100,19 @@
         <div class="bg-white rounded-lg shadow-md p-6 mb-8">
             <div class="md:flex items-start">
                 <div class="md:w-1/4 text-center mb-6 md:mb-0">
-                    <img src="<?php echo $usuario['imagen_perfil'] ?? 'assets/default-profile.png'; ?>" 
-                         alt="Foto de perfil" 
+                    <img src="<?php echo $usuario['foto_perfil'] ?? 'assets/default-profile.png'; ?>"
+                         alt="Foto de perfil"
                          class="profile-image mx-auto mb-4">
                 </div>
                 <div class="md:w-3/4 md:pl-8">
                     <h1 class="text-3xl font-bold text-gray-800 mb-2"><?php echo htmlspecialchars($usuario['nombre']); ?></h1>
-                    <p class="text-gray-600 mb-4"><?php echo htmlspecialchars($usuario['descripcion'] ?? 'Sin descripción'); ?></p>
+                    <p class="text-gray-600 mb-4"><?php echo htmlspecialchars($usuario['area_trabajo'] ?? 'Sin área de trabajo'); ?></p>
                     <p class="text-gray-600 mb-4">
                         <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
-                        <?php echo htmlspecialchars($usuario['ciudad'] ?? 'Ubicación no especificada'); ?>
+                        <?php echo htmlspecialchars($usuario['telefono'] ?? 'Teléfono no especificado'); ?>
                     </p>
                 </div>
             </div>
@@ -95,7 +124,7 @@
                 <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="md:flex">
                         <div class="md:w-1/4">
-                            <img src="<?php echo htmlspecialchars($producto['imagen']); ?>" 
+                            <img src="<?php echo htmlspecialchars($producto['imagen']); ?>"
                                  alt="<?php echo htmlspecialchars($producto['nombre']); ?>"
                                  class="w-full h-48 object-cover">
                         </div>
@@ -109,13 +138,13 @@
                             <p class="text-lg font-bold text-yellow-500 mb-4">
                                 €<?php echo number_format($producto['precio'], 2); ?>
                             </p>
-                            <?php if(isset($_SESSION['usuario']) && $_SESSION['usuario'] == $usuario['usuario']): ?>
+                            <?php if(isset($_SESSION['usuario']['usuario']) && $_SESSION['usuario']['usuario'] == $usuario['usuario']): ?>
                                 <div class="flex space-x-4">
-                                    <a href="editarProducto.php?id=<?php echo $producto['id_producto']; ?>" 
+                                    <a href="editarProducto.php?id=<?php echo $producto['id_producto']; ?>"
                                        class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200">
                                         Editar producto
                                     </a>
-                                    <button onclick="eliminarProducto(<?php echo $producto['id_producto']; ?>)" 
+                                    <button onclick="eliminarProducto(<?php echo $producto['id_producto']; ?>)"
                                             class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-200">
                                         Eliminar producto
                                     </button>
@@ -129,6 +158,26 @@
     </main>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userDropdownButton = document.getElementById('user-dropdown-button');
+            const userDropdown = document.getElementById('user-dropdown');
+
+            if (userDropdownButton && userDropdown) {
+                userDropdownButton.addEventListener('click', function() {
+                    userDropdown.classList.toggle('hidden');
+                    this.setAttribute('aria-expanded', !userDropdown.classList.contains('hidden'));
+                });
+
+                // Cerrar el desplegable si se hace clic fuera
+                document.addEventListener('click', function(event) {
+                    if (!userDropdownButton.contains(event.target) && !userDropdown.contains(event.target)) {
+                        userDropdown.classList.add('hidden');
+                        userDropdownButton.setAttribute('aria-expanded', false);
+                    }
+                });
+            }
+        });
+
         function eliminarProducto(id) {
             if(confirm('¿Estás seguro de que deseas eliminar este producto?')) {
                 window.location.href = `eliminarProducto.php?id=${id}`;
