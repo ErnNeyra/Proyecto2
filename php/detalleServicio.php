@@ -13,15 +13,12 @@
             <nav class="flex items-center">
                 <a href="producto.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
                 <a href="servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
-                <a href="contacto.php" class="text-gray-700 hover:text-black mr-4">Contacto</a>
+                <!-- PANEL USUARIO -->
             </nav>
         </div>
     </header>
 
     <main class="container mx-auto py-12 px-6 flex-grow">
-    <?php
-      
-    ?>
         <div class="bg-white rounded-lg shadow-md p-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>

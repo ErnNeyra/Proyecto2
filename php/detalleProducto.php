@@ -13,7 +13,6 @@
             <nav class="flex items-center">
                 <a href="producto.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
                 <a href="servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
-                <a href="contacto.php" class="text-gray-700 hover:text-black mr-4">Contacto</a>
             </nav>
         </div>
     </header>
