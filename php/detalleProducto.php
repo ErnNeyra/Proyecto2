@@ -20,13 +20,31 @@
 
     <main class="container mx-auto py-12 px-6 flex-grow">
     <?php
-      
+
+        error_reporting( E_ALL );
+        ini_set("display_errors", 1 );   
+        require('util/config.php');
+
+
+        $idProducto = $_GET["id_producto"];
+        $sql = "SELECT * FROM producto WHERE id_producto = $idProducto";
+        $resultado = $_conexion ->query($sql);
+        while($producto = $resultado -> fetch_assoc()){
+            $nombre = $producto["nombre"];
+            $precio = $producto["precio"];
+            $categoria = $producto["categoria"];
+            $descripcion = $producto["descripcion"];
+            $imagen = $producto["imagen"];
+            $usuario = $producto["usuario"];
+        }
+            
+        
     ?>
         <div class="bg-white rounded-lg shadow-md p-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                     <div id="contenedor-imagen-principal" class="mb-4 cursor-zoom-in">
-                        <img id="imagen-principal" src="https://via.placeholder.com/600x400/4a5568/fff?Text=Imagen%20Principal" alt="Imagen del Producto" class="w-full rounded-md">
+                        <img id="imagen-principal" src=" <?php echo $imagen ?>"  alt="Imagen del Producto" class="w-full rounded-md">
                     </div>
                     <div class="flex -mx-2">
                         <div class="w-1/4 px-2">
@@ -53,7 +71,7 @@
                     </div>
                 </div>
                 <div>
-                    <h1 class="text-3xl font-semibold text-gray-800 mb-4">Nombre del Producto/Servicio Detallado</h1>
+                    <h1 class="text-3xl font-semibold text-gray-800 mb-4"><?php echo$nombre?></h1>
                     <div class="flex items-center mb-4">
                         <span class="text-yellow-500 text-xl mr-1">&#9733;</span>
                         <span class="text-yellow-500 text-xl mr-1">&#9733;</span>
@@ -62,8 +80,8 @@
                         <span class="text-gray-300 text-xl mr-2">&#9733;</span>
                         <span class="text-gray-600 text-sm">(3 valoraciones)</span>
                     </div>
-                    <p class="text-gray-700 leading-relaxed mb-6">Descripción detallada del producto o servicio. Aquí se pueden incluir todas las características, beneficios, instrucciones de uso, etc. Este texto podría ser bastante extenso y proporcionar al usuario toda la información que necesita para tomar una decisión.</p>
-                    <p class="text-gray-600 font-semibold mb-2">Precio: <span class="text-black">$XX.XX</span></p>
+                    <p class="text-gray-700 leading-relaxed mb-6"><?php echo$descripcion?></p>
+                    <p class="text-gray-600 font-semibold mb-2">Precio: <span class="text-black"><?php echo$precio?>€</span></p>
                     <p class="text-gray-600 mb-4">Disponibilidad: <span class="text-green-500">En stock</span></p>
                     <div class="mb-6">
                         <button class="bg-yellow-500 text-black py-3 px-6 rounded-md hover:bg-yellow-600 focus:outline-none focus:shadow-outline">Contactar al Emprendedor</button>
@@ -74,7 +92,7 @@
                             <div class="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center text-white font-semibold mr-2">
                                 EP
                             </div>
-                            <p class="text-gray-700 font-semibold">Nombre del Emprendedor</p>
+                            <p class="text-gray-700 font-semibold"><?php echo$usuario?></p>
                         </div>
                         <p class="text-gray-600 text-sm mt-1">Breve descripción del emprendedor.</p>
                         <!-- <a href="" class="text-indigo-500 hover:underline text-sm mt-2 inline-block">Ver perfil</a>ESTO QUE ESSSSSSSSSSSSSSSSSSSSSSSs -->

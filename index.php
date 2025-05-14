@@ -90,19 +90,20 @@ if (isset($_SESSION['usuario'])) {
                 <div id="productos-carrusel" class="whitespace-nowrap scroll-smooth transition-transform duration-300 py-4 flex gap-4"> <?php
                     // Check if $_conexion is set and valid
                     $sql = "SELECT * FROM producto LIMIT 10"; // Ejemplo: los 10 primeros productos
-                    $result = $_conexion->query($sql);
+                    $resultado = $_conexion->query($sql);
 
-                    if ($result && $result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo '<div class="producto-card inline-block w-72 shadow-md rounded-md overflow-hidden border border-gray-200 bg-white flex-shrink-0 js-fade-in-up">'; // Añadido flex-shrink-0 y js-fade-in-up
-                        echo '<img src="php/' . htmlspecialchars($row['imagen']) . '" alt="' . htmlspecialchars($row['nombre']) . '" class="w-full h-40 object-cover">';
-                        echo '<div class="producto-card-content p-4">';
-                        echo '<h3 class="font-semibold text-gray-700">' . htmlspecialchars($row['nombre']) . '</h3>';
-                        echo '<p class="text-gray-600 text-sm">' . htmlspecialchars(substr($row['descripcion'], 0, 100)) . '...</p>';
-                        echo '<a href="detalleProducto.php?id=' . $row['id_producto'] . '" class="text-yellow-600 hover:text-yellow-700 font-semibold mt-2 inline-block">Ver Detalles</a>';
-                        echo '</div>';
-                        echo '</div>';
-                    }
+                    if ($resultado && $resultado->num_rows > 0) {
+                        while ($producto = $resultado->fetch_assoc()) {
+                            echo '<div class="producto-card inline-block w-72 shadow-md rounded-md overflow-hidden border border-gray-200 bg-white flex-shrink-0 js-fade-in-up">'; // Añadido flex-shrink-0 y js-fade-in-up
+                            echo '<img src="php/' . htmlspecialchars($producto['imagen']) . '" alt="' . htmlspecialchars($producto['nombre']) . '" class="w-full h-40 object-cover">';
+                            echo '<div class="producto-card-content p-4">';
+                            echo '<h3 class="font-semibold text-gray-700">' . htmlspecialchars($producto['nombre']) . '</h3>';
+                            echo '<p class="text-gray-600 text-sm">' . htmlspecialchars(substr($producto['descripcion'], 0, 100)) . '...</p>';
+                            echo '<a href="php/detalleProducto.php?id_producto=' . $producto['id_producto'] . '" class="text-yellow-600 hover:text-yellow-700 font-semibold mt-2 inline-block">Ver Detalles</a>';
+                            echo '</div>';
+                            echo '</div>';
+                            echo '<input type="hidden" name="id_producto" value=" '. $producto["id_producto"] .'">';
+                        }
                     } else {
                         echo "<p class='text-center text-gray-600 w-full'>No hay productos destacados por el momento.</p>"; // width full para centrar
                     }

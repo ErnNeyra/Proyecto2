@@ -84,12 +84,12 @@
                                 <span class="text-gray-600 text-sm ml-2">(0 valoraciones)</span>
                             </div>
                         </div>
-                        <a href="detalleProducto.php" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4">Ver Detalles</a>
+                        <a href="detalleProducto.php?id_producto=<?php echo $producto['id_producto']; ?>" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4">Ver Detalles</a>
                     </div>
                 </div>
             <?php
             } ?>
-            </div>
+        </div>
     </main>
 
     <footer class="bg-black py-4 text-center text-gray-400">
