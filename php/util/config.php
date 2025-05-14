@@ -1,10 +1,10 @@
 <?php
 
     //CONEXION AGUSTIN
-    /*$servidor = "localhost";
+    $servidor = "localhost";
     $usuario = "root";
-    $contrasena = "123456";
-    $BBDD = "weconnectdb";*/
+    $contrasena = "";
+    $BBDD = "weconnectdb";
 
     //$servidor = "localhost";
    // $usuario = "u593365251_root";
@@ -12,10 +12,10 @@
    // $BBDD = "u593365251_weConnect";
 
    //Conexion Ernesto
-    $servidor = "localhost";
+    /*$servidor = "localhost";
     $usuario = "root";
     $contrasena = "";
-    $BBDD = "We_connect";
+    $BBDD = "We_connect";*/
 
     //Mysqli ó PDO (nosotros vamos a usar Mysqli)
     //Intenta crear una conexion con la base de datos con los siguientes parámetros y en ese orden
