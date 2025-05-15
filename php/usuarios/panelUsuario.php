@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require('util/config.php');
+    require('../util/config.php');
 
     // Verificar si el usuario está logueado Y si la información del usuario está completa en la sesión
     if (!isset($_SESSION['usuario']) || !isset($_SESSION['usuario']['id_usuario'])) {
@@ -96,7 +96,7 @@
         <div class="bg-white rounded-lg shadow-md p-6 mb-8">
             <div class="md:flex items-start">
                 <div class="md:w-1/4 text-center mb-6 md:mb-0">
-                    <img src="<?php echo htmlspecialchars($usuario['foto_perfil'] ?? 'util/img/usuario.jpg'); ?>"
+                    <img src="<?php echo htmlspecialchars($usuario['foto_perfil'] ?? '../util/img/usuario.jpg'); ?>"
                          alt="Foto de perfil"
                          class="profile-image mx-auto mb-4">
                 </div>
@@ -131,7 +131,23 @@
                     </div>
             </div>
         </div>
+        <?php
+            if($_SERVER["REQUEST_METHOD"] == "POST"){
+                //por convención se usa siempre el id para borrar, pero se podría usar el titulo
+                $idProducto = $_POST["id_producto"];
+                //borrar el producto de la base de datos
+                /* $sql = "DELETE FROM animes WHERE id_anime = $idAnime";
+                $_conexion -> query($sql); */
 
+                //1. Prepare
+                $sql = $_conexion -> prepare("DELETE FROM producto WHERE id_producto = ?");
+                //2. Bind
+                $sql -> bind_param("i", $idProducto);
+                //3. Excute
+                $sql -> execute();
+
+            }
+        ?>
         <h2 class="text-2xl font-semibold text-gray-800 mb-6">Tus Productos Publicados</h2>
         <div class="grid gap-6">
             <?php if ($productos->num_rows > 0): ?>
@@ -155,14 +171,15 @@
                                 </p>
                                 <?php if(isset($_SESSION['usuario']['usuario']) && $_SESSION['usuario']['usuario'] == $usuario['usuario']): ?>
                                     <div class="flex space-x-4">
-                                        <a href="editarProducto.php?id=<?php echo $producto['id_producto']; ?>"
+                                        <a href="../productos/editarProducto.php?id=<?php echo $producto['id_producto']; ?>"
                                            class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200">
                                             Editar producto
                                         </a>
-                                        <button onclick="eliminarProducto(<?php echo $producto['id_producto']; ?>)"
-                                                class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-200">
-                                            Eliminar producto
-                                        </button>
+                                        <form action="" method="post">
+                                            <!-- Hago que sea dinámico, cada producto tiene un ID único -->
+                                            <input type="hidden" name="id_producto" value="<?php echo $producto["id_producto"]?>">
+                                            <button type="submit" class="btn btn-danger" onClick="location.reload()">Eliminar producto</button>
+                                        </form>
                                     </div>
                                 <?php endif; ?>
                             </div>
@@ -175,6 +192,6 @@
         </div>
     </main>
 
-     <script src="../js/script2.js"></script>
+     <script src="../../js/script2.js"></script>
 </body>
 </html>

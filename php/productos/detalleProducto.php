@@ -201,7 +201,7 @@
     <footer class="bg-black py-4 text-center text-gray-400">
         <p>&copy; 2025 We-Connect. Todos los derechos reservados.</p>
     </footer>
-    <script src="../js/script2.js"></script> <script src="../js/valoracion.js"></script> <script src="../js/lightbox.js"></script> <script src="../js/detalle-producto.js"></script> <script src="../js/comentario.js"></script>
+    <script src="../../js/script2.js"></script> <script src="../../js/valoracion.js"></script> <script src="../../js/lightbox.js"></script> <script src="../../js/detalle-producto.js"></script> <script src="../../js/comentario.js"></script>
   
 </body>
 </html>

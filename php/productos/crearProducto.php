@@ -8,7 +8,7 @@
     // Verificar si el usuario ha iniciado sesión
    if (!isset($_SESSION['usuario'])) {
         // Si no ha iniciado sesión, redirigir a la página de inicio de sesión
-        header("location: login.php"); // O una página de error de acceso no autorizado
+        header("location: ../usuarios/login.php"); // O una página de error de acceso no autorizado
         echo"<h2>Debes iniciar sesión para añadir un producto.</h2>";
         exit();
     }else{
@@ -87,13 +87,13 @@
 
         // Si no hay errores, proceder con la inserción
         if(empty($error)) {
-            if(isset($nombre) && isset($descripcion) && isset($precio) && isset($usuarioSesion["usuario"]["usuario"]) && isset($categoria) && isset($ubicacionFinal)){
+            if(isset($nombre) && isset($descripcion) && isset($precio) && isset($usuarioSesion["usuario"]) && isset($categoria) && isset($ubicacionFinal)){
                 $sql = $_conexion->prepare("INSERT INTO producto
                     (nombre, descripcion, precio, usuario, categoria, imagen)
                     VALUES (?, ?, ?, ?, ?, ?)"
                 );
                 $sql->bind_param("ssdsss",
-                    $nombre, $descripcion, $precio, $usuarioSesion["usuario"]["usuario"], $categoria, $ubicacionFinal
+                    $nombre, $descripcion, $precio, $usuarioSesion["usuario"], $categoria, $ubicacionFinal
                 );
                 if ($sql->execute()) {
                     $success = "Producto creado con éxito.";
@@ -213,6 +213,6 @@
     </footer>
 </body>
 </html>
-    <script src="../js/script2.js"></script>
+    <script src="../../js/script2.js"></script>
 </body>
 </html>

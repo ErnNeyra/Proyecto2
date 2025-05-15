@@ -93,7 +93,7 @@
                     if ($resultado && $resultado->num_rows > 0) {
                         while ($producto = $resultado->fetch_assoc()) {
                             echo '<div class="producto-card inline-block w-72 shadow-md rounded-md overflow-hidden border border-gray-200 bg-white flex-shrink-0 js-fade-in-up">'; // Añadido flex-shrink-0 y js-fade-in-up
-                            echo '<img src="php/' . htmlspecialchars($producto['imagen']) . '" alt="' . htmlspecialchars($producto['nombre']) . '" class="w-full h-40 object-cover">';
+                            echo '<img src="php/util/' . htmlspecialchars($producto['imagen']) . '" alt="' . htmlspecialchars($producto['nombre']) . '" class="w-full h-40 object-cover">';
                             echo '<div class="producto-card-content p-4">';
                             echo '<h3 class="font-semibold text-gray-700">' . htmlspecialchars($producto['nombre']) . '</h3>';
                             echo '<p class="text-gray-600 text-sm">' . htmlspecialchars(substr($producto['descripcion'], 0, 100)) . '...</p>';

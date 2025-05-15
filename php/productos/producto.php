@@ -96,7 +96,7 @@
     </footer>
 
     <script src="../js/valoracion.js"></script>
-     <script src="../js/script2.js"></script>
+    <script src="../../js/script2.js"></script>
 </body>
 </html>
 <?php

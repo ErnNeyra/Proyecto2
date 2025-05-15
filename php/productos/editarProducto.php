@@ -89,5 +89,6 @@
     <footer class="bg-black py-4 text-center text-gray-400">
         &copy; 2025 We-Connect. Todos los derechos reservados.
     </footer>
+    <script src="../../js/script2.js"></script>
 </body>
 </html>

@@ -87,13 +87,13 @@
 
         // Si no hay errores, proceder con la inserción
         if(empty($error)) {
-            if(isset($nombre) && isset($descripcion) && isset($precio) && isset($usuarioSesion["usuario"]["usuario"]) && isset($categoria) && isset($ubicacionFinal)){
+            if(isset($nombre) && isset($descripcion) && isset($precio) && isset($usuarioSesion["usuario"]) && isset($categoria) && isset($ubicacionFinal)){
                 $sql = $_conexion->prepare("INSERT INTO servicio
                     (nombre, descripcion, precio, usuario, categoria, imagen)
                     VALUES (?, ?, ?, ?, ?, ?)"
                 );
                 $sql->bind_param("ssdsss",
-                    $nombre, $descripcion, $precio, $usuarioSesion["usuario"]["usuario"], $categoria, $ubicacionFinal
+                    $nombre, $descripcion, $precio, $usuarioSesion["usuario"], $categoria, $ubicacionFinal
                 );
                 if ($sql->execute()) {
                     $success = "Servicio creado con éxito.";
@@ -191,7 +191,7 @@
                 </div>
                 <div class="mb-4">
                     <label for="categoria" class="block text-gray-700 text-sm font-bold mb-2">Categoría:</label>
-                    <select id="categoria" name="categoria" class="form-select form-select-lg">
+                    <select required id="categoria" name="categoria" class="form-select form-select-lg">
                     <option value="">---Selecciona una categoría---</option>
                     <?php
                     foreach ($categorias as $categoria): ?>
@@ -214,6 +214,6 @@
 </body>
 </html>
 
- <script src="../js/script2.js"></script>
+ <script src="../../js/script2.js"></script>
 </body>
 </html>
