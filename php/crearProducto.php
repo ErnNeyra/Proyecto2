@@ -20,10 +20,11 @@
     $success = "";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        //Recibo la el usuario con la sesión
-        $usuario = $_SESSION['usuario'];
-        // Validación de campos 
-        //Valido el nombre dle producto
+        //Recibo el usuario con la sesión
+        $usuario_sesion = $_SESSION['usuario'];
+
+        // Validación de campos
+        //Valido el nombre del producto
         $tmpNombre = depurar(ucwords(strtolower($_POST['nombre'])));
         if($tmpNombre == "") {
             $errorNombre = "El nombre es obligatorio";
@@ -60,7 +61,7 @@
                 }
             }
         }
-        
+
 
         //Valido la categoria del producto
         $categoria = $_POST['categoria'];
@@ -72,7 +73,7 @@
         if (!$checkCategoria->get_result()->num_rows > 0) {
             $errorCategoria = "Categoría inválida";
         }
-                
+
 
         //Validación de imagen
         //$_FILES es un array BIDIMENSIONAL, mientras que $_POST es un array UNIDIMENSIONAL
@@ -86,13 +87,13 @@
 
         // Si no hay errores, proceder con la inserción
         if(empty($error)) {
-            if(isset($nombre) && isset($descripcion) && isset($precio) && isset($usuario) && isset($categoria) && isset($ubicacionFinal)){
+            if(isset($nombre) && isset($descripcion) && isset($precio) && isset($usuario_sesion["usuario"]) && isset($categoria) && isset($ubicacionFinal)){
                 $sql = $_conexion->prepare("INSERT INTO producto
                     (nombre, descripcion, precio, usuario, categoria, imagen)
                     VALUES (?, ?, ?, ?, ?, ?)"
                 );
                 $sql->bind_param("ssdsss",
-                    $nombre, $descripcion, $precio, $usuario, $categoria, $ubicacionFinal
+                    $nombre, $descripcion, $precio, $usuario_sesion["usuario"], $categoria, $ubicacionFinal
                 );
                 if ($sql->execute()) {
                     $success = "Producto creado con éxito.";
@@ -101,7 +102,7 @@
                 }
             }
         }
-    
+
     }
 
     $sql = "SELECT nombre FROM categoria";
@@ -121,7 +122,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Nuevo Producto | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
     <header class="bg-white shadow-md">
@@ -155,21 +156,33 @@
     <main class="container mx-auto py-12 px-6 flex-grow">
         <div class="bg-white rounded-md shadow-md p-8 max-w-lg mx-auto border border-gray-200">
             <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Crear Nuevo Producto o Servicio</h1>
+            <?php if (!empty($error)): ?>
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <strong class="font-bold">Error:</strong>
+                    <span class="block sm:inline"><?php echo $error; ?></span>
+                </div>
+            <?php endif; ?>
+            <?php if (!empty($success)): ?>
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <strong class="font-bold">Éxito:</strong>
+                    <span class="block sm:inline"><?php echo $success; ?></span>
+                </div>
+            <?php endif; ?>
             <form method="post" enctype="multipart/form-data">
                 <div class="mb-4">
                     <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Nombre:</label>
                     <input type="text" id="nombre" name="nombre" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                    <?php if (isset($errorNombre)) echo "<span class='error'>$errorNombre</span>"; ?>
+                    <?php if (isset($errorNombre)) echo "<span class='text-red-500 text-xs italic'>$errorNombre</span>"; ?>
                 </div>
                 <div class="mb-4">
                     <label for="descripcion" class="block text-gray-700 text-sm font-bold mb-2">Descripción:</label>
                     <textarea id="descripcion" name="descripcion" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
-                    <?php if (isset($errorDescripcion)) echo "<span class='error'>$errorDescripcion</span>"; ?>
+                    <?php if (isset($errorDescripcion)) echo "<span class='text-red-500 text-xs italic'>$errorDescripcion</span>"; ?>
                 </div>
                 <div class="mb-4">
                     <label for="precio" class="block text-gray-700 text-sm font-bold mb-2">Precio:</label>
                     <input type="number" id="precio" name="precio" step="0.01" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                    <?php if (isset($errorPrecio)) echo "<span class='error'>$errorPrecio</span>"; ?>
+                    <?php if (isset($errorPrecio)) echo "<span class='text-red-500 text-xs italic'>$errorPrecio</span>"; ?>
                 </div>
                 <div class="mb-4">
                     <label for="imagen" class="block text-gray-700 text-sm font-bold mb-2">Imagen (opcional):</label>
@@ -182,11 +195,10 @@
                     <option value="">---Selecciona una categoría---</option>
                     <?php
                     foreach ($categorias as $categoria): ?>
-                        <!-- Ambas formas php las interpreta de la misma manera, está creando un option con el valor $estudio e imprimiendolo en el select -->
                         <option value="<?php echo $categoria;?>"><?= $categoria ?></option>
                     <?php endforeach; ?>
                     </select>
-                    <?php if (isset($errorCategoria)) echo "<span class='error'>$errorCategoria</span>"; ?>
+                    <?php if (isset($errorCategoria)) echo "<span class='text-red-500 text-xs italic'>$errorCategoria</span>"; ?>
                 </div>
                 <div class="flex items-center justify-between">
                     <button type="submit" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:shadow-outline">Crear Producto</button>
