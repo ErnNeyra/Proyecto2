@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listado de Servicios | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
     <header class="bg-white shadow-md">
@@ -88,29 +88,8 @@
     <footer class="bg-black py-4 text-center text-gray-400">
         <p>&copy; 2025 We-Connect. Todos los derechos reservados.</p>
     </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const userDropdownButton = document.getElementById('user-dropdown-button');
-            const userDropdown = document.getElementById('user-dropdown');
-
-            if (userDropdownButton && userDropdown) {
-                userDropdownButton.addEventListener('click', function() {
-                    userDropdown.classList.toggle('hidden');
-                    this.setAttribute('aria-expanded', !userDropdown.classList.contains('hidden'));
-                });
-
-                // Cerrar el desplegable si se hace clic fuera
-                document.addEventListener('click', function(event) {
-                    if (!userDropdownButton.contains(event.target) && !userDropdown.contains(event.target)) {
-                        userDropdown.classList.add('hidden');
-                        userDropdownButton.setAttribute('aria-expanded', false);
-                    }
-                });
-            }
-        });
-    </script>
     <script src="js/valoracion.js"></script>
+     <script src="../js/script2.js"></script>
 </body>
 </html>
 <?php

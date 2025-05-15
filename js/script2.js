@@ -533,3 +533,292 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 }); // Fin de DOMContentLoaded
+ document.addEventListener('DOMContentLoaded', function() {
+            const userDropdownButton = document.getElementById('user-dropdown-button');
+            const userDropdown = document.getElementById('user-dropdown');
+
+            if (userDropdownButton && userDropdown) {
+                userDropdownButton.addEventListener('click', function() {
+                    userDropdown.classList.toggle('hidden');
+                    this.setAttribute('aria-expanded', !userDropdown.classList.contains('hidden'));
+                });
+
+                // Cerrar el desplegable si se hace clic fuera
+                document.addEventListener('click', function(event) {
+                    if (!userDropdownButton.contains(event.target) && !userDropdown.contains(event.target)) {
+                        userDropdown.classList.add('hidden');
+                        userDropdownButton.setAttribute('aria-expanded', false);
+                    }
+                });
+            }
+        });
+           document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const precioInput = document.getElementById('precio');
+        const nombreInput = document.getElementById('nombre');
+        const descripcionInput = document.getElementById('descripcion');
+
+        // Agregar div para mensajes de error antes del formulario
+        const errorContainer = document.createElement('div');
+        errorContainer.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 hidden';
+        errorContainer.setAttribute('role', 'alert');
+        form.parentNode.insertBefore(errorContainer, form);
+
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+            let errorMessages = [];
+
+            // Validación del nombre
+            if (nombreInput.value.length < 3 || nombreInput.value.length > 100) {
+                errorMessages.push('El nombre debe tener entre 3 y 100 caracteres.');
+                isValid = false;
+            }
+
+            // Validación de la descripción
+            if (descripcionInput.value.length < 10 || descripcionInput.value.length > 500) {
+                errorMessages.push('La descripción debe tener entre 10 y 500 caracteres.');
+                isValid = false;
+            }
+
+            // Validación del precio
+            if (precioInput.value <= 0) {
+                errorMessages.push('El precio debe ser mayor que 0.');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                errorContainer.innerHTML = errorMessages.map(msg => `<p>${msg}</p>`).join('');
+                errorContainer.classList.remove('hidden');
+                // Scroll hacia el mensaje de error
+                errorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                errorContainer.classList.add('hidden');
+            }
+        });
+    });
+     const dropdownBtn = document.getElementById('dropdownBtn');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        if (dropdownBtn && dropdownMenu) {
+            dropdownBtn.addEventListener('click', () => {
+                dropdownMenu.classList.toggle('hidden');
+            });
+
+            // Cerrar el desplegable si se hace clic fuera
+            document.addEventListener('click', (event) => {
+                if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.add('hidden');
+                }
+            });
+        }
+
+        document.getElementById('mejorarDescripcion').addEventListener('click', async function() {
+            const descripcion = document.getElementById('descripcion').value;
+            const sugerenciaDiv = document.getElementById('sugerenciaDescripcion');
+            const textoSugerencia = document.getElementById('textoSugerencia');
+
+            if (!descripcion.trim()) {
+                alert('Por favor, ingrese una descripción primero.');
+                return;
+            }
+
+            try {
+                this.disabled = true;
+                this.textContent = 'Procesando...';
+
+                const response = await fetch('util/mejorar_descripcion.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ descripcion: descripcion })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    textoSugerencia.textContent = data.success;
+                    sugerenciaDiv.classList.remove('hidden');
+                } else {
+                    alert('Error: ' + (data.error || 'No se pudo procesar la solicitud'));
+                }
+            } catch (error) {
+                alert('Error al procesar la solicitud');
+            } finally {
+                this.disabled = false;
+                this.textContent = 'Mejorar Descripción';
+            }
+        });
+
+        document.getElementById('aplicarSugerencia').addEventListener('click', function() {
+            const descripcion = document.getElementById('descripcion');
+            const sugerencia = document.getElementById('textoSugerencia').textContent;
+            descripcion.value = sugerencia;
+            document.getElementById('sugerenciaDescripcion').classList.add('hidden');
+        });
+
+        // Funcionalidad para el generador de logos
+        document.getElementById('generarLogo').addEventListener('click', function() {
+            document.getElementById('modalGenerarLogo').classList.remove('hidden');
+            document.getElementById('paso1').classList.remove('hidden');
+            document.getElementById('paso2').classList.add('hidden');
+            document.getElementById('logoDescripcion').value = '';
+        });
+
+        document.getElementById('cerrarModal').addEventListener('click', function() {
+            document.getElementById('modalGenerarLogo').classList.add('hidden');
+        });
+
+        document.getElementById('generarLogoBtn').addEventListener('click', async function() {
+            const descripcion = document.getElementById('logoDescripcion').value;
+            const loadingIndicator = document.getElementById('loadingIndicator');
+
+            if (!descripcion.trim()) {
+                alert('Por favor, describe cómo quieres que sea tu logo.');
+                return;
+            }
+
+            try {
+                this.disabled = true;
+                loadingIndicator.classList.remove('hidden');
+
+                const response = await fetch('./util/generar_logo.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ descripcion: descripcion })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('logoGenerado').src = data.imageUrl;
+                    document.getElementById('paso1').classList.add('hidden');
+                    document.getElementById('paso2').classList.remove('hidden');
+                } else {
+                    alert('Error: ' + (data.error || 'No se pudo generar el logo'));
+                }
+            } catch (error) {
+                alert('Error al generar el logo');
+            } finally {
+                this.disabled = false;
+                loadingIndicator.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('regenerarLogo').addEventListener('click', function() {
+            document.getElementById('paso2').classList.add('hidden');
+            document.getElementById('paso1').classList.remove('hidden');
+        });
+
+        document.getElementById('guardarLogo').addEventListener('click', async function() {
+            const logoUrl = document.getElementById('logoGenerado').src;
+
+            try {
+                const response = await fetch(logoUrl);
+                const blob = await response.blob();
+
+                // Crear un objeto File
+                const file = new File([blob], 'logo.png', { type: 'image/png' });
+
+                // Crear un objeto DataTransfer y agregar el archivo
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+
+                // Asignar el archivo al input de imagen
+                document.getElementById('imagen').files = dataTransfer.files;
+
+                // Cerrar el modal
+                document.getElementById('modalGenerarLogo').classList.add('hidden');
+
+                // Opcional: Mostrar mensaje de éxito
+                alert('Logo agregado correctamente. No olvides guardar los cambios.');
+            } catch (error) {
+                alert('Error al guardar el logo: ' + error.message);
+            }
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+    const mejorarDescripcionBtn = document.getElementById('mejorarDescripcion');
+    const sugerenciaDescripcionDiv = document.getElementById('sugerenciaDescripcion');
+    const textoSugerenciaParrafo = document.getElementById('textoSugerencia');
+    const aplicarSugerenciaBtn = document.getElementById('aplicarSugerencia');
+    const descripcionTextarea = document.getElementById('descripcion');
+
+    const generarLogoBtn = document.getElementById('generarLogo');
+    const modalGenerarLogoDiv = document.getElementById('modalGenerarLogo');
+    const cerrarModalBtn = document.getElementById('cerrarModal');
+    const generarLogoModalBtn = document.getElementById('generarLogoBtn');
+    const logoDescripcionTextarea = document.getElementById('logoDescripcion');
+    const paso1Div = document.getElementById('paso1');
+    const paso2Div = document.getElementById('paso2');
+    const logoGeneradoImg = document.getElementById('logoGenerado');
+    const loadingIndicatorDiv = document.getElementById('loadingIndicator');
+    const guardarLogoBtn = document.getElementById('guardarLogo');
+    const imagenInputFile = document.getElementById('imagen');
+
+    if (mejorarDescripcionBtn) {
+        mejorarDescripcionBtn.addEventListener('click', function() {
+            // Aquí iría la lógica para llamar a una API o generar una sugerencia localmente
+            const sugerencia = "Esta es una sugerencia para mejorar tu descripción. Intenta ser más específico sobre los beneficios que ofreces.";
+            textoSugerenciaParrafo.textContent = sugerencia;
+            sugerenciaDescripcionDiv.classList.remove('hidden');
+        });
+    }
+
+    if (aplicarSugerenciaBtn) {
+        aplicarSugerenciaBtn.addEventListener('click', function() {
+            descripcionTextarea.value = textoSugerenciaParrafo.textContent;
+            sugerenciaDescripcionDiv.classList.add('hidden');
+        });
+    }
+
+    if (generarLogoBtn) {
+        generarLogoBtn.addEventListener('click', function() {
+            modalGenerarLogoDiv.classList.remove('hidden');
+        });
+    }
+
+    if (cerrarModalBtn) {
+        cerrarModalBtn.addEventListener('click', function() {
+            modalGenerarLogoDiv.classList.add('hidden');
+            paso1Div.classList.remove('hidden');
+            paso2Div.classList.add('hidden');
+            logoGeneradoImg.src = '';
+        });
+    }
+
+    if (generarLogoModalBtn) {
+        generarLogoModalBtn.addEventListener('click', function() {
+            const descripcionLogo = logoDescripcionTextarea.value;
+            if (descripcionLogo.trim() !== "") {
+                loadingIndicatorDiv.classList.remove('hidden');
+                paso1Div.classList.add('hidden');
+                // Simulación de una llamada a una API de generación de logos
+                setTimeout(function() {
+                    const imageUrl = 'https://via.placeholder.com/150/4682B4/FFFFFF?Text=' + encodeURIComponent('Logo para ' + descripcionLogo);
+                    logoGeneradoImg.src = imageUrl;
+                    paso2Div.classList.remove('hidden');
+                    loadingIndicatorDiv.classList.add('hidden');
+                }, 2000);
+            } else {
+                alert("Por favor, describe cómo quieres tu logo.");
+            }
+        });
+    }
+
+    if (guardarLogoBtn) {
+        guardarLogoBtn.addEventListener('click', function() {
+            const logoUrl = logoGeneradoImg.src;
+            // Aquí podrías implementar la lógica para descargar la imagen
+            // o para mostrarla en el input file (esto es más complejo y puede requerir soluciones del lado del servidor).
+            alert("La URL del logo generado es: " + logoUrl + ". Puedes hacer clic derecho y 'Guardar imagen como...' para descargarla y luego subirla.");
+            modalGenerarLogoDiv.classList.add('hidden');
+            paso1Div.classList.remove('hidden');
+            paso2Div.classList.add('hidden');
+            logoGeneradoImg.src = '';
+        });
+    }
+});

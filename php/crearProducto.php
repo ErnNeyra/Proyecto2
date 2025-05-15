@@ -202,53 +202,6 @@
 </body>
 </html>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
-        const precioInput = document.getElementById('precio');
-        const nombreInput = document.getElementById('nombre');
-        const descripcionInput = document.getElementById('descripcion');
-
-        // Agregar div para mensajes de error antes del formulario
-        const errorContainer = document.createElement('div');
-        errorContainer.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 hidden';
-        errorContainer.setAttribute('role', 'alert');
-        form.parentNode.insertBefore(errorContainer, form);
-
-        form.addEventListener('submit', function(e) {
-            let isValid = true;
-            let errorMessages = [];
-
-            // Validación del nombre
-            if (nombreInput.value.length < 3 || nombreInput.value.length > 100) {
-                errorMessages.push('El nombre debe tener entre 3 y 100 caracteres.');
-                isValid = false;
-            }
-
-            // Validación de la descripción
-            if (descripcionInput.value.length < 10 || descripcionInput.value.length > 500) {
-                errorMessages.push('La descripción debe tener entre 10 y 500 caracteres.');
-                isValid = false;
-            }
-
-            // Validación del precio
-            if (precioInput.value <= 0) {
-                errorMessages.push('El precio debe ser mayor que 0.');
-                isValid = false;
-            }
-
-            if (!isValid) {
-                e.preventDefault();
-                errorContainer.innerHTML = errorMessages.map(msg => `<p>${msg}</p>`).join('');
-                errorContainer.classList.remove('hidden');
-                // Scroll hacia el mensaje de error
-                errorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } else {
-                errorContainer.classList.add('hidden');
-            }
-        });
-    });
-</script>
-
+ <script src="../js/script2.js"></script>
 </body>
 </html>
