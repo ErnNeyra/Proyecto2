@@ -89,21 +89,32 @@
                     // Check if $_conexion is set and valid
                     $sql = "SELECT * FROM producto LIMIT 10"; // Ejemplo: los 10 primeros productos
                     $resultado = $_conexion->query($sql);
+                    $sql1 = "SELECT * FROM servicio LIMIT 10"; // Ejemplo: los 10 primeros productos
+                    $resultado1 = $_conexion->query($sql);
 
-                    if ($resultado && $resultado->num_rows > 0) {
+                    if ($resultado && $resultado1 && $resultado1->num_rows >0 && $resultado->num_rows > 0) {
                         while ($producto = $resultado->fetch_assoc()) {
                             echo '<div class="producto-card inline-block w-72 shadow-md rounded-md overflow-hidden border border-gray-200 bg-white flex-shrink-0 js-fade-in-up">'; // Añadido flex-shrink-0 y js-fade-in-up
                             echo '<img src="php/util/' . htmlspecialchars($producto['imagen']) . '" alt="' . htmlspecialchars($producto['nombre']) . '" class="w-full h-40 object-cover">';
                             echo '<div class="producto-card-content p-4">';
                             echo '<h3 class="font-semibold text-gray-700">' . htmlspecialchars($producto['nombre']) . '</h3>';
-                            echo '<p class="text-gray-600 text-sm">' . htmlspecialchars(substr($producto['descripcion'], 0, 100)) . '...</p>';
                             echo '<a href="php/productos/detalleProducto.php?id_producto=' . $producto['id_producto'] . '" class="text-yellow-600 hover:text-yellow-700 font-semibold mt-2 inline-block">Ver Detalles</a>';
                             echo '</div>';
                             echo '</div>';
                             echo '<input type="hidden" name="id_producto" value=" '. $producto["id_producto"] .'">';
                         }
+                        while ($servicio = $resultado1->fetch_assoc()) {
+                            echo '<div class="producto-card inline-block w-72 shadow-md rounded-md overflow-hidden border border-gray-200 bg-white flex-shrink-0 js-fade-in-up">'; // Añadido flex-shrink-0 y js-fade-in-up
+                            echo '<img src="php/util/' . htmlspecialchars($servicio['imagen']) . '" alt="' . htmlspecialchars($servicio['nombre']) . '" class="w-full h-40 object-cover">';
+                            echo '<div class="producto-card-content p-4">';
+                            echo '<h3 class="font-semibold text-gray-700">' . htmlspecialchars($servicio['nombre']) . '</h3>';
+                            echo '<a href="php/productos/detalleProducto.php?id_producto=' . $servicio['id_producto'] . '" class="text-yellow-600 hover:text-yellow-700 font-semibold mt-2 inline-block">Ver Detalles</a>';
+                            echo '</div>';
+                            echo '</div>';
+                            echo '<input type="hidden" name="id_producto" value=" '. $servicio["id_producto"] .'">';
+                        }
                     } else {
-                        echo "<p class='text-center text-gray-600 w-full'>No hay productos destacados por el momento.</p>"; // width full para centrar
+                        echo "<p class='text-center text-gray-600 w-full'>No hay productos o servicios destacados por el momento.</p>"; // width full para centrar
                     }
                     // No cierres la conexión aquí si la necesitas en otras partes de la página
                     // $_conexion->close();

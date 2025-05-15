@@ -56,7 +56,7 @@
             //$idProducto = $_GET['id_producto'];
             //$sql = "SELECT * FROM productos WHERE id_producto = $idProducto";
             // $stmt = $_conexion->prepare($sql);
-            $sql = "SELECT * FROM producto LIMIT 3";
+            $sql = "SELECT * FROM producto LIMIT 20";
             $resultado = $_conexion -> query($sql);
         ?>
 
