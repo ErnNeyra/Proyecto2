@@ -140,10 +140,10 @@
     <?php
     error_reporting(E_ALL);
     ini_set("display_errors", 1);
-    require('./util/config.php');
+    require('../util/config.php');
 
     // Definir la carpeta donde se guardarán las fotos de perfil
-    $uploadDir = 'util/img/';
+    $uploadDir = '../util/img/';
     ?>
 </head>
 
@@ -213,7 +213,7 @@
             }
         } else {
             // Si no se subió ninguna foto, asignamos la ruta por defecto
-            $fotoPerfil = 'util/img/usuario.jpg';
+            $fotoPerfil = '../util/img/usuario.jpg';
         }
 
         if (empty($errores)) {
@@ -243,7 +243,7 @@
                         'foto_perfil' => $row_sesion['foto_perfil']
                     );
                     // Redirección al index.php después del registro:
-                    header("location: ../index.php");
+                    header("location: ../../index.php");
                     exit;
                 } else {
                     $errores[] = "Error al iniciar sesión después del registro";
@@ -338,7 +338,7 @@
         </form>
 
         <div class="mt-6 text-center">
-            <button type="button" onclick="window.location.href='../index.php'" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Volver</button>
+            <button type="button" onclick="window.location.href='../../index.php'" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Volver</button>
         </div>
     </div>
     <script>

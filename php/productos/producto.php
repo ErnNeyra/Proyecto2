@@ -10,9 +10,9 @@
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
     <header class="bg-white shadow-md">
         <div class="container mx-auto py-4 px-6 flex items-center justify-between">
-            <a href="../index.php" class="text-xl font-bold text-black">We-Connect</a>
+            <a href="../../index.php" class="text-xl font-bold text-black">We-Connect</a>
             <nav class="flex items-center">
-                <a href="servicio.php" class="text-gray-700 hover:text-black mr-4">Servicio</a>
+                <a href="../servicios/servicio.php" class="text-gray-700 hover:text-black mr-4">Servicio</a>
                 <?php
                 session_start();
                 if(isset($_SESSION["usuario"])){
@@ -23,14 +23,14 @@
                     echo '        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
                     echo '    </button>';
                     echo '    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-10 hidden">';
-                    echo '        <a href="panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Panel</a>';
-                    echo '        <a href="editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
+                    echo '        <a href="../usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Panel</a>';
+                    echo '        <a href="../usuarios/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
                     echo '        <hr class="border-gray-200">';
-                    echo '        <a href="util/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
+                    echo '        <a href="../usuarios/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
                     echo '    </div>';
                     echo '</div>';
                 } else {
-                    echo '<a href="login.php" class="text-gray-700 hover:text-black">Iniciar Sesión</a>';
+                    echo '<a href="../usuarios/login.php" class="text-gray-700 hover:text-black">Iniciar Sesión</a>';
                 }
                 ?>
             </nav>
@@ -40,12 +40,12 @@
         if(!isset($_SESSION["usuario"]["usuario"])){
             //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
             //se ejecute el código body
-            header("location: login.php");
+            header("location: ../usuarios/login.php");
             exit;
         }
         error_reporting( E_ALL );
         ini_set("display_errors", 1 );
-        require('util/config.php');
+        require('../util/config.php');
     ?>
     <main class="container mx-auto py-12 px-6 flex-grow">
         <div class="flex items-center justify-between mb-8">

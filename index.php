@@ -21,8 +21,8 @@
         <div class="container mx-auto py-4 px-4 flex items-center justify-between">
             <a href="index.php" class="logo text-2xl font-bold text-gray-900 hover:text-marca-primario transition duration-200">We-Connect</a>
             <nav class="flex items-center space-x-4 md:space-x-6">
-                <a href="php/producto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Productos</a>
-                <a href="php/servicio.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Servicios</a>
+                <a href="php/productos/producto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Productos</a>
+                <a href="php/servicios/servicio.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Servicios</a>
                 <a href="php/contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
                 <?php
                     session_start(); // Inicia la sesión
@@ -49,15 +49,15 @@
 
                         // Contenido del desplegable (oculto por defecto)
                         echo '    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-10 hidden">';
-                        echo '        <a href="php/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Perfil</a>';
-                        echo '        <a href="php/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
+                        echo '        <a href="php/usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Perfil</a>';
+                        echo '        <a href="php/usuarios/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
                         echo '        <hr class="border-gray-200">';
-                        echo '        <a href="php/util/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
+                        echo '        <a href="php/usuarios/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
                         echo '    </div>';
                         echo '</div>';
                     } else {
-                        echo '<a href="php/login.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Iniciar Sesión</a>';
-                        echo '<a href="php/registro.php" class="cta-button bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold">Regístrate</a>';
+                        echo '<a href="php/usuarios/login.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Iniciar Sesión</a>';
+                        echo '<a href="php/usuarios/registro.php" class="cta-button bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold">Regístrate</a>';
                     }
                 ?>
             </nav>
@@ -97,7 +97,7 @@
                             echo '<div class="producto-card-content p-4">';
                             echo '<h3 class="font-semibold text-gray-700">' . htmlspecialchars($producto['nombre']) . '</h3>';
                             echo '<p class="text-gray-600 text-sm">' . htmlspecialchars(substr($producto['descripcion'], 0, 100)) . '...</p>';
-                            echo '<a href="php/detalleProducto.php?id_producto=' . $producto['id_producto'] . '" class="text-yellow-600 hover:text-yellow-700 font-semibold mt-2 inline-block">Ver Detalles</a>';
+                            echo '<a href="php/productos/detalleProducto.php?id_producto=' . $producto['id_producto'] . '" class="text-yellow-600 hover:text-yellow-700 font-semibold mt-2 inline-block">Ver Detalles</a>';
                             echo '</div>';
                             echo '</div>';
                             echo '<input type="hidden" name="id_producto" value=" '. $producto["id_producto"] .'">';
