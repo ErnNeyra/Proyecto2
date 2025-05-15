@@ -21,7 +21,7 @@
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //Recibo el usuario con la sesión
-        $usuario_sesion = $_SESSION['usuario'];
+        $usuarioSesion = $_SESSION['usuario'];
 
         // Validación de campos
         //Valido el nombre del servicio
@@ -87,13 +87,13 @@
 
         // Si no hay errores, proceder con la inserción
         if(empty($error)) {
-            if(isset($nombre) && isset($descripcion) && isset($precio) && isset($usuario_sesion["usuario"]) && isset($categoria) && isset($ubicacionFinal)){
+            if(isset($nombre) && isset($descripcion) && isset($precio) && isset($usuarioSesion["usuario"]["usuario"]) && isset($categoria) && isset($ubicacionFinal)){
                 $sql = $_conexion->prepare("INSERT INTO servicio
                     (nombre, descripcion, precio, usuario, categoria, imagen)
                     VALUES (?, ?, ?, ?, ?, ?)"
                 );
                 $sql->bind_param("ssdsss",
-                    $nombre, $descripcion, $precio, $usuario_sesion["usuario"], $categoria, $ubicacionFinal
+                    $nombre, $descripcion, $precio, $usuarioSesion["usuario"]["usuario"], $categoria, $ubicacionFinal
                 );
                 if ($sql->execute()) {
                     $success = "Servicio creado con éxito.";
@@ -129,7 +129,7 @@
         <div class="container mx-auto py-4 px-6 flex items-center justify-between">
             <a href="../../index.php" class="text-xl font-bold text-black">We-Connect</a>
             <nav class="flex items-center">
-                <a href="servicios/servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
+                <a href="servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
                 <?php
                     if(isset($_SESSION["usuario"])){
                         $aliasUsuario = htmlspecialchars($_SESSION['usuario']['usuario']);

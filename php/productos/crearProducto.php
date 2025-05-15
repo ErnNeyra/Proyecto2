@@ -21,7 +21,7 @@
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //Recibo el usuario con la sesión
-        $usuario_sesion = $_SESSION['usuario'];
+        $usuarioSesion = $_SESSION['usuario'];
 
         // Validación de campos
         //Valido el nombre del producto
@@ -79,7 +79,7 @@
         //$_FILES es un array BIDIMENSIONAL, mientras que $_POST es un array UNIDIMENSIONAL
         $imagen = $_FILES["imagen"]["name"];
         $ubicacionTemporal = $_FILES["imagen"]["tmp_name"];
-        $ubicacionFinal = "util/img/$imagen";
+        $ubicacionFinal = "../util/img/$imagen";
         $imagenTipo = $_FILES["imagen"]["type"];
 
         //mueve el archivo que se ha cargado de una ubicación a otra
@@ -87,13 +87,13 @@
 
         // Si no hay errores, proceder con la inserción
         if(empty($error)) {
-            if(isset($nombre) && isset($descripcion) && isset($precio) && isset($usuario_sesion["usuario"]) && isset($categoria) && isset($ubicacionFinal)){
+            if(isset($nombre) && isset($descripcion) && isset($precio) && isset($usuarioSesion["usuario"]["usuario"]) && isset($categoria) && isset($ubicacionFinal)){
                 $sql = $_conexion->prepare("INSERT INTO producto
                     (nombre, descripcion, precio, usuario, categoria, imagen)
                     VALUES (?, ?, ?, ?, ?, ?)"
                 );
                 $sql->bind_param("ssdsss",
-                    $nombre, $descripcion, $precio, $usuario_sesion["usuario"], $categoria, $ubicacionFinal
+                    $nombre, $descripcion, $precio, $usuarioSesion["usuario"]["usuario"], $categoria, $ubicacionFinal
                 );
                 if ($sql->execute()) {
                     $success = "Producto creado con éxito.";
@@ -142,7 +142,7 @@
                         echo '        <a href="../usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Panel</a>';
                         echo '        <a href="../usuarios/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
                         echo '        <hr class="border-gray-200">';
-                        echo '        <a href="../usuarios//logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
+                        echo '        <a href="../usuarios/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
                         echo '    </div>';
                         echo '</div>';
                     } else {

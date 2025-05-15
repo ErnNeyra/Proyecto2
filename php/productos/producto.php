@@ -12,7 +12,7 @@
         <div class="container mx-auto py-4 px-6 flex items-center justify-between">
             <a href="../../index.php" class="text-xl font-bold text-black">We-Connect</a>
             <nav class="flex items-center">
-                <a href="../servicios/servicio.php" class="text-gray-700 hover:text-black mr-4">Servicio</a>
+                <a href="../servicios/servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
                 <?php
                 session_start();
                 if(isset($_SESSION["usuario"])){

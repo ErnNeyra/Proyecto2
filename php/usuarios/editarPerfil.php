@@ -97,13 +97,13 @@
                         </button>
                         <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg origin-top-right hidden">
                             <div class="py-1">
-                                <a href="usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Mi Panel</a>
-                                <a href="usuarios/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100">Cerrar Sesión</a>
+                                <a href="panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Mi Panel</a>
+                                <a href="logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100">Cerrar Sesión</a>
                             </div>
                         </div>
                     </div>
                 <?php else: ?>
-                    <a href="usuarios/login.php" class="text-gray-700 hover:text-black">Iniciar Sesión</a>
+                    <a href="login.php" class="text-gray-700 hover:text-black">Iniciar Sesión</a>
                 <?php endif; ?>
             </nav>
         </div>
