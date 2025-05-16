@@ -140,9 +140,7 @@
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
     <header class="bg-white shadow-md">
         <div class="container mx-auto py-4 px-6 flex items-center justify-between">
-            <a href="../../index.php" class="logo inline-block">
-                <img src="../util/img/Logo.png" alt="We-Connect Logo" class="h-10 w-auto">
-            </a>
+            <a href="../../index.php" class="text-xl font-bold text-black">We-Connect</a>
             <nav class="flex items-center">
                 <a href="producto.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
                 <?php
@@ -170,7 +168,7 @@
 
     <main class="container mx-auto py-12 px-6 flex-grow">
         <div class="bg-white rounded-md shadow-md p-8 max-w-lg mx-auto border border-gray-200">
-            <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Crear Nuevo Producto</h1>
+            <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Crear Nuevo Producto o Servicio</h1>
             <?php if (!empty($error)): ?>
                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
                     <strong class="font-bold">Error:</strong>

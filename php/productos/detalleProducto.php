@@ -9,9 +9,7 @@
     <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
     <header class="bg-white shadow-md">
         <div class="container mx-auto py-4 px-6 flex items-center justify-between">
-            <a href="../../index.php" class="logo inline-block">
-                <img src="../util/img/Logo.png" alt="We-Connect Logo" class="h-10 w-auto">
-            </a>
+            <a href="../../index.php" class="text-xl font-bold text-black">We-Connect</a>
             <nav class="flex items-center">
                 <a href="producto.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
                 <a href="../servicios/servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
@@ -101,6 +99,28 @@
                     <p class="text-gray-700 leading-relaxed mb-6"><?php echo$descripcion?></p>
                     <p class="text-gray-600 font-semibold mb-2">Precio: <span class="text-black"><?php echo$precio?>€</span></p>
                     <p class="text-gray-600 mb-4">Disponibilidad: <span class="text-green-500">En stock</span></p>
+                    
+                    <!-- BOTON DE EDITAR -->
+
+                     <?php
+                        $sql = "SELECT * FROM producto WHERE id_producto = ?";
+                        $stmt = $_conexion->prepare($sql);
+                        $stmt->bind_param("i", $_GET['id_producto']);
+                        $stmt->execute();
+                        $resultado = $stmt->get_result();
+                        $producto = $resultado->fetch_assoc();
+                        if (isset($_SESSION["usuario"]["usuario"]) && $_SESSION["usuario"]["usuario"] == $producto["usuario"]) {
+                            // Mostrar el botón de editar solo si el usuario es el propietario del producto
+                            echo '<div class="mb-6">';
+                            echo '    <a href="editarProducto.php?id_producto=' . $producto["id_producto"] . '" class="bg-yellow-500 text-black py-3 px-6 rounded-md hover:bg-yellow-600 focus:outline-none focus:shadow-outline">Editar</a>';
+                            echo '</div>';
+                        } else {
+                            echo '<div class="mb-6">';
+                            echo '    <button class="bg-gray-300 text-gray-500 py-3 px-6 rounded-md cursor-not-allowed" disabled>Editar</button> Este servicio no te pertenece.';
+                            echo '</div>';
+                            
+                        }
+                     ?>
                     <div class="mb-6">
                         <button class="bg-yellow-500 text-black py-3 px-6 rounded-md hover:bg-yellow-600 focus:outline-none focus:shadow-outline">Contactar al Emprendedor</button>
                     </div>

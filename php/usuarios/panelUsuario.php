@@ -41,7 +41,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil de <?php echo htmlspecialchars($usuario['nombre']); ?> | We-Connect</title>
+    <title>Perfil de <?php echo htmlspecialchars($usuario['usuario']); ?> | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         .profile-image {
@@ -70,9 +70,7 @@
 <body class="bg-gray-100 font-sans min-h-screen">
     <header class="bg-white shadow-md">
         <div class="container mx-auto py-4 px-6 flex items-center justify-between">
-           <a href="../../index.php" class="logo inline-block">
-                <img src="../util/img/Logo.png" alt="We-Connect Logo" class="h-10 w-auto">
-            </a>
+            <a href="../../index.php" class="text-xl font-bold text-black">We-Connect</a>
             <nav class="flex items-center">
                 <a href="../productos/producto.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
                 <a href="../servicios/servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>

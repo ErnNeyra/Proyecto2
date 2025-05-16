@@ -9,35 +9,44 @@
     <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
     <header class="bg-white shadow-md">
         <div class="container mx-auto py-4 px-6 flex items-center justify-between">
-            <a href="../../index.php" class="logo inline-block">
-                <img src="../util/img/Logo.png" alt="We-Connect Logo" class="h-10 w-auto">
-            </a>
+            <a href="../../index.php" class="text-xl font-bold text-black">We-Connect</a>
             <nav class="flex items-center">
                 <a href="../productos/producto.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
                 <a href="servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
                 <?php
-                error_reporting(E_ALL);
-                ini_set("display_errors",1);
-                require ('../util/config.php');
-                require ('../util/depurar.php');
-                session_start();
-                if(isset($_SESSION["usuario"]["usuario"])){
-                    $aliasUsuario = htmlspecialchars($_SESSION['usuario']['usuario']);
-                    echo '<div class="relative">';
-                    echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-black focus:outline-none" aria-expanded="false" aria-haspopup="true">';
-                    echo '        <span>' . $aliasUsuario . '</span>';
-                    echo '        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
-                    echo '    </button>';
-                    echo '    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-10 hidden">';
-                    echo '        <a href="../usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Panel</a>';
-                    echo '        <a href="../usuarios/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
-                    echo '        <hr class="border-gray-200">';
-                    echo '        <a href="../usuarios/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
-                    echo '    </div>';
-                    echo '</div>';
-                } else {
-                    echo '<a href="../usuarios/login.php" class="text-gray-700 hover:text-black">Iniciar Sesión</a>';
-                }
+                    error_reporting(E_ALL);
+                    ini_set("display_errors",1);
+                    require ('../util/config.php');
+                    require ('../util/depurar.php');
+                    session_start();
+                    if(isset($_SESSION["usuario"]["usuario"])){
+                        $aliasUsuario = htmlspecialchars($_SESSION['usuario']['usuario']);
+                        echo '<div class="relative">';
+                        echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-black focus:outline-none" aria-expanded="false" aria-haspopup="true">';
+                        echo '        <span>' . $aliasUsuario . '</span>';
+                        echo '        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
+                        echo '    </button>';
+                        echo '    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-10 hidden">';
+                        echo '        <a href="../usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Panel</a>';
+                        echo '        <a href="../usuarios/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
+                        echo '        <hr class="border-gray-200">';
+                        echo '        <a href="../usuarios/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
+                        echo '    </div>';
+                        echo '</div>';
+                    } else {
+                        echo '<a href="../usuarios/login.php" class="text-gray-700 hover:text-black">Iniciar Sesión</a>';
+                    }
+                    $idServicio = $_GET["id_servicio"];
+                    $sql = "SELECT * FROM servicio WHERE id_servicio = $idServicio";
+                    $resultado = $_conexion ->query($sql);
+                    while($servicio = $resultado -> fetch_assoc()){
+                        $nombre = $servicio["nombre"];
+                        $precio = $servicio["precio"];
+                        $categoria = $servicio["categoria"];
+                        $descripcion = $servicio["descripcion"];
+                        $imagen = $servicio["imagen"];
+                        $usuario = $servicio["usuario"];
+                    }
                 ?>
             </nav>
         </div>
@@ -48,7 +57,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                     <div id="contenedor-imagen-principal" class="mb-4 cursor-zoom-in">
-                        <img id="imagen-principal" src="https://via.placeholder.com/600x400/4a5568/fff?Text=Imagen%20Principal" alt="Imagen del Producto" class="w-full rounded-md">
+                        <img id="imagen-principal" src="<?php echo $imagen ?>" alt="Imagen del Servicio" class="w-full rounded-md">
                     </div>
                     <div class="flex -mx-2">
                         <div class="w-1/4 px-2">
@@ -75,7 +84,7 @@
                     </div>
                 </div>
                 <div>
-                    <h1 class="text-3xl font-semibold text-gray-800 mb-4">Nombre del Producto/Servicio Detallado</h1>
+                    <h1 class="text-3xl font-semibold text-gray-800 mb-4"><?php echo $nombre ?></h1>
                     <div class="flex items-center mb-4">
                         <span class="text-yellow-500 text-xl mr-1">&#9733;</span>
                         <span class="text-yellow-500 text-xl mr-1">&#9733;</span>
@@ -84,14 +93,31 @@
                         <span class="text-gray-300 text-xl mr-2">&#9733;</span>
                         <span class="text-gray-600 text-sm">(3 valoraciones)</span>
                     </div>
-                    <p class="text-gray-700 leading-relaxed mb-6">Descripción detallada del producto o servicio. Aquí se pueden incluir todas las características, beneficios, instrucciones de uso, etc. Este texto podría ser bastante extenso y proporcionar al usuario toda la información que necesita para tomar una decisión.</p>
-                    <p class="text-gray-600 font-semibold mb-2">Precio: <span class="text-black">$XX.XX</span></p>
-                    <p class="text-gray-600 mb-4">Disponibilidad: <span class="text-green-500">En stock</span></p>
+                    <p class="text-gray-700 leading-relaxed mb-6"><?php echo $descripcion ?></p>
+                    <p class="text-gray-600 font-semibold mb-2">Precio: <span class="text-black"><?php echo $precio?>€</span></p>
+                    <p class="text-gray-600 mb-4"><span class="text-green-500">Disponible</span></p>
 
                     <!-- BOTON DE EDITAR -->
-                    <div class="mb-6">
-                        <a href="editarServicio.php" class="bg-yellow-500 text-black py-3 px-6 rounded-md hover:bg-yellow-600 focus:outline-none focus:shadow-outline">Editar</a>
-                    </div>
+
+                     <?php
+                        $sql = "SELECT * FROM servicio WHERE id_servicio = ?";
+                        $stmt = $_conexion->prepare($sql);
+                        $stmt->bind_param("i", $_GET['id_servicio']);
+                        $stmt->execute();
+                        $resultado = $stmt->get_result();
+                        $servicio = $resultado->fetch_assoc();
+                        if (isset($_SESSION["usuario"]["usuario"]) && $_SESSION["usuario"]["usuario"] == $servicio["usuario"]) {
+                            // Mostrar el botón de editar solo si el usuario es el propietario del servicio
+                            echo '<div class="mb-6">';
+                            echo '    <a href="editarServicio.php?id_servicio=' . $servicio["id_servicio"] . '" class="bg-yellow-500 text-black py-3 px-6 rounded-md hover:bg-yellow-600 focus:outline-none focus:shadow-outline">Editar</a>';
+                            echo '</div>';
+                        } else {
+                            echo '<div class="mb-6">';
+                            echo '    <button class="bg-gray-300 text-gray-500 py-3 px-6 rounded-md cursor-not-allowed" disabled>Editar</button> Este servicio no te pertenece.';
+                            echo '</div>';
+                            
+                        }
+                     ?>
                     <div class="mb-6">
                         <button class="bg-yellow-500 text-black py-3 px-6 rounded-md hover:bg-yellow-600 focus:outline-none focus:shadow-outline">Contactar al Emprendedor</button>
                     </div>
@@ -101,7 +127,7 @@
                             <div class="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center text-white font-semibold mr-2">
                                 EP
                             </div>
-                            <p class="text-gray-700 font-semibold">Nombre del Emprendedor</p>
+                            <p class="text-gray-700 font-semibold"><?php echo $usuario ?></p>
                         </div>
                         <p class="text-gray-600 text-sm mt-1">Breve descripción del emprendedor.</p>
                         <!-- <a href="" class="text-indigo-500 hover:underline text-sm mt-2 inline-block">Ver perfil</a>ESTO QUE ESSSSSSSSSSSSSSSSSSSSSSSs -->

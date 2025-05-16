@@ -10,9 +10,7 @@
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
     <header class="bg-white shadow-md">
         <div class="container mx-auto py-4 px-6 flex items-center justify-between">
-            <a href="../../index.php" class="logo inline-block">
-                <img src="../util/img/Logo.png" alt="We-Connect Logo" class="h-10 w-auto">
-            </a>
+            <a href="../../index.php" class="text-xl font-bold text-black">We-Connect</a>
             <nav class="flex items-center">
                 <a href="../servicios/servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
                 <?php
@@ -74,17 +72,7 @@
                         <h3 class="font-semibold text-gray-700 mb-2"><?php echo $producto["nombre"] ?></h3>
                         <p class="text-gray-600 text-sm mb-2"><?php echo $producto["descripcion"] ?></p>
                         <p class="text-gray-500 text-xs mb-2">Ofrecido por: <?php echo $producto["usuario"] ?></p>
-                        <div class="mb-2">
-                            <label class="block text-gray-700 text-sm font-bold mb-1">Valorar:</label>
-                            <div class="flex items-center">
-                                <button class="star-button text-gray-300 hover:text-yellow-500 focus:outline-none text-xl mr-1" data-value="1">&#9733;</button>
-                                <button class="star-button text-gray-300 hover:text-yellow-500 focus:outline-none text-xl mr-1" data-value="2">&#9733;</button>
-                                <button class="star-button text-gray-300 hover:text-yellow-500 focus:outline-none text-xl mr-1" data-value="3">&#9733;</button>
-                                <button class="star-button text-gray-300 hover:text-yellow-500 focus:outline-none text-xl mr-1" data-value="4">&#9733;</button>
-                                <button class="star-button text-gray-300 hover:text-yellow-500 focus:outline-none text-xl mr-1" data-value="5">&#9733;</button>
-                                <span class="text-gray-600 text-sm ml-2">(0 valoraciones)</span>
-                            </div>
-                        </div>
+    
                         <a href="detalleProducto.php?id_producto=<?php echo $producto['id_producto']; ?>" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4">Ver Detalles</a>
                     </div>
                 </div>
@@ -97,7 +85,6 @@
         <p>&copy; 2025 We-Connect. Todos los derechos reservados.</p>
     </footer>
 
-    <script src="../js/valoracion.js"></script>
     <script src="../../js/script2.js"></script>
 </body>
 </html>

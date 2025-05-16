@@ -88,9 +88,7 @@
 <body class="bg-gray-100 font-sans">
     <header class="bg-white shadow-md">
         <div class="container mx-auto py-4 px-6 flex items-center justify-between">
-            <a href="../../index.php" class="logo inline-block">
-                <img src="../util/img/Logo.png" alt="We-Connect Logo" class="h-10 w-auto">
-            </a>
+            <a href="../../index.php" class="text-xl font-bold text-black">We-Connect</a>
             <nav class="flex items-center">
                 <?php if (isset($_SESSION['usuario']['usuario'])): ?>
                     <div class="relative">
