@@ -11,6 +11,7 @@
 
     // Obtener el ID del usuario de la sesión de forma segura
     $id_usuario = $_SESSION['usuario']['id_usuario'];
+    $usuarioActual = $_SESSION['usuario']['usuario'];
     $aliasUsuario = htmlspecialchars($_SESSION['usuario']['usuario']);
 
     // Obtener información del usuario
@@ -185,6 +186,7 @@
                     categoria,
                     fecha_agregado
                 FROM producto
+                WHERE usuario = '$usuarioActual'
 
                 UNION ALL
 
@@ -199,6 +201,7 @@
                     categoria,
                     fecha_agregado
                 FROM servicio
+                WHERE usuario = '$usuarioActual'
 
                 ORDER BY fecha_agregado DESC
             ";

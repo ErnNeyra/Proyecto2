@@ -92,6 +92,21 @@
             </div>
         </section>
 
+    <section id="featured-products" class="featured-products py-8 observe-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center js-fade-in-up" data-delay="0s">Productos Destacados</h2>
+            <div id="productos-carrusel-wrapper" class="relative group">
+                <div id="productos-carrusel-container" class="overflow-hidden">
+                    <div id="productos-carrusel" class="flex transition-transform duration-500 ease-in-out py-4 gap-4">
+                        <?php
+                            //*** NO TOCAR ***
+
+                            //recojo 20 productos y servicios aleatorios
+                            $sql =" SELECT id_producto AS id, nombre, imagen, 'producto' AS tipo FROM producto
+                                    UNION ALL
+                                    SELECT id_servicio AS id, nombre, imagen, 'servicio' AS tipo FROM servicio
+                                    ORDER BY RAND() LIMIT 20"; // Cambié el límite a 20 para mostrar más productos/servicios
+                            $resultado = $_conexion->query($sql);
         <section id="featured-products" class="featured-products py-8 observe-section">
             <div class="container mx-auto px-6">
                 <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center js-fade-in-up" data-delay="0s">Productos Destacados</h2>
@@ -102,31 +117,11 @@
                             // *** IMPORTANTE: Aquí corrijo la obtención de servicios ***
                             $productos_servicios = [];
 
-                            // Obtener hasta 10 productos (o el número que desees)
-                            $sql_productos = "SELECT id_producto, nombre, imagen, 'producto' as tipo FROM producto ORDER BY RAND() LIMIT 10";
-                            $resultado_productos = $_conexion->query($sql_productos);
-                            if ($resultado_productos) {
-                                while ($item = $resultado_productos->fetch_assoc()) {
+
+                            if($resultado){
+                                while($item = $resultado->fetch_assoc()){
                                     $productos_servicios[] = $item;
                                 }
-                            }
-
-                            // Obtener hasta 10 servicios (o el número que desees)
-                            // CORREGIDO: Usar $sql1 para servicios
-                            $sql_servicios = "SELECT id_servicio as id_producto, nombre, imagen, 'servicio' as tipo FROM servicio ORDER BY RAND() LIMIT 10";
-                            $resultado_servicios = $_conexion->query($sql_servicios); // Ejecutar la consulta correcta
-                            if ($resultado_servicios) {
-                                while ($item = $resultado_servicios->fetch_assoc()) {
-                                    $productos_servicios[] = $item;
-                                }
-                            }
-
-                            // Ahora $productos_servicios puede contener hasta 20 items (productos y servicios)
-                            // script2.js necesita al menos 7 para mostrar controles y habilitar bucle
-
-                            // Mezclar aleatoriamente todos los items combinados si es necesario
-                            if (!empty($productos_servicios)) {
-                                shuffle($productos_servicios);
                             }
 
                             if (!empty($productos_servicios)) {
@@ -138,12 +133,12 @@
                                     echo '<div class="producto-card flex-none w-full sm:w-1/2 md:w-1/3 px-2 js-fade-in-up">';
                                     echo '    <div class="bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl h-full flex flex-col">'; // Añadido flex y flex-col para layout interno
                                     // Aspect ratio para la imagen
-                                    echo '      <a href="' . $detalle_url . $item['id_producto'] . '" class="block w-full h-40 overflow-hidden">'; // Ajustado h-40 directamente
+                                    echo '      <a href="' . $detalle_url . $item['id'] . '" class="block w-full h-40 overflow-hidden">'; // Ajustado h-40 directamente
                                     echo '        <img src="php/util/' . htmlspecialchars($item['imagen']) . '" alt="' . htmlspecialchars($item['nombre']) . '" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">';
                                     echo '      </a>';
                                     echo '      <div class="producto-card-content p-4 flex flex-col flex-grow">'; // Añadido flex, flex-col, flex-grow
                                     echo '        <h3 class="font-semibold text-gray-700 mb-2 truncate">' . htmlspecialchars($item['nombre']) . '</h3>'; // Añadido truncate y mb-2
-                                    echo '        <a href="' . $detalle_url . $item['id_producto'] . '" class="mt-auto inline-block text-center bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold text-sm">Ver Detalles</a>'; // Añadido mt-auto, text-center, text-sm
+                                    echo '        <a href="' . $detalle_url . $item['id'] . '" class="mt-auto inline-block text-center bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold text-sm">Ver Detalles</a>'; // Añadido mt-auto, text-center, text-sm
                                     echo '      </div>';
                                     echo '    </div>';
                                     echo '</div>';
