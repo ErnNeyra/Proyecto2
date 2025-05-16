@@ -88,7 +88,7 @@
             $fotoPerfil = '../util/img/usuario.jpg';
         }
 
-        if (empty($errores)) {
+             if (empty($errores)) {
             $contrasena_cifrada = password_hash($tmpContrasena, PASSWORD_DEFAULT);
             $sql = "INSERT INTO usuario (nombre, usuario, email, contrasena, foto_perfil) VALUES (?, ?, ?, ?, ?)";
             $stmt = $_conexion->prepare($sql);
@@ -98,23 +98,28 @@
                 // Obtener el ID del usuario recién registrado
                 $user_id = $_conexion->insert_id;
 
-                // Recuperar la información del usuario para la sesión
+              
+                require '../util/send_welcome_email.php';
+                // *** ================================================================= ***
+
+
+                // Recuperar la información del usuario para la sesión (esto ya lo tienes)
                 $sql_sesion = "SELECT id_usuario, usuario, nombre, email, foto_perfil FROM usuario WHERE id_usuario = ?";
                 $stmt_sesion = $_conexion->prepare($sql_sesion);
                 $stmt_sesion->bind_param("i", $user_id);
                 $stmt_sesion->execute();
                 $resultado_sesion = $stmt_sesion->get_result();
                 if ($row_sesion = $resultado_sesion->fetch_assoc()) {
-                    // Iniciar la sesión y guardar la información del usuario
+                    // Iniciar la sesión y guardar la información del usuario (ya lo tienes)
                     session_start();
                     $_SESSION['usuario'] = array(
                         'id_usuario' => $row_sesion['id_usuario'],
-                        'usuario' => $row_sesion['usuario'],
+                        'usuario' => $row_sesion['usuario'], // Asegúrate de usar la columna correcta
                         'nombre' => $row_sesion['nombre'],
                         'email' => $row_sesion['email'],
                         'foto_perfil' => $row_sesion['foto_perfil']
                     );
-                    // Redirección al index.php después del registro:
+                    // Redirección al index.php después del registro: (ya lo tienes)
                     header("location: ../../index.php");
                     exit;
                 } else {
