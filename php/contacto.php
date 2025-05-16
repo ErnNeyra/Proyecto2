@@ -33,10 +33,8 @@
                 <a href="productos/producto.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
                 <a href="servicios/servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
                 <?php
-                // No necesitas iniciar la sesión aquí de nuevo si ya lo haces al inicio de la página
-                // session_start(); // Ya se inició arriba
-
-                if (isset($_SESSION['usuario']['usuario'])) {
+                session_start(); // Ya se inició arriba
+                if (isset($_SESSION['usuario'])) {
                     $aliasUsuario = htmlspecialchars($_SESSION['usuario']['usuario']);
                     echo '<div class="relative">';
                     echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-black focus:outline-none" aria-expanded="false" aria-haspopup="true">';

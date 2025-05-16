@@ -178,6 +178,20 @@
                     <label for="descripcion" class="block text-gray-700 text-sm font-bold mb-2">Descripción:</label>
                     <textarea id="descripcion" name="descripcion" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
                     <?php if (isset($errorDescripcion)) echo "<span class='text-red-500 text-xs italic'>$errorDescripcion</span>"; ?>
+                    
+                    <!-- Botón para mejorar descripción -->
+                    <button type="button" id="mejorarDescripcion" class="mt-2 bg-yellow-500 text-black py-1 px-3 rounded-md hover:bg-yellow-600 text-sm">
+                        Mejorar Descripción
+                    </button>
+                    
+                    <!-- Div para mostrar la sugerencia -->
+                    <div id="sugerenciaDescripcion" class="hidden mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+                        <p class="text-sm text-gray-700 mb-2">Sugerencia de descripción mejorada:</p>
+                        <p id="textoSugerencia" class="text-gray-800 mb-3"></p>
+                        <button type="button" id="aplicarSugerencia" class="bg-yellow-500 text-black py-1 px-3 rounded-md hover:bg-yellow-600 text-sm">
+                            Aplicar Sugerencia
+                        </button>
+                    </div>
                 </div>
                 <div class="mb-4">
                     <label for="precio" class="block text-gray-700 text-sm font-bold mb-2">Precio:</label>
@@ -213,6 +227,53 @@
     </footer>
 </body>
 </html>
-    <script src="../../js/script2.js"></script>
+    <script>
+        // Funcionalidad para mejorar descripción
+        document.getElementById('mejorarDescripcion').addEventListener('click', async function() {
+            const descripcion = document.getElementById('descripcion').value;
+            const sugerenciaDiv = document.getElementById('sugerenciaDescripcion');
+            const textoSugerencia = document.getElementById('textoSugerencia');
+
+            if (!descripcion.trim()) {
+                alert('Por favor, ingrese una descripción primero.');
+                return;
+            }
+
+            try {
+                this.disabled = true;
+                this.textContent = 'Procesando...';
+
+                const response = await fetch('../util/mejorar_descripcion.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ descripcion: descripcion })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    textoSugerencia.textContent = data.success;
+                    sugerenciaDiv.classList.remove('hidden');
+                } else {
+                    alert('Error: ' + (data.error || 'No se pudo procesar la solicitud'));
+                }
+            } catch (error) {
+                alert('Error al procesar la solicitud');
+            } finally {
+                this.disabled = false;
+                this.textContent = 'Mejorar Descripción';
+            }
+        });
+
+        document.getElementById('aplicarSugerencia').addEventListener('click', function() {
+            const descripcion = document.getElementById('descripcion');
+            const sugerencia = document.getElementById('textoSugerencia').textContent;
+            descripcion.value = sugerencia;
+            document.getElementById('sugerenciaDescripcion').classList.add('hidden');
+        });
+    </script>
+    <script src="../../js/script2.js">
 </body>
 </html>

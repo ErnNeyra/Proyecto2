@@ -229,59 +229,46 @@
                         class="w-full p-3 border border-gray-300 rounded-md focus:border-yellow-500 focus:ring-yellow-500">
                     <p class="text-sm text-gray-500 mt-1">Formatos permitidos: JPG, PNG. Tamaño máximo: 5MB</p>
 
-                    <button type="button"
-                            id="generarLogo"
-                            class="mt-2 bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">
-                        Generar Logo con IA
-                    </button>
-
-                    <div id="modalGenerarLogo" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-                        <div class="bg-white p-6 rounded-lg max-w-md w-full relative">
-                            <h3 class="text-lg font-semibold mb-4">Generar Logo con IA</h3>
-
-                            <div id="paso1" class="space-y-4">
-                                <div class="form-group">
-                                    <label for="logoDescripcion" class="block mb-2">Describe cómo quieres que sea tu logo:</label>
-                                    <textarea
-                                        id="logoDescripcion"
-                                        class="w-full p-3 border border-gray-300 rounded-md focus:border-yellow-500 focus:ring-yellow-500"
-                                        rows="4"
-                                        placeholder="Ejemplo: Un logo minimalista para una tienda de ropa, con tonos azules y blancos..."></textarea>
-                                </div>
-                                <button type="button"
-                                        id="generarLogoBtn"
-                                        class="w-full bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600">
-                                    Generar Logo
-                                </button>
+                    <!-- Generador de logo con IA en línea -->
+                    <div id="generadorLogoInline" class="mt-4">
+                        <button type="button"
+                                id="generarLogo"
+                                class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200">
+                            Generar Logo con IA
+                        </button>
+                        <div id="logoIAForm" class="hidden mt-4">
+                            <div class="form-group">
+                                <label for="logoDescripcion" class="block mb-2">Describe cómo quieres que sea tu logo:</label>
+                                <textarea
+                                    id="logoDescripcion"
+                                    class="w-full p-3 border border-gray-300 rounded-md focus:border-yellow-500 focus:ring-yellow-500"
+                                    rows="4"
+                                    placeholder="Ejemplo: Un logo minimalista para una tienda de ropa, con tonos azules y blancos..."></textarea>
                             </div>
-
-                            <div id="paso2" class="hidden space-y-4">
-                                <div class="flex justify-center">
-                                    <img id="logoGenerado" class="max-w-full h-auto mb-4 rounded-lg shadow-lg" src="" alt="Logo generado">
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button type="button"
-                                            id="regenerarLogo"
-                                            class="flex-1 bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600">
-                                        Generar Otro
-                                    </button>
-                                    <button type="button"
-                                            id="guardarLogo"
-                                            class="flex-1 bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600">
-                                        Usar Este Logo
-                                    </button>
-                                </div>
-                            </div>
-
                             <button type="button"
-                                    id="cerrarModal"
-                                    class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl"
-                                    aria-label="Cerrar">
-                                ×
+                                    id="generarLogoBtn"
+                                    class="w-full bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 mt-2">
+                                Generar Logo
                             </button>
-
-                            <div id="loadingIndicator" class="hidden absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center">
+                            <div id="loadingIndicator" class="hidden flex items-center justify-center mt-4">
                                 <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500"></div>
+                            </div>
+                        </div>
+                        <div id="logoResultado" class="hidden mt-4">
+                            <div class="flex justify-center">
+                                <img id="logoGenerado" class="max-w-full h-auto mb-4 rounded-lg shadow-lg" src="" alt="Logo generado">
+                            </div>
+                            <div class="flex space-x-2">
+                                <button type="button"
+                                        id="regenerarLogo"
+                                        class="flex-1 bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600">
+                                    Generar Otro
+                                </button>
+                                <button type="button"
+                                        id="guardarLogo"
+                                        class="flex-1 bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600">
+                                    Usar Este Logo
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -326,7 +313,7 @@
                 this.disabled = true;
                 this.textContent = 'Procesando...';
 
-                const response = await fetch('util/mejorar_descripcion.php', {
+                const response = await fetch('../util/mejorar_descripcion.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -357,16 +344,11 @@
             document.getElementById('sugerenciaDescripcion').classList.add('hidden');
         });
 
-        // Funcionalidad para el generador de logos
+        // Generador de logo con IA en línea (sin modal)
         document.getElementById('generarLogo').addEventListener('click', function() {
-            document.getElementById('modalGenerarLogo').classList.remove('hidden');
-            document.getElementById('paso1').classList.remove('hidden');
-            document.getElementById('paso2').classList.add('hidden');
+            document.getElementById('logoIAForm').classList.remove('hidden');
+            document.getElementById('logoResultado').classList.add('hidden');
             document.getElementById('logoDescripcion').value = '';
-        });
-
-        document.getElementById('cerrarModal').addEventListener('click', function() {
-            document.getElementById('modalGenerarLogo').classList.add('hidden');
         });
 
         document.getElementById('generarLogoBtn').addEventListener('click', async function() {
@@ -382,7 +364,7 @@
                 this.disabled = true;
                 loadingIndicator.classList.remove('hidden');
 
-                const response = await fetch('./util/generar_logo.php', {
+                const response = await fetch('../util/generar_logo.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -394,8 +376,8 @@
 
                 if (data.success) {
                     document.getElementById('logoGenerado').src = data.imageUrl;
-                    document.getElementById('paso1').classList.add('hidden');
-                    document.getElementById('paso2').classList.remove('hidden');
+                    document.getElementById('logoIAForm').classList.add('hidden');
+                    document.getElementById('logoResultado').classList.remove('hidden');
                 } else {
                     alert('Error: ' + (data.error || 'No se pudo generar el logo'));
                 }
@@ -408,8 +390,8 @@
         });
 
         document.getElementById('regenerarLogo').addEventListener('click', function() {
-            document.getElementById('paso2').classList.add('hidden');
-            document.getElementById('paso1').classList.remove('hidden');
+            document.getElementById('logoResultado').classList.add('hidden');
+            document.getElementById('logoIAForm').classList.remove('hidden');
         });
 
         document.getElementById('guardarLogo').addEventListener('click', async function() {
@@ -429,8 +411,9 @@
                 // Asignar el archivo al input de imagen
                 document.getElementById('imagen').files = dataTransfer.files;
 
-                // Cerrar el modal
-                document.getElementById('modalGenerarLogo').classList.add('hidden');
+                // Ocultar el generador
+                document.getElementById('logoResultado').classList.add('hidden');
+                document.getElementById('logoIAForm').classList.add('hidden');
 
                 // Opcional: Mostrar mensaje de éxito
                 alert('Logo agregado correctamente. No olvides guardar los cambios.');
