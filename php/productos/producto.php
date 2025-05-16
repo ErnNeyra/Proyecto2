@@ -38,8 +38,6 @@
     </header>
     <?php
         if(!isset($_SESSION["usuario"]["usuario"])){
-            //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
-            //se ejecute el código body
             header("location: ../usuarios/login.php");
             exit;
         }
@@ -47,7 +45,33 @@
         ini_set("display_errors", 1 );
         require('../util/config.php');
     ?>
+
     <main class="container mx-auto py-12 px-6 flex-grow">
+        <!-- Barra de búsqueda -->
+        <div class="bg-white shadow-md rounded-lg p-4 mb-8 max-w-3xl mx-auto">
+            <form action="" method="GET" class="flex flex-col sm:flex-row items-center gap-2">
+                <div class="relative w-full">
+                    <input 
+                        type="text" 
+                        name="buscar" 
+                        placeholder="Buscar productos..." 
+                        class="w-full px-4 py-2 pl-10 pr-4 rounded-lg border border-gray-300 focus:outline-none focus:border-yellow-500"
+                    >
+                    <div class="absolute left-3 top-2.5">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                </div>
+                <button 
+                    type="submit" 
+                    class="w-full sm:w-auto bg-yellow-500 text-black px-6 py-2 rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
+                >
+                    Buscar
+                </button>
+            </form>
+        </div>
+
         <div class="flex items-center justify-between mb-8">
             <h1 class="text-3xl font-semibold text-gray-800">Explora los productos que ofrecen nuestros emprendedores</h1>
             <a href="crearProducto.php" class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 focus:outline-none focus:shadow-outline">Crear Producto</a>
