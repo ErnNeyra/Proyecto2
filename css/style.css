@@ -1,0 +1,434 @@
+/* styles.css */
+
+/* Estilos generales del body con un fondo sutil */
+body.bg-gray-100.font-sans {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.75;
+    color: #2d3748;
+    /* Fondo degradado sutil */
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    background-attachment: fixed; /* Para que el fondo no se desplace con el scroll */
+}
+
+/* Estilos de la cabecera */
+header.bg-white.shadow-md {
+    background-color: rgba(255, 255, 255, 0.95); /* Blanco ligeramente transparente */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem 0;
+    backdrop-filter: blur(10px); /* Efecto de desenfoque para la transparencia */
+}
+
+header .container.mx-auto.py-4.px-6.flex.items-center.justify-between {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+header .logo.text-xl.font-bold.text-black {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #000; /* Logo en negro */
+    text-decoration: none;
+}
+
+header .main-nav.flex.items-center .nav-link.text-gray-700.hover\:text-black {
+    color: #718096;
+    text-decoration: none;
+    margin-left: 2rem;
+    transition: color 0.2s ease-in-out;
+}
+
+header .main-nav.flex.items-center .nav-link.text-gray-700.hover\:text-black:hover {
+    color: #2d3748;
+}
+
+/* Estilos del dropdown */
+header .main-nav.flex.items-center .dropdown.relative {
+    position: relative;
+}
+
+header .main-nav.flex.items-center .dropdown .dropdown-toggle.text-gray-700.hover\:text-black {
+    color: #718096;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    align-items: center;
+}
+
+header .main-nav.flex.items-center .dropdown .dropdown-toggle.text-gray-700.hover\:text-black span.mr-2 {
+    margin-right: 0.75rem;
+}
+
+header .main-nav.flex.items-center .dropdown .dropdown-toggle.text-gray-700.hover\:text-black svg.h-4.w-4.fill-current {
+    fill: #718096;
+}
+
+header .main-nav.flex.items-center .dropdown .dropdown-menu.absolute.right-0.mt-2.w-48.bg-white.rounded-md.shadow-lg.origin-top-right {
+    position: absolute;
+    right: 0;
+    margin-top: 0.5rem;
+    width: 180px;
+    background-color: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    z-index: 20;
+}
+
+header .main-nav.flex.items-center .dropdown .dropdown-menu .py-1 .dropdown-item.block.px-4.py-2.text-gray-800.hover\:bg-gray-100 {
+    display: block;
+    padding: 0.75rem 1.25rem;
+    color: #4a5568;
+    text-decoration: none;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+header .main-nav.flex.items-center .dropdown .dropdown-menu .py-1 .dropdown-item.block.px-4.py-2.text-gray-800.hover\:bg-gray-100:hover {
+    background-color: #edf2f7;
+    color: #2d3748;
+}
+
+header .main-nav.flex.items-center .dropdown .dropdown-menu .py-1 .dropdown-item.block.px-4.py-2.text-red-500.hover\:bg-gray-100 {
+    color: #e53e3e;
+}
+
+header .main-nav.flex.items-center .dropdown .dropdown-menu .py-1 .dropdown-item.block.px-4.py-2.text-red-500.hover\:bg-gray-100:hover {
+    background-color: #edf2f7;
+    color: #c53030;
+}
+
+/* Estilos del panel principal */
+main.container.mx-auto.mt-8 {
+    max-width: 960px;
+    margin: 3rem auto;
+    padding: 2rem;
+}
+
+main .edit-profile-panel.bg-white.shadow-md.rounded-md.p-8 {
+    background-color: #fff;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border-radius: 0.5rem;
+    padding: 2.5rem;
+}
+
+main .edit-profile-panel .panel-title.text-xl.font-semibold.text-gray-800.mb-6 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+/* Estilos de las alertas */
+main .edit-profile-panel .alert {
+    padding: 1rem 1.5rem;
+    border-radius: 0.375rem;
+    margin-bottom: 1.5rem;
+}
+
+main .edit-profile-panel .alert.alert-error {
+    background-color: #fff5f5;
+    border-color: #f56565;
+    color: #e53e3e;
+}
+
+main .edit-profile-panel .alert.alert-success {
+    background-color: #f0fff4;
+    border-color: #48bb78;
+    color: #38a169;
+}
+
+/* Estilos del formulario */
+main .edit-profile-panel .profile-form .form-group.mb-4 {
+    margin-bottom: 1.75rem;
+}
+
+main .edit-profile-panel .profile-form .form-label.block.text-gray-700.text-sm.font-bold.mb-2 {
+    display: block;
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+}
+
+main .edit-profile-panel .profile-form .form-input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight.focus\:outline-none.focus\:shadow-outline {
+    appearance: none;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    color: #4a5568;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+main .edit-profile-panel .profile-form .form-input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight.focus\:outline-none.focus\:shadow-outline:focus {
+    outline: none;
+    border-color: #667eea; /* Un azul más moderno para el foco */
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+main .edit-profile-panel .profile-form .form-input[type="file"].shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight.focus\:outline-none.focus\:shadow-outline {
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+}
+
+main .edit-profile-panel .profile-form .error-message.text-red-500.text-xs.italic.mt-1 {
+    color: #e53e3e;
+    font-size: 0.8rem;
+    font-style: italic;
+    margin-top: 0.5rem;
+}
+
+/* Estilos de los botones primarios (naranja/dorado) */
+.button.button-primary {
+    background-color: #f59e0b; /* Naranja dorado */
+    color: #fff;
+}
+
+.button.button-primary:hover {
+    background-color: #d97706;
+    box-shadow: 0 0 0 0.2rem rgba(245, 158, 11, 0.5);
+}
+
+/* Estilos de los botones secundarios (gris azulado) */
+.button.button-secondary {
+    background-color: #edf2f7; /* Gris claro secundario */
+    color: #4a5568;
+    border: 1px solid #e2e8f0;
+}
+
+.button.button-secondary:hover {
+    background-color: #d3e0e9;
+    color: #2d3748;
+    border-color: #cbd5e0;
+}
+
+/* Estilos del modal */
+#modalGenerarLogo.fixed.inset-0.bg-black.bg-opacity-50.hidden.flex.items-center.justify-center.z-50 {
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+
+#modalGenerarLogo .modal-content.bg-white.p-6.rounded-lg.max-w-md.w-full.relative {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+    max-width: 640px;
+    width: 90%;
+    position: relative;
+}
+
+#modalGenerarLogo .modal-title.text-lg.font-semibold.text-gray-800.mb-4 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+#modalGenerarLogo .modal-step.space-y-4 {
+    margin-bottom: 1.5rem;
+}
+
+#modalGenerarLogo .modal-step .form-group .form-label {
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+}
+
+#modalGenerarLogo .modal-step .form-group .form-input {
+    appearance: none;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    color: #4a5568;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+#modalGenerarLogo .modal-step .form-group .form-input:focus {
+    outline: none;
+    border-color: #f59e0b; /* Naranja dorado para el foco del modal */
+    box-shadow: 0 0 0 0.2rem rgba(245, 158, 11, 0.25);
+}
+
+#modalGenerarLogo .logo-preview.flex.justify-center {
+    margin-bottom: 1.5rem;
+}
+
+#modalGenerarLogo .logo-preview img#logoGenerado {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#modalGenerarLogo .logo-actions.flex.space-x-2 {
+    display: flex;
+    gap: 0.75rem;
+}
+
+#modalGenerarLogo .modal-close.absolute.top-2.right-2.text-gray-500.hover\:text-gray-700.text-xl.focus\:outline-none {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    color: #718096;
+    font-size: 1.5rem;
+    cursor: pointer;
+    outline: none;
+    transition: color 0.2s ease-in-out;
+}
+
+#modalGenerarLogo .modal-close.absolute.top-2.right-2.text-gray-500.hover\:text-gray-700.text-xl.focus\:outline-none:hover {
+    color: #2d3748;
+}
+
+#modalGenerarLogo .loading-indicator.hidden.absolute.inset-0.bg-white.bg-opacity-90.flex.items-center.justify-center.rounded-lg {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+}
+
+#modalGenerarLogo .loading-indicator .animate-spin.rounded-full {
+    border-color: #f59e0b transparent #f59e0b transparent; /* Loader naranja dorado */
+    border-width: 0.25rem;
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Estilos del botón de guardar cambios (azul más oscuro) */
+main .edit-profile-panel .form-actions.mt-6 {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+main .edit-profile-panel .form-actions .button.button-primary {
+    background-color: #434190; /* Un azul morado más oscuro y profesional */
+}
+
+main .edit-profile-panel .form-actions .button.button-primary:hover {
+    background-color: #38367a;
+    box-shadow: 0 0 0 0.2rem rgba(67, 65, 144, 0.5);
+}
+
+/* Animación sutil para el fondo (opcional) */
+@keyframes backgroundPan {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+}
+
+body.bg-gray-100.font-sans {
+    /* Aplicar la animación al body */
+    animation: backgroundPan 15s infinite alternate;
+    background-size: 200% 200%; /* Hacer el fondo más grande para la animación */
+}
+
+/* Responsive design (opcional) */
+@media (max-width: 768px) {
+    header .container.mx-auto.py-4.px-6.flex.items-center.justify-between {
+        padding: 1rem;
+    }
+
+    header .logo.text-xl.font-bold.text-black {
+        font-size: 1.5rem;
+    }
+
+    header .main-nav.flex.items-center .nav-link.text-gray-700.hover\:text-black {
+        margin-left: 1rem;
+    }
+
+    main.container.mx-auto.mt-8 {
+        padding: 1.5rem;
+    }
+
+    main .edit-profile-panel.bg-white.shadow-md.rounded-md.p-8 {
+        padding: 1.5rem;
+    }
+
+    main .edit-profile-panel .panel-title.text-xl.font-semibold.text-gray-800.mb-6 {
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    main .edit-profile-panel .profile-form .form-group.mb-4 {
+        margin-bottom: 1.5rem;
+    }
+
+    main .edit-profile-panel .profile-form .form-label.block.text-gray-700.text-sm.font-bold.mb-2 {
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+    }
+
+    main .edit-profile-panel .profile-form .form-input.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight.focus\:outline-none.focus\:shadow-outline {
+        padding: 0.6rem 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    main .edit-profile-panel .profile-form .form-input[type="file"].shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight.focus\:outline-none.focus\:shadow-outline {
+        padding-top: 0.4rem;
+        padding-bottom: 0.4rem;
+    }
+
+    .button {
+        font-size: 0.9rem;
+        padding: 0.75rem 1rem;
+    }
+
+    #modalGenerarLogo .modal-content.bg-white.p-6.rounded-lg.max-w-md.w-full.relative {
+        padding: 1.5rem;
+    }
+
+    #modalGenerarLogo .modal-title.text-lg.font-semibold.text-gray-800.mb-4 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    #modalGenerarLogo .modal-step.space-y-4 {
+        margin-bottom: 1rem;
+    }
+
+    #modalGenerarLogo .modal-step .form-group .form-label {
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+    }
+
+    #modalGenerarLogo .modal-step .form-group .form-input {
+        padding: 0.6rem 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    #modalGenerarLogo .logo-actions.flex.space-x-2 {
+        gap: 0.5rem;
+    }
+
+    #modalGenerarLogo .modal-close.absolute.top-2.right-2.text-gray-500.hover\:text-gray-700.text-xl.focus\:outline-none {
+        font-size: 1.25rem;
+    }
+
+    main .edit-profile-panel .form-actions.mt-6 {
+        margin-top: 1.5rem;
+    }
+
+    main .edit-profile-panel .form-actions .button.button-primary {
+        padding: 0.8rem 1.25rem;
+        font-size: 0.95rem;
+    }
+}

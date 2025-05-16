@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Producto | We-Connect</title>
+    <title>Editar Producto o Servicio | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -54,20 +54,6 @@
                     <label for="descripcion" class="block text-gray-700 text-sm font-bold mb-2">Descripción:</label>
                     <textarea id="descripcion" name="descripcion" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required><?= htmlspecialchars($producto['descripcion'] ?? '') ?></textarea>
                     <?php if (isset($errorDescripcion)) echo "<span class='error'>$errorDescripcion</span>"; ?>
-                    
-                    <!-- Botón para mejorar descripción -->
-                    <button type="button" id="mejorarDescripcion" class="mt-2 bg-yellow-500 text-black py-1 px-3 rounded-md hover:bg-yellow-600 text-sm">
-                        Mejorar Descripción
-                    </button>
-                    
-                    <!-- Div para mostrar la sugerencia -->
-                    <div id="sugerenciaDescripcion" class="hidden mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
-                        <p class="text-sm text-gray-700 mb-2">Sugerencia de descripción mejorada:</p>
-                        <p id="textoSugerencia" class="text-gray-800 mb-3"></p>
-                        <button type="button" id="aplicarSugerencia" class="bg-yellow-500 text-black py-1 px-3 rounded-md hover:bg-yellow-600 text-sm">
-                            Aplicar Sugerencia
-                        </button>
-                    </div>
                 </div>
                 <div class="mb-4">
                     <label for="precio" class="block text-gray-700 text-sm font-bold mb-2">Precio:</label>
@@ -104,53 +90,5 @@
         &copy; 2025 We-Connect. Todos los derechos reservados.
     </footer>
     <script src="../../js/script2.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const mejorarBtn = document.getElementById('mejorarDescripcion');
-            const descripcionTextarea = document.getElementById('descripcion');
-            const sugerenciaDiv = document.getElementById('sugerenciaDescripcion');
-            const textoSugerencia = document.getElementById('textoSugerencia');
-            const aplicarBtn = document.getElementById('aplicarSugerencia');
-
-            mejorarBtn.addEventListener('click', async function() {
-                const descripcionActual = descripcionTextarea.value;
-                if (!descripcionActual.trim()) {
-                    alert('Por favor, escribe una descripción primero.');
-                    return;
-                }
-
-                mejorarBtn.disabled = true;
-                mejorarBtn.textContent = 'Mejorando...';
-
-                try {
-                    const response = await fetch('../util/mejorar_descripcion.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: 'descripcion=' + encodeURIComponent(descripcionActual)
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('Error en la respuesta del servidor');
-                    }
-
-                    const data = await response.json();
-                    textoSugerencia.textContent = data.descripcion_mejorada;
-                    sugerenciaDiv.classList.remove('hidden');
-                } catch (error) {
-                    alert('Error al mejorar la descripción: ' + error.message);
-                } finally {
-                    mejorarBtn.disabled = false;
-                    mejorarBtn.textContent = 'Mejorar Descripción';
-                }
-            });
-
-            aplicarBtn.addEventListener('click', function() {
-                descripcionTextarea.value = textoSugerencia.textContent;
-                sugerenciaDiv.classList.add('hidden');
-            });
-        });
-    </script>
 </body>
 </html>
