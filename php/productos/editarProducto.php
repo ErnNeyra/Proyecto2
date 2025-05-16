@@ -41,7 +41,7 @@
 
     <main class="container mx-auto py-12 px-6 flex-grow">
         <div class="bg-white rounded-md shadow-md p-8 max-w-lg mx-auto border border-gray-200">
-            <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Editar Producto o Servicio</h1>
+            <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Editar Producto</h1>
 
             <?php if (!empty($error)) echo "<div class='text-red-500 mb-4'>$error</div>"; ?>
             <?php if (!empty($success)) echo "<div class='text-green-500 mb-4'>$success</div>"; ?>

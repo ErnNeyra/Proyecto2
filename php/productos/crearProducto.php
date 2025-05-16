@@ -170,7 +170,7 @@
 
     <main class="container mx-auto py-12 px-6 flex-grow">
         <div class="bg-white rounded-md shadow-md p-8 max-w-lg mx-auto border border-gray-200">
-            <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Crear Nuevo Producto o Servicio</h1>
+            <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Crear Nuevo Producto </h1>
             <?php if (!empty($error)): ?>
                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
                     <strong class="font-bold">Error:</strong>

@@ -77,7 +77,10 @@
         <div class="twinkling"></div>
         <div class="container mx-auto px-4 text-center hero-content relative z-10">
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight js-fade-in-up" data-delay="0s">
-                Bienvenido a We-Connect
+                Bienvenido a 
+                <div class="relative h-32 flex items-center justify-center overflow-hidden">
+                    <img src="php/util/img/LogoBlanco.png" alt="We-Connect Logo" class="max-h-full w-auto scale-125 object-contain">
+                </div>
             </h1>
             <p class="text-lg md:text-xl mb-10 max-w-3xl mx-auto js-fade-in-up" data-delay="0.3s">
                 Conecta con profesionales, encuentra servicios y descubre productos increíbles.

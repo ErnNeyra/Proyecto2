@@ -13,8 +13,8 @@
                 <img src="../util/img/Logo.png" alt="We-Connect Logo" class="h-10 w-auto">
             </a>
             <nav class="flex items-center">
-                <a href="../productos/producto.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
                 <a href="servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
+                <a href="../productos/producto.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
                 <?php
                     error_reporting(E_ALL);
                     ini_set("display_errors",1);
