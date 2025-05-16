@@ -18,7 +18,9 @@
 
     <header class="shadow-md sticky top-0 z-50">
         <div class="container mx-auto py-4 px-4 flex items-center justify-between">
-            <a href="index.php" class="logo text-2xl font-bold text-gray-900 hover:text-marca-primario transition duration-200">We-Connect</a>
+            <a href="index.php" class="logo inline-block">
+                <img src="php/util/img/Logo.png" alt="We-Connect Logo" class="h-10 w-auto">
+            </a>
             <nav class="flex items-center space-x-4 md:space-x-6">
                 <a href="php/productos/producto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Productos</a>
                 <a href="php/servicios/servicio.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Servicios</a>
@@ -74,8 +76,9 @@
         <div class="stars"></div>
         <div class="twinkling"></div>
         <div class="container mx-auto px-4 text-center hero-content relative z-10">
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight js-fade-in-up" data-delay="0s">
-                Bienvenido a We-Connect
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight js-fade-in-up flex items-center justify-center gap-4" data-delay="0s">
+                Bienvenido a
+                <img src="php/util/img/Logo.png" alt="We-Connect Logo" class="h-32 w-auto inline-block align-middle">
             </h1>
             <p class="text-lg md:text-xl mb-10 max-w-3xl mx-auto js-fade-in-up" data-delay="0.3s">
                 Conecta con profesionales, encuentra servicios y descubre productos increíbles.

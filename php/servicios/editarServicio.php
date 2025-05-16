@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,16 +8,19 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
-<header class="bg-white shadow-md">
-    <div class="container mx-auto py-4 px-6 flex items-center justify-between">
-        <a href="../../index.php" class="text-xl font-bold text-black">We-Connect</a>
-        <nav class="flex items-center">
-            <a href="servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
-            <?php
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto py-4 px-6 flex items-center justify-between">
+            <a href="../../index.php" class="logo inline-block">
+                <img src="../util/img/Logo.png" alt="We-Connect Logo" class="h-10 w-auto">
+            </a>
+            <nav class="flex items-center">
+                <a href="servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
+                <?php
                 session_start();
                 // Verificamos si el usuario está autenticado
-                if(isset($_SESSION["usuario"]["usuario"])){
+                if (isset($_SESSION["usuario"]["usuario"])) {
                     $aliasUsuario = htmlspecialchars($_SESSION['usuario']['usuario']);
                     echo '<div class="relative">';
                     echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-black focus:outline-none" aria-expanded="false" aria-haspopup="true">';
@@ -34,75 +38,82 @@
                     echo '<a href="../usuarios/login.php" class="text-gray-700 hover:text-black">Iniciar Sesión</a>';
                 }
                 ?>
-        </nav>
-    </div>
-</header>
+            </nav>
+        </div>
+    </header>
 
-<main class="container mx-auto py-12 px-6 flex-grow">
-    <!-- Barra de búsqueda -->
-    <div class="bg-white shadow-sm py-4">
-        <div class="container mx-auto px-6">
-            <form action="" method="GET" class="flex items-center justify-center max-w-2xl mx-auto">
-                <div class="relative flex-1">
-                    <input 
-                        type="text" 
-                        name="buscar" 
-                        placeholder="Buscar productos..." 
-                        class="w-full px-4 py-2 pl-10 pr-4 rounded-lg border border-gray-300 focus:outline-none focus:border-yellow-500"
-                    >
-                    <div class="absolute left-3 top-2.5">
-                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                        </svg>
+    <main class="container mx-auto py-12 px-6 flex-grow">
+        <!-- Barra de búsqueda -->
+        <div class="bg-white shadow-sm py-4">
+            <div class="container mx-auto px-6">
+                <form action="" method="GET" class="flex items-center justify-center max-w-2xl mx-auto">
+                    <div class="relative flex-1">
+                        <input type="text" name="buscar" placeholder="Buscar productos..."
+                            class="w-full px-4 py-2 pl-10 pr-4 rounded-lg border border-gray-300 focus:outline-none focus:border-yellow-500">
+                        <div class="absolute left-3 top-2.5">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
                     </div>
+                    <button type="submit"
+                        class="ml-2 bg-yellow-500 text-black px-6 py-2 rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50">
+                        Buscar
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-md shadow-md p-8 max-w-lg mx-auto border border-gray-200">
+            <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Editar Servicio</h1>
+
+            <!-- Mensajes de éxito o error -->
+            <p class="text-red-500 mb-4" id="error-message" style="display: none;"></p>
+            <p class="text-green-500 mb-4" id="success-message" style="display: none;"></p>
+
+            <form action="editar_servicio.php?id=123" method="post" enctype="multipart/form-data">
+                <div class="mb-4">
+                    <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" value="Nombre actual"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
                 </div>
-                <button 
-                    type="submit" 
-                    class="ml-2 bg-yellow-500 text-black px-6 py-2 rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
-                >
-                    Buscar
-                </button>
+                <div class="mb-4">
+                    <label for="descripcion" class="block text-gray-700 text-sm font-bold mb-2">Descripción:</label>
+                    <textarea id="descripcion" name="descripcion" rows="4"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>Descripción actual</textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="precio" class="block text-gray-700 text-sm font-bold mb-2">Precio:</label>
+                    <input type="number" id="precio" name="precio" step="0.01" value="100.00"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="imagen" class="block text-gray-700 text-sm font-bold mb-2">Imagen (opcional):</label>
+                    <input type="file" id="imagen" name="imagen"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <p class="text-gray-500 text-xs italic">Formatos permitidos: JPG, PNG. Tamaño máximo: 2MB.</p>
+                    <p class="text-sm mt-2">Imagen actual: <a href="" target="_blank"
+                            class="text-blue-500 underline">Ver imagen</a></p><!-- PROGRAMAR IMAGEN -->
+                </div>
+                <div class="flex items-center justify-between">
+                    <button type="submit"
+                        class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:shadow-outline">Actualizar
+                        Servicio</button>
+                    <a href="servicio.php"
+                        class="inline-block align-baseline font-semibold text-sm text-blue-500 hover:text-blue-800">Cancelar</a>
+                </div>
             </form>
         </div>
-    </div>
-    
-    <div class="bg-white rounded-md shadow-md p-8 max-w-lg mx-auto border border-gray-200">
-        <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Editar Servicio</h1>
+    </main>
 
-        <!-- Mensajes de éxito o error -->
-        <p class="text-red-500 mb-4" id="error-message" style="display: none;"></p>
-        <p class="text-green-500 mb-4" id="success-message" style="display: none;"></p>
-
-        <form action="editar_servicio.php?id=123" method="post" enctype="multipart/form-data">
-            <div class="mb-4">
-                <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" value="Nombre actual" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            </div>
-            <div class="mb-4">
-                <label for="descripcion" class="block text-gray-700 text-sm font-bold mb-2">Descripción:</label>
-                <textarea id="descripcion" name="descripcion" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>Descripción actual</textarea>
-            </div>
-            <div class="mb-4">
-                <label for="precio" class="block text-gray-700 text-sm font-bold mb-2">Precio:</label>
-                <input type="number" id="precio" name="precio" step="0.01" value="100.00" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            </div>
-            <div class="mb-4">
-                <label for="imagen" class="block text-gray-700 text-sm font-bold mb-2">Imagen (opcional):</label>
-                <input type="file" id="imagen" name="imagen" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                <p class="text-gray-500 text-xs italic">Formatos permitidos: JPG, PNG. Tamaño máximo: 2MB.</p>
-                <p class="text-sm mt-2">Imagen actual: <a href="" target="_blank" class="text-blue-500 underline">Ver imagen</a></p><!-- PROGRAMAR IMAGEN -->
-            </div>
-            <div class="flex items-center justify-between">
-                <button type="submit" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:shadow-outline">Actualizar Servicio</button>
-                <a href="servicio.php" class="inline-block align-baseline font-semibold text-sm text-blue-500 hover:text-blue-800">Cancelar</a>
-            </div>
-        </form>
-    </div>
-</main>
-
-<footer class="bg-black py-4 text-center text-gray-400">
-    &copy; 2025 We-Connect. Todos los derechos reservados.
-</footer>
-<script src="../../js/script2.js"></script>
+    <footer class="bg-black py-4 text-center text-gray-400">
+        &copy; 2025 We-Connect. Todos los derechos reservados.
+    </footer>
+    <script src="../../js/script2.js"></script>
 </body>
+
 </html>
