@@ -18,7 +18,9 @@
 
     <header class="shadow-md sticky top-0 z-50">
         <div class="container mx-auto py-4 px-4 flex items-center justify-between">
-            <a href="index.php" class="logo text-2xl font-bold text-gray-900 hover:text-marca-primario transition duration-200">We-Connect</a>
+            <a href="index.php" class="logo inline-block">
+                <img src="php/util/img/Logo.png" alt="We-Connect Logo" class="h-10 w-auto">
+            </a>
             <nav class="flex items-center space-x-4 md:space-x-6">
                 <a href="php/productos/producto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Productos</a>
                 <a href="php/servicios/servicio.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Servicios</a>
