@@ -1,3 +1,5 @@
+
+ 
 <?php
     session_start();
     require('../util/config.php'); // Asegúrate de que este archivo contiene tu conexión a la base de datos ($_conexion)
@@ -57,7 +59,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../../css/usuario.css">
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex items-center justify-center">
     <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">

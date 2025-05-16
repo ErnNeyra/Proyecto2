@@ -1,0 +1,172 @@
+/*
+ * Archivo CSS Principal para We-Connect (styles.css)
+ * Diseño profesional y elegante, optimizado para trabajar con Tailwind CSS.
+ */
+
+/* ==========================================================================
+   Variables de Marca y Diseño (Refinadas y Completas)
+   ========================================================================== */
+
+:root {
+    /* Colores de Marca */
+    --color-marca-primario: #1a3d5e; /* Azul Oscuro Profundo */
+    --color-marca-primario-rgb: 26, 61, 94; /* Para rgba en sombras/borders */
+    --color-marca-primario-oscuro: #15314b; /* Un tono más oscuro para hover, etc. */
+
+    --color-marca-secundaria: #f3a638; /* Dorado Vibrante */
+    --color-marca-secundaria-rgb: 243, 166, 56; /* Para rgba */
+    --color-marca-secundaria-oscuro: #e0972d; /* Un tono más oscuro */
+
+    /* Colores de Texto */
+    --color-texto-principal: #333; /* Texto general y etiquetas de formulario */
+    --color-texto-oscuro: #1F2937; /* Títulos, elementos importantes */
+    --color-texto-claro: #6B7280; /* Texto secundario, descripciones, placeholders */
+    --color-texto-inverso: #f8f8f8; /* Texto sobre fondos oscuros */
+
+    /* Tipografía */
+    --fuente-principal: 'Poppins', sans-serif;
+    --fuente-secundaria: 'Open Sans', sans-serif;
+
+    /* Espaciado */
+    --espacio-xs: 0.25rem;  /* 4px */
+    --espacio-sm: 0.5rem;   /* 8px */
+    --espacio-md: 1rem;     /* 16px */
+    --espacio-lg: 1.5rem;   /* 24px */
+    --espacio-xl: 2rem;     /* 32px */
+    --espacio-2xl: 3rem;    /* 48px */
+
+    /* Bordes y Sombras */
+    --borde-radio-sm: 0.125rem;
+    --borde-radio-md: 0.375rem;
+    --borde-radio-lg: 0.75rem;
+    --sombra-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --sombra-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --sombra-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Transiciones */
+    --transicion-rapida: 0.15s ease-in-out;
+    --transicion-suave: 0.3s ease-in-out;
+
+    /* Z-Index */
+    --z-index-bajo: 10;
+    --z-index-medio: 20;
+    --z-index-alto: 30;
+    --z-index-superior: 40;
+}
+
+/* ==========================================================================
+   Estilos Globales y Resets (Adaptados a Tailwind)
+   ========================================================================== */
+
+/* Reset de margen y padding para consistencia */
+body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, blockquote, dl, dd, form, fieldset, legend, textarea, pre {
+    margin: 0;
+    padding: 0;
+}
+
+/* Herencia de box-sizing para comportamiento predecible */
+html {
+    box-sizing: border-box;
+}
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+/* Tipografía base y suavizado */
+body {
+    font-family: var(--fuente-principal);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6; /* Mejora la legibilidad */
+    color: var(--color-texto-principal);
+}
+
+/* Enfoque visual claro para la accesibilidad */
+:focus {
+    outline: 2px solid var(--color-marca-secundaria);
+    outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Estilos de Componentes (Personalizados)
+   ========================================================================== */
+
+/* Hero Section (Adaptado) */
+.hero-section {
+    background: linear-gradient(135deg, var(--color-marca-primario), #2c3e50);
+    position: relative;
+    overflow: hidden;
+    color: var(--color-texto-inverso);
+}
+
+.hero-content {
+    /* Centrado y espaciado mejorado */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Asegura altura mínima */
+    padding: var(--espacio-xl) 0;
+}
+
+.hero-section h1 {
+    font-family: var(--fuente-principal);
+    font-weight: 700;
+    color: var(--color-texto-inverso);
+    margin-bottom: var(--espacio-md);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.hero-section p {
+    font-family: var(--fuente-secundaria);
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 70ch; /* Limita el ancho para legibilidad */
+    line-height: 1.7;
+    margin-bottom: var(--espacio-lg);
+}
+
+.hero-section .cta-button {
+    background-color: var(--color-marca-secundaria);
+    color: var(--color-texto-oscuro);
+    padding: var(--espacio-sm) var(--espacio-lg);
+    border-radius: var(--borde-radio-md);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color var(--transicion-rapida);
+    box-shadow: var(--sombra-sm);
+}
+
+.hero-section .cta-button:hover {
+    background-color: var(--color-marca-secundaria-oscuro);
+    color: var(--color-texto-inverso);
+}
+
+/* Background del espacio */
+.space-background {
+    background: linear-gradient(135deg, #16222A, #3A6073);
+    overflow: hidden;
+    position: relative;
+}
+
+.stars, .twinkling {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.stars {
+    background: url(./img/stars.png) repeat top center;
+    z-index: 0;
+}
+
+.twinkling {
+    background: url(./img/twinkling.png) repeat top center;
+    z-index: 1;
+    animation: twinkling 60s infinite;
+}
+

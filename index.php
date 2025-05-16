@@ -8,8 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="css/styles.css">
-
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="css/index.css"> <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -39,7 +38,7 @@
                         }
 
                         // Estructura del desplegable
-                        echo '<div class="relative">';
+                        echo '<div class="relative">'; // Clase relativa para el posicionamiento absoluto del desplegable
                         echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-marca-primario transition duration-200 focus:outline-none" aria-expanded="false" aria-haspopup="true">';
                         // Mostrar la foto de perfil
                         echo '        <img class="h-8 w-8 rounded-full mr-2 object-cover" src="' . $imagenPerfil . '" alt="Imagen de Perfil de ' . $nombreUsuario . '">';
@@ -68,6 +67,9 @@
             require('php/util/config.php');
         ?>
     </header>
+
+    <main class="flex-grow">
+
     <section class="hero-section space-background text-white py-20 md:py-32 flex items-center relative overflow-hidden observe-section">
         <div class="stars"></div>
         <div class="twinkling"></div>
@@ -84,59 +86,87 @@
     <section id="featured-products" class="featured-products py-8 observe-section">
         <div class="container mx-auto px-6">
             <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center js-fade-in-up" data-delay="0s">Productos Destacados</h2>
-            <div id="productos-carrusel-container" class="relative overflow-hidden">
-                <div id="productos-carrusel" class="whitespace-nowrap scroll-smooth transition-transform duration-300 py-4 flex gap-4"> <?php
-                    // Check if $_conexion is set and valid
-                    $sql = "SELECT * FROM producto LIMIT 10"; // Ejemplo: los 10 primeros productos
-                    $resultado = $_conexion->query($sql);
-                    $sql1 = "SELECT * FROM servicio LIMIT 10"; // Ejemplo: los 10 primeros productos
-                    $resultado1 = $_conexion->query($sql);
+            <div id="productos-carrusel-wrapper" class="relative group">
+                <div id="productos-carrusel-container" class="overflow-hidden">
+                    <div id="productos-carrusel" class="flex transition-transform duration-500 ease-in-out py-4 gap-4">
+                        <?php
+                            // *** IMPORTANTE: Aquí corrijo la obtención de servicios ***
+                            $productos_servicios = [];
 
-                    if ($resultado && $resultado1 && $resultado1->num_rows >0 && $resultado->num_rows > 0) {
-                        while ($producto = $resultado->fetch_assoc()) {
-                            echo '<div class="producto-card inline-block w-72 shadow-md rounded-md overflow-hidden border border-gray-200 bg-white flex-shrink-0 js-fade-in-up">'; // Añadido flex-shrink-0 y js-fade-in-up
-                            echo '<img src="php/util/' . htmlspecialchars($producto['imagen']) . '" alt="' . htmlspecialchars($producto['nombre']) . '" class="w-full h-40 object-cover">';
-                            echo '<div class="producto-card-content p-4">';
-                            echo '<h3 class="font-semibold text-gray-700">' . htmlspecialchars($producto['nombre']) . '</h3>';
-                            echo '<a href="php/productos/detalleProducto.php?id_producto=' . $producto['id_producto'] . '" class="text-yellow-600 hover:text-yellow-700 font-semibold mt-2 inline-block">Ver Detalles</a>';
-                            echo '</div>';
-                            echo '</div>';
-                            echo '<input type="hidden" name="id_producto" value=" '. $producto["id_producto"] .'">';
-                        }
-                        while ($servicio = $resultado1->fetch_assoc()) {
-                            echo '<div class="producto-card inline-block w-72 shadow-md rounded-md overflow-hidden border border-gray-200 bg-white flex-shrink-0 js-fade-in-up">'; // Añadido flex-shrink-0 y js-fade-in-up
-                            echo '<img src="php/util/' . htmlspecialchars($servicio['imagen']) . '" alt="' . htmlspecialchars($servicio['nombre']) . '" class="w-full h-40 object-cover">';
-                            echo '<div class="producto-card-content p-4">';
-                            echo '<h3 class="font-semibold text-gray-700">' . htmlspecialchars($servicio['nombre']) . '</h3>';
-                            echo '<a href="php/productos/detalleProducto.php?id_producto=' . $servicio['id_producto'] . '" class="text-yellow-600 hover:text-yellow-700 font-semibold mt-2 inline-block">Ver Detalles</a>';
-                            echo '</div>';
-                            echo '</div>';
-                            echo '<input type="hidden" name="id_producto" value=" '. $servicio["id_producto"] .'">';
-                        }
-                    } else {
-                        echo "<p class='text-center text-gray-600 w-full'>No hay productos o servicios destacados por el momento.</p>"; // width full para centrar
-                    }
-                    // No cierres la conexión aquí si la necesitas en otras partes de la página
-                    // $_conexion->close();
-                    ?>
+                            // Obtener hasta 10 productos (o el número que desees)
+                            $sql_productos = "SELECT id_producto, nombre, imagen, 'producto' as tipo FROM producto ORDER BY RAND() LIMIT 10";
+                            $resultado_productos = $_conexion->query($sql_productos);
+                            if ($resultado_productos) {
+                                while ($item = $resultado_productos->fetch_assoc()) {
+                                    $productos_servicios[] = $item;
+                                }
+                            }
+
+                            // Obtener hasta 10 servicios (o el número que desees)
+                            // CORREGIDO: Usar $sql1 para servicios
+                            $sql_servicios = "SELECT id_servicio as id_producto, nombre, imagen, 'servicio' as tipo FROM servicio ORDER BY RAND() LIMIT 10";
+                            $resultado_servicios = $_conexion->query($sql_servicios); // Ejecutar la consulta correcta
+                            if ($resultado_servicios) {
+                                while ($item = $resultado_servicios->fetch_assoc()) {
+                                    $productos_servicios[] = $item;
+                                }
+                            }
+
+                            // Ahora $productos_servicios puede contener hasta 20 items (productos y servicios)
+                            // script2.js necesita al menos 7 para mostrar controles y habilitar bucle
+
+                            // Mezclar aleatoriamente todos los items combinados si es necesario
+                            if (!empty($productos_servicios)) {
+                                shuffle($productos_servicios);
+                            }
+
+                            if (!empty($productos_servicios)) {
+                                foreach ($productos_servicios as $item) {
+                                    $detalle_url = $item['tipo'] === 'producto' ? 'php/productos/detalleProducto.php?id_producto=' : 'php/servicios/detalleServicio.php?id_servicio='; // Asumiendo que tienes detalleServicio.php
+
+                                    // Mantengo tus clases responsive de ancho, pero recuerda que tu CSS custom o index.css podría afectarlas
+                                    // Añadido flex-none para que no se encojan por defecto en el flex container
+                                    echo '<div class="producto-card flex-none w-full sm:w-1/2 md:w-1/3 px-2 js-fade-in-up">';
+                                    echo '    <div class="bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl h-full flex flex-col">'; // Añadido flex y flex-col para layout interno
+                                    // Aspect ratio para la imagen
+                                    echo '      <a href="' . $detalle_url . $item['id_producto'] . '" class="block w-full h-40 overflow-hidden">'; // Ajustado h-40 directamente
+                                    echo '        <img src="php/util/' . htmlspecialchars($item['imagen']) . '" alt="' . htmlspecialchars($item['nombre']) . '" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">';
+                                    echo '      </a>';
+                                    echo '      <div class="producto-card-content p-4 flex flex-col flex-grow">'; // Añadido flex, flex-col, flex-grow
+                                    echo '        <h3 class="font-semibold text-gray-700 mb-2 truncate">' . htmlspecialchars($item['nombre']) . '</h3>'; // Añadido truncate y mb-2
+                                    echo '        <a href="' . $detalle_url . $item['id_producto'] . '" class="mt-auto inline-block text-center bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold text-sm">Ver Detalles</a>'; // Añadido mt-auto, text-center, text-sm
+                                    echo '      </div>';
+                                    echo '    </div>';
+                                    echo '</div>';
+                                }
+                            } else {
+                                echo "<p class='text-center text-gray-600 w-full py-8'>No hay productos o servicios destacados por el momento.</p>";
+                            }
+                        ?>
+                    </div>
                 </div>
-                <button id="prev-producto" class="carousel-control absolute left-0 top-1/2 transform -translate-y-1/2 ml-2 focus:outline-none">
+
+                <button id="prev-producto" aria-label="Anterior" class="carousel-control absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 sm:-translate-x-6 rounded-full p-3 shadow-md focus:outline-none z-10">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 </button>
-                <button id="next-producto" class="carousel-control absolute right-0 top-1/2 transform -translate-y-1/2 mr-2 focus:outline-none">
+                <button id="next-producto" aria-label="Siguiente" class="carousel-control absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 sm:translate-x-6 rounded-full p-3 shadow-md focus:outline-none z-10">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </button>
+
                 <div id="carousel-indicators" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
                     </div>
-                <button id="pause-play-button" class="carousel-control absolute bottom-10 right-4 focus:outline-none">
-                    <i id="play-icon" class="fas fa-play"></i>
-                    <i id="pause-icon" class="fas fa-pause" style="display:none;"></i>
-                </button>
+
+                 <button id="pause-play-button" class="carousel-control absolute bottom-10 right-4 focus:outline-none z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-md">
+                     <i id="play-icon" class="fas fa-play"></i>
+                     <i id="pause-icon" class="fas fa-pause" style="display:none;"></i>
+                 </button>
+
             </div>
         </div>
     </section>
 
-    <section class="why-choose-us py-12 bg-white observe-section">
+
+    <section class="call-to-action bg-yellow-500 py-12 text-center observe-section">
         <div class="container mx-auto px-6">
             <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center js-fade-in-up" data-delay="0s">¿Por Qué Elegirnos?</h2>
             <div class="why-choose-us-grid grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -177,56 +207,100 @@
         </div>
     </section>
 
-    <section class="how-it-works py-12 observe-section"> <div class="container mx-auto px-6">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center js-fade-in-up" data-delay="0s">¿Cómo funciona?</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+  <section class="how-it-works py-12 observe-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center js-fade-in-up" data-delay="0s">¿Cómo
+                funciona?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="how-it-works-item text-center js-fade-in-up" data-delay="0.1s">
-                    <i class="mx-auto h-12 w-12 text-yellow-500 fas fa-user-plus"></i>
-                    <h3 class="font-semibold text-black mt-2">Regístrate</h3>
-                    <p class="text-gray-600">Crea tu perfil y cuéntale a la comunidad sobre tu emprendimiento.</p>
+                    <div class="step-circle bg-yellow-200 text-yellow-700 font-bold w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                        1
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Regístrate</h3>
+                    <p class="text-gray-600">Crea tu cuenta de forma rápida y sencilla para empezar a conectar.</p>
                 </div>
                 <div class="how-it-works-item text-center js-fade-in-up" data-delay="0.2s">
-                    <i class="mx-auto h-12 w-12 text-yellow-500 fas fa-search"></i>
-                    <h3 class="font-semibold text-black mt-2">Explora</h3>
-                    <p class="text-gray-600">Descubre perfiles de otros emprendedores y sus ofertas de productos o servicios.</p>
+                    <div class="step-circle bg-yellow-200 text-yellow-700 font-bold w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                        2
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Explora</h3>
+                    <p class="text-gray-600">Navega por perfiles, servicios y productos para encontrar lo que necesitas.</p>
                 </div>
                 <div class="how-it-works-item text-center js-fade-in-up" data-delay="0.3s">
-                    <i class="mx-auto h-12 w-12 text-yellow-500 fas fa-handshake"></i>
-                    <h3 class="font-semibold text-black mt-2">Conecta</h3>
-                    <p class="text-gray-600">Accede a herramientas premium para contactar y colaborar directamente (próximamente).</p>
+                    <div class="step-circle bg-yellow-200 text-yellow-700 font-bold w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                        3
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Conecta</h3>
+                    <p class="text-gray-600">Establece conexiones profesionales y colabora en proyectos interesantes.</p>
                 </div>
             </div>
         </div>
     </section>
-    </main>
 
-    <footer class="bg-black py-8 text-center text-gray-400">
-        <div class="container mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left mb-8"><div class="footer-section">
-                    <h3 class="text-lg font-semibold text-white mb-4">We-Connect</h3>
-                    <p>Conectando profesionales y oportunidades en un solo lugar.</p>
+
+    <section class="call-to-action bg-yellow-500 py-12 text-center observe-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 js-fade-in-up" data-delay="0s">Únete a We-Connect Hoy</h2>
+            <p class="text-xl text-gray-700 mb-8 js-fade-in-up" data-delay="0.2s">
+                Comienza a construir tu futuro profesional y a descubrir oportunidades increíbles.
+            </p>
+            <a href="php/usuarios/registro.php" class="cta-button bg-gray-800 text-white py-3 px-8 rounded-md hover:bg-gray-900 transition duration-200 font-semibold text-lg js-fade-in-up" data-delay="0.4s">
+                Regístrate Ahora
+            </a>
+        </div>
+    </section>
+
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="footer-section">
+                    <h3 class="text-lg font-semibold mb-4">Acerca de We-Connect</h3>
+                    <p class="text-gray-300">
+                        We-Connect es una plataforma que conecta a compradores y vendedores de productos y servicios,
+                        facilitando el comercio y las oportunidades de negocio.
+                    </p>
                 </div>
-                <div class="footer-section footer-links">
-                    <h3 class="text-lg font-semibold text-white mb-4">Enlaces Útiles</h3>
-                    <ul>
-                        <li><a href="#" class="hover:text-marca-secundaria transition duration-200">Términos de Servicio</a></li>
-                        <li><a href="#" class="hover:text-marca-secundaria transition duration-200">Política de Privacidad</a></li>
-                        <li><a href="#" class="hover:text-marca-secundaria transition duration-200">Ayuda</a></li>
-                        <li><a href="php/contacto.php" class="hover:text-marca-secundaria transition duration-200">Contacto</a></li>
+                <div class="footer-section">
+                    <h3 class="text-lg font-semibold mb-4">Enlaces Útiles</h3>
+                    <ul class="list-none p-0">
+                        <li><a href="index.php" class="hover:text-marca-secundaria transition duration-200">Inicio</a></li>
+                        <li><a href="php/productos/producto.php"
+                                class="hover:text-marca-secundaria transition duration-200">Productos</a></li>
+                        <li><a href="php/servicios/servicio.php"
+                                class="hover:text-marca-secundaria transition duration-200">Servicios</a></li>
+                        <li><a href="php/contacto.php"
+                                class="hover:text-marca-secundaria transition duration-200">Contacto</a></li>
                     </ul>
                 </div>
-                <div class="footer-section social-icons-footer"> <h3 class="text-lg font-semibold text-white mb-4">Síguenos</h3>
-                    <div class="flex justify-center md:justify-start space-x-4 text-xl"> <a href="#" class="hover:text-marca-secundaria transition duration-200"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="hover:text-marca-secundaria transition duration-200"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="hover:text-marca-secundaria transition duration-200"><i class="fab fa-linkedin-in"></i></a>
-                                </div>
+                <div class="footer-section">
+                    <h3 class="text-lg font-semibold mb-4">Soporte</h3>
+                    <ul class="list-none p-0">
+                        <li><a href="#" class="hover:text-marca-secundaria transition duration-200">Preguntas Frecuentes</a></li>
+                        <li><a href="#" class="hover:text-marca-secundaria transition duration-200">Términos de Servicio</a></li>
+                        <li><a href="#" class="hover:text-marca-secundaria transition duration-200">Política de Privacidad</a></li>
+                        <li><a href="php/contacto.php" class="hover:text-marca-secundaria transition duration-200">Ayuda</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section social-icons-footer">
+                    <h3 class="text-lg font-semibold text-white mb-4">Síguenos</h3>
+                    <div class="flex justify-center md:justify-start space-x-4 text-xl">
+                        <a href="#" class="hover:text-marca-secundaria transition duration-200"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="hover:text-marca-secundaria transition duration-200"><i
+                                class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-marca-secundaria transition duration-200"><i
+                                class="fab fa-linkedin-in"></i></a>
+                    </div>
                 </div>
             </div>
-            <div class="copyright border-t border-gray-700 pt-8"> <p>&copy; <?php echo date('Y'); ?> We-Connect. Todos los derechos reservados.</p> </div>
+            <div class="copyright border-t border-gray-700 pt-8">
+                <p>&copy; <?php echo date('Y'); ?> We-Connect. Todos los derechos reservados.</p>
+            </div>
         </div>
     </footer>
 
-   
-    <script src="js/script2.js"></script>
-</body>
+
+
+    <script src="js/desplegable.js"></script> <script src="js/script2.js"></script> </body>
 </html>

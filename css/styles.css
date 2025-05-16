@@ -151,54 +151,64 @@ a:hover {
    Header (Pulido con Transparencia y Sombra)
    ========================================================================== */
 
+/* Header */
 header {
-    /* Tailwind maneja sticky, top-0, z-50, flex layout, padding */
-    /* Usamos CSS puro para el fondo semi-transparente y el desenfoque */
-    background-color: var(--color-fondo-transparente-claro); /* Fondo semi-transparente */
-    backdrop-filter: blur(8px); /* Efecto de desenfoque moderno */
-    box-shadow: var(--sombra-header); /* Sombra sutil */
+    background-color: #fff; /* Fondo blanco para el header */
+    border-bottom: 1px solid #E2E8F0; /* Línea sutil en la parte inferior */
 }
 
-header .container {
-    /* Tailwind maneja mx-auto, py-4, px-6, flex, items-center, justify-between */
+header .logo {
+    color: #1A202C; /* Color del logo */
+    /* Las clases font-bold text-2xl de Tailwind ya aplican el tamaño y negrita */
 }
-
-header a.logo {
-    color: var(--color-marca-primario);
-    font-size: 1.5rem; /* Ajusta si es necesario */
-    font-weight: 700;
-    transition: color var(--transicion-rapida);
-}
-header a.logo:hover { color: var(--color-marca-secundaria); }
 
 header nav a {
-    /* Tailwind maneja text-gray-700, mr-4 */
-    color: var(--color-texto-oscuro); /* Color por defecto para los enlaces de navegación */
-    margin: 0 var(--espacio-sm); /* Espaciado entre enlaces */
-    transition: color var(--transicion-rapida), transform var(--transicion-rapida);
-}
-header nav a:hover {
-    color: var(--color-marca-primario);
-    transform: translateY(-2px); /* Sutil elevación */
+    color: #4A5568; /* Color de los enlaces de navegación (gris oscuro) */
+     /* Las clases text-gray-700 transition duration-200 de Tailwind están bien */
 }
 
-/* Estilo para los botones CTA en el header */
-header .cta-button {
-    /* Tailwind maneja bg-yellow-500, text-black, py-2, px-4, rounded-md, hover:bg-yellow-600 */
-    /* Si usas las clases btn genéricas, aplica btn-primary o btn-secondary */
-    /* @apply btn btn-secondary; */ /* Ejemplo con @apply */
-    font-weight: 600;
-    transition: background-color var(--transicion-default), transform var(--transicion-default), box-shadow var(--transicion-default);
-    /* Si no usas @apply, necesitas definir el estilo aquí si no lo cubre Tailwind */
-    /* background-color: var(--color-marca-secundaria); */
-    /* color: var(--color-texto-oscuro); */
-    /* padding: var(--espacio-sm) var(--espacio-md); */
-    /* border-radius: var(--borde-redondo-sm); */
+header nav a:hover {
+    color: var(--color-primario); /* Usar color de marca al pasar el ratón */
+     /* Tailwind hover:text-yellow-500 puede sobrescribir esto si no ajustas la especificidad o el config de Tailwind */
 }
+
+/* Estilos para el desplegable de usuario */
+#user-dropdown-button {
+    cursor: pointer;
+     /* Las clases flex items-center text-gray-700 hover:text-yellow-500 transition duration-200 focus:outline-none de Tailwind están bien */
+     color: #4A5568; /* Asegurar color inicial */
+}
+#user-dropdown-button:hover {
+     color: var(--color-primario); /* Usar color de marca al pasar el ratón */
+}
+
+
+#user-dropdown {
+    /* Las clases hidden, absolute, right-0, mt-2, w-48, bg-white, rounded-md, shadow-xl, z-10 de Tailwind están bien */
+    border: 1px solid #E2E8F0; /* Borde sutil para el desplegable */
+}
+
+#user-dropdown a {
+    color: #4A5568; /* Color de los enlaces del desplegable */
+     /* Las clases block px-4 py-2 text-gray-800 transition duration-200 de Tailwind están bien */
+}
+
+#user-dropdown a:hover {
+    background-color: #F7FAFC; /* Fondo suave al pasar el ratón */
+    color: #1A202C; /* Texto más oscuro al pasar el ratón */
+     /* Tailwind hover:bg-gray-100 puede sobrescribir esto */
+}
+
+/* Estilos específicos para el botón de registro en el header */
+header .cta-button {
+     background-color: var(--color-primario); /* Usa el color de marca primario */
+     color: #1A202C; /* Texto oscuro */
+     /* Las clases py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold de Tailwind están bien */
+}
+
 header .cta-button:hover {
-    transform: translateY(-2px);
-    /* Si no usas @apply, añade: box-shadow: var(--sombra-suave); */
-    /* Si Tailwind maneja hover:bg-yellow-600, eso es suficiente */
+     background-color: #C0A000; /* Un tono más oscuro al pasar el ratón */
+     color: #fff; /* Texto blanco */
 }
 
 
@@ -451,63 +461,78 @@ header .cta-button:hover {
 
 /* Controles del Carrusel (Pulido) */
 /* Asumiendo que usas botones con clases prev-producto y next-producto */
-.carousel-control {
-    /* Tailwind maneja absolute, left/right, top, transform, rounded-full, w-10, h-10, flex, items-center, justify-center, focus:outline-none, z-10 */
-    background-color: var(--color-fondo-transparente-oscuro); /* Fondo semitransparente oscuro */
-    color: white;
-    border-radius: var(--borde-redondo-completo);
-    width: 40px; height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color var(--transicion-rapida), opacity var(--transicion-rapida);
-    opacity: 0.7;
-    z-index: 50; /* Asegurar que estén sobre las tarjetas */
-}
-.carousel-control:hover {
-    background-color: rgba(0, 0, 0, 0.8); /* Fondo más oscuro en hover */
-    opacity: 1;
+/* Carrusel general */
+/* Contenedor del carrusel */
+#carousel {
+  max-width: 900px;
+  margin: 40px auto;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
-#prev-producto { left: var(--espacio-md); } /* Posición ejemplo */
-#next-producto { right: var(--espacio-md); } /* Posición ejemplo */
-
-/* Indicadores del Carrusel (Pulido) */
-#carousel-indicators {
-    /* Tailwind maneja absolute, bottom-4, left-1/2, transform, flex, space-x-2 */
-    display: flex;
-    justify-content: center;
-    margin-top: var(--espacio-md);
-    position: absolute; /* Si Tailwind no lo hace */
-    bottom: var(--espacio-md); /* Posición */
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 50;
+/* Cada slide */
+.carousel-item {
+  display: none;
+  text-align: center;
+  padding: 20px;
 }
 
-#carousel-indicators button {
-    /* Tailwind maneja w-3, h-3, rounded-full, bg-gray-400, focus:outline-none */
-    background-color: rgba(0, 0, 0, 0.3);
-    border: none;
-    width: 10px; height: 10px;
-    border-radius: var(--borde-redondo-completo);
-    margin: 0 4px;
-    cursor: pointer;
-    transition: background-color var(--transicion-rapida), transform var(--transicion-rapida);
+.carousel-item.active {
+  display: block;
 }
 
-#carousel-indicators button:hover {
-    transform: scale(1.1);
+/* Imagen del producto */
+.carousel-item img {
+  width: 100%;
+  max-height: 500px;
+  object-fit: contain;
+  border-radius: 10px;
 }
-/* Clase activa (puede ser bg-yellow-500 de Tailwind o una clase tuya como .active) */
-#carousel-indicators button.bg-yellow-500,
-#carousel-indicators button.active,
-#carousel-indicators button[aria-current="true"]
-{
-    background-color: var(--color-marca-secundaria);
-    transform: scale(1.2); /* Ligeramente más grande */
+
+/* Título del producto */
+.carousel-item h2 {
+  margin-top: 15px;
+  font-size: 22px;
+  color: #333;
 }
+
+/* Botón de acción */
+.carousel-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.carousel-button:hover {
+  background-color: #34495e;
+}
+
+/* Controles del carrusel */
+.carousel-controls {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 30px;
+}
+
+.carousel-controls button {
+  background: none;
+  border: none;
+  font-size: 32px;
+  cursor: pointer;
+  color: #2c3e50;
+}
+
+.carousel-controls button:hover {
+  color: #000;
+}
+
 
 /* Botón Pausa/Play (Pulido) */
 #pause-play-button {
