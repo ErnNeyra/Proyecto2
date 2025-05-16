@@ -132,53 +132,116 @@
             </div>
         </div>
         <?php
-            if($_SERVER["REQUEST_METHOD"] == "POST"){
+            if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['tipo'], $_POST['id'])){
                 //por convención se usa siempre el id para borrar, pero se podría usar el titulo
-                $idProducto = $_POST["id_producto"];
+                $tipo = $_POST['tipo']; // 'producto' o 'servicio'
+                $id = intval($_POST['id']);
                 //borrar el producto de la base de datos
                 /* $sql = "DELETE FROM animes WHERE id_anime = $idAnime";
                 $_conexion -> query($sql); */
-
+                // determina si es un producto o un servicio
+                if ($tipo === 'producto') {
+                    $tabla = 'producto';
+                    $campo = 'id_producto';
+                } elseif ($tipo === 'servicio') {
+                    $tabla = 'servicio';
+                    $campo = 'id_servicio';
+                } else {
+                    // Tipo desconocido
+                    exit('Tipo no válido.');
+                }
+                // Gestiono
+                $sql = $_conexion->prepare("SELECT imagen FROM $tabla WHERE $campo = ?");
+                $sql->bind_param("i", $id);
+                $sql->execute();
+                $sql->bind_result($rutaImagen);
+                $sql->fetch();
+                $sql->close();
                 //1. Prepare
-                $sql = $_conexion -> prepare("DELETE FROM producto WHERE id_producto = ?");
+                $sql = $_conexion -> prepare("DELETE FROM $tabla WHERE $campo = ?");
                 //2. Bind
-                $sql -> bind_param("i", $idProducto);
+                $sql -> bind_param("i", $id);
                 //3. Excute
                 $sql -> execute();
-
+                $sql -> close();
+                // 4. Borra la imagen 
+                if ($rutaImagen && file_exists($rutaImagen)) {
+                    unlink($rutaImagen);
+                }
             }
+
+            // Consulta que combina productos y servicios
+            $sql = "
+                SELECT 
+                    'producto' AS tipo,
+                    id_producto AS id,
+                    nombre,
+                    descripcion,
+                    precio,
+                    stock,
+                    imagen,
+                    categoria,
+                    fecha_agregado
+                FROM producto
+
+                UNION ALL
+
+                SELECT 
+                    'servicio' AS tipo,
+                    id_servicio AS id,
+                    nombre,
+                    descripcion,
+                    precio,
+                    NULL AS stock,
+                    imagen,
+                    categoria,
+                    fecha_agregado
+                FROM servicio
+
+                ORDER BY fecha_agregado DESC
+            ";
+            $resultado = $_conexion->query($sql);
+
         ?>
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Tus Productos Publicados</h2>
-        <div class="grid gap-6">
-            <?php if ($productos->num_rows > 0): ?>
-                <?php while($producto = $productos->fetch_assoc()): ?>
-                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
-                        <div class="md:flex">
-                            <div class="md:w-1/4">
-                                <img src="<?php echo htmlspecialchars($producto['imagen']); ?>"
-                                     alt="<?php echo htmlspecialchars($producto['nombre']); ?>"
-                                     class="w-full h-48 object-cover">
-                            </div>
-                            <div class="md:w-3/4 p-6">
-                                <h3 class="text-xl font-semibold text-gray-800 mb-2">
-                                    <?php echo htmlspecialchars($producto['nombre']); ?>
-                                </h3>
-                                <p class="text-gray-600 mb-4">
-                                    <?php echo htmlspecialchars($producto['descripcion']); ?>
-                                </p>
-                                <p class="text-lg font-bold text-yellow-500 mb-4">
-                                    €<?php echo number_format($producto['precio'], 2); ?>
-                                </p>
-                                <?php if(isset($_SESSION['usuario']['usuario']) && $_SESSION['usuario']['usuario'] == $usuario['usuario']): ?>
-                                    <div class="flex space-x-4">
-                                        <a href="../productos/editarProducto.php?id=<?php echo $producto['id_producto']; ?>"
-                                           class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200">
-                                            Editar producto
-                                        </a>
-                                        <form action="" method="post">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Tus Productos Y Servicios Publicados</h2>
+            <div class="grid gap-6">
+                <?php if ($resultado->num_rows > 0): ?>
+                    <?php while($item = $resultado->fetch_assoc()): ?>
+                        <div class="item-card bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="md:flex">
+                                <div class="md:w-1/4">
+                                    <img src="<?php echo htmlspecialchars($item['imagen']); ?>"
+                                        alt="<?php echo htmlspecialchars($item['nombre']); ?>"
+                                        class="w-full h-48 object-cover">
+                                </div>
+                                <div class="md:w-3/4 p-6">
+                                    <!-- Muestra "Producto" o "Servicio" según el tipo -->
+                                    <span class="bg-blue-100 text-blue-800 text-sm px-2 py-1 rounded">
+                                        <?php echo strtoupper($item['tipo']) ?>
+                                    </span>
+                                    
+                                    <h3 class="text-xl font-semibold text-gray-800 mb-2 mt-2">
+                                        <?php echo htmlspecialchars($item['nombre']); ?>
+                                    </h3>
+                                    <p class="text-gray-600 mb-4">
+                                        <?php echo htmlspecialchars($item['descripcion']); ?>
+                                    </p>
+                                    <p class="text-lg font-bold text-yellow-500 mb-4">
+                                        €<?php echo number_format($item['precio'], 2); ?>
+                                    </p>
+                                    
+                                    <?php if(isset($_SESSION['usuario']['usuario']) && $_SESSION['usuario']['usuario'] == $usuario['usuario']): ?>
+                                        <div class="flex space-x-4">
+                                            <!-- Enlace dinámico para editar (producto o servicio) -->
+                                            <a href="../<?php echo $item['tipo'] ?>s/editar<?php echo ucfirst($item['tipo']) ?>.php?id=<?php echo $item['id']; ?>"
+                                            class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200">
+                                                Editar <?php echo $item['tipo'] ?>
+                                            </a>
+                                        <form action="" method="post" onsubmit="return confirm('¿Seguro que deseas eliminar este <?php echo $item['tipo']?>?');">
                                             <!-- Hago que sea dinámico, cada producto tiene un ID único -->
-                                            <input type="hidden" name="id_producto" value="<?php echo $producto["id_producto"]?>">
-                                            <button type="submit" class="btn btn-danger" onClick="location.reload()">Eliminar producto</button>
+                                            <input type="hidden" name="tipo" value="<?php echo $item["tipo"]?>">
+                                            <input type="hidden" name="id" value="<?php echo $item["id"]?>">
+                                            <button type="submit" class="btn btn-danger" onClick="location.reload()">Eliminar <?php echo $item['tipo']?></button>
                                         </form>
                                     </div>
                                 <?php endif; ?>

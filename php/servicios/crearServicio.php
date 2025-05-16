@@ -77,10 +77,21 @@
 
         //Validación de imagen
         //$_FILES es un array BIDIMENSIONAL, mientras que $_POST es un array UNIDIMENSIONAL
-        $imagen = $_FILES["imagen"]["name"];
-        $ubicacionTemporal = $_FILES["imagen"]["tmp_name"];
-        $ubicacionFinal = "../util/img/$imagen";
+        $imagen = depurar($_FILES["imagen"]["name"]);
+        $ubicacionTemporal= depurar($_FILES["imagen"]["tmp_name"]);
         $imagenTipo = $_FILES["imagen"]["type"];
+        if (isset($_FILES["imagen"]) && $_FILES["imagen"]["error"] == 0) {
+        // Procesar imagen
+        } else {
+            $errorImagen = "Debe seleccionar una imagen válida.";
+        }
+        $permitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!in_array($imagenTipo, $permitidos)) {
+            $errorImagen = "Solo se permiten imágenes JPG, PNG, GIF o WebP.";
+        }
+        $extension = pathinfo($imagen, PATHINFO_EXTENSION);
+        $nombreImagen = uniqid('img_', true) . '.' . $extension;
+        $ubicacionFinal = "../util/img/$nombreImagen";
 
         //mueve el archivo que se ha cargado de una ubicación a otra
         move_uploaded_file($ubicacionTemporal, $ubicacionFinal);
@@ -225,9 +236,7 @@
     <footer class="bg-black py-4 text-center text-gray-400">
         &copy; 2025 We-Connect. Todos los derechos reservados.
     </footer>
-</body>
-</html>
-    <script src="../../js/script2.js">
+    <script src="../../js/script2.js"></script>
     <script>
         // Funcionalidad para mejorar descripción
         document.getElementById('mejorarDescripcion').addEventListener('click', async function() {
