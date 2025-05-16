@@ -92,21 +92,6 @@
             </div>
         </section>
 
-    <section id="featured-products" class="featured-products py-8 observe-section">
-        <div class="container mx-auto px-6">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center js-fade-in-up" data-delay="0s">Productos Destacados</h2>
-            <div id="productos-carrusel-wrapper" class="relative group">
-                <div id="productos-carrusel-container" class="overflow-hidden">
-                    <div id="productos-carrusel" class="flex transition-transform duration-500 ease-in-out py-4 gap-4">
-                        <?php
-                            //*** NO TOCAR ***
-
-                            //recojo 20 productos y servicios aleatorios
-                            $sql =" SELECT id_producto AS id, nombre, imagen, 'producto' AS tipo FROM producto
-                                    UNION ALL
-                                    SELECT id_servicio AS id, nombre, imagen, 'servicio' AS tipo FROM servicio
-                                    ORDER BY RAND() LIMIT 20"; // Cambié el límite a 20 para mostrar más productos/servicios
-                            $resultado = $_conexion->query($sql);
         <section id="featured-products" class="featured-products py-8 observe-section">
             <div class="container mx-auto px-6">
                 <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center js-fade-in-up" data-delay="0s">Productos Destacados</h2>
@@ -114,38 +99,42 @@
                     <div id="productos-carrusel-container" class="overflow-hidden">
                         <div id="productos-carrusel" class="flex transition-transform duration-500 ease-in-out py-4 gap-4">
                             <?php
-                            // *** IMPORTANTE: Aquí corrijo la obtención de servicios ***
-                            $productos_servicios = [];
+                                //*** NO TOCAR ***
 
+                                //recojo 20 productos y servicios aleatorios
+                                $sql =" SELECT id_producto AS id, nombre, imagen, 'producto' AS tipo FROM producto
+                                        UNION ALL
+                                        SELECT id_servicio AS id, nombre, imagen, 'servicio' AS tipo FROM servicio
+                                        ORDER BY RAND() LIMIT 20";
+                                $resultado = $_conexion->query($sql);
 
-                            if($resultado){
-                                while($item = $resultado->fetch_assoc()){
-                                    $productos_servicios[] = $item;
+                                $productos_servicios = [];
+
+                                if($resultado){
+                                    while($item = $resultado->fetch_assoc()){
+                                        $productos_servicios[] = $item;
+                                    }
                                 }
-                            }
 
-                            if (!empty($productos_servicios)) {
-                                foreach ($productos_servicios as $item) {
-                                    $detalle_url = $item['tipo'] === 'producto' ? 'php/productos/detalleProducto.php?id_producto=' : 'php/servicios/detalleServicio.php?id_servicio='; // Asumiendo que tienes detalleServicio.php
+                                if (!empty($productos_servicios)) {
+                                    foreach ($productos_servicios as $item) {
+                                        $detalle_url = $item['tipo'] === 'producto' ? 'php/productos/detalleProducto.php?id_producto=' : 'php/servicios/detalleServicio.php?id_servicio=';
 
-                                    // Mantengo tus clases responsive de ancho, pero recuerda que tu CSS custom o index.css podría afectarlas
-                                    // Añadido flex-none para que no se encojan por defecto en el flex container
-                                    echo '<div class="producto-card flex-none w-full sm:w-1/2 md:w-1/3 px-2 js-fade-in-up">';
-                                    echo '    <div class="bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl h-full flex flex-col">'; // Añadido flex y flex-col para layout interno
-                                    // Aspect ratio para la imagen
-                                    echo '      <a href="' . $detalle_url . $item['id'] . '" class="block w-full h-40 overflow-hidden">'; // Ajustado h-40 directamente
-                                    echo '        <img src="php/util/' . htmlspecialchars($item['imagen']) . '" alt="' . htmlspecialchars($item['nombre']) . '" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">';
-                                    echo '      </a>';
-                                    echo '      <div class="producto-card-content p-4 flex flex-col flex-grow">'; // Añadido flex, flex-col, flex-grow
-                                    echo '        <h3 class="font-semibold text-gray-700 mb-2 truncate">' . htmlspecialchars($item['nombre']) . '</h3>'; // Añadido truncate y mb-2
-                                    echo '        <a href="' . $detalle_url . $item['id'] . '" class="mt-auto inline-block text-center bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold text-sm">Ver Detalles</a>'; // Añadido mt-auto, text-center, text-sm
-                                    echo '      </div>';
-                                    echo '    </div>';
-                                    echo '</div>';
+                                        echo '<div class="producto-card flex-none w-full sm:w-1/2 md:w-1/3 px-2 js-fade-in-up">';
+                                        echo '    <div class="bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl h-full flex flex-col">';
+                                        echo '      <a href="' . $detalle_url . $item['id'] . '" class="block w-full h-40 overflow-hidden">';
+                                        echo '        <img src="php/util/' . htmlspecialchars($item['imagen']) . '" alt="' . htmlspecialchars($item['nombre']) . '" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">';
+                                        echo '      </a>';
+                                        echo '      <div class="producto-card-content p-4 flex flex-col flex-grow">';
+                                        echo '        <h3 class="font-semibold text-gray-700 mb-2 truncate">' . htmlspecialchars($item['nombre']) . '</h3>';
+                                        echo '        <a href="' . $detalle_url . $item['id'] . '" class="mt-auto inline-block text-center bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold text-sm">Ver Detalles</a>';
+                                        echo '      </div>';
+                                        echo '    </div>';
+                                        echo '</div>';
+                                    }
+                                } else {
+                                    echo "<p class='text-center text-gray-600 w-full py-8'>No hay productos o servicios destacados por el momento.</p>";
                                 }
-                            } else {
-                                echo "<p class='text-center text-gray-600 w-full py-8'>No hay productos o servicios destacados por el momento.</p>";
-                            }
                             ?>
                         </div>
                     </div>
@@ -172,7 +161,6 @@
                 </div>
             </div>
         </section>
-
 
         <section class="call-to-action bg-yellow-500 py-12 text-center observe-section">
             <div class="container mx-auto px-6">
