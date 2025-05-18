@@ -1,15 +1,15 @@
 <?php
 
     //CONEXION AGUSTIN
-    $servidor = "localhost";
-    $usuario = "root";
-    $contrasena = "";
-    $BBDD = "weconnectdb";
-
     // $servidor = "localhost";
-    // $usuario = "u593365251_root";
-    // $contrasena = "Patatata12345!";
-    // $BBDD = "u593365251_weConnect";
+    // $usuario = "root";
+    // $contrasena = "";
+    // $BBDD = "weconnectdb";
+
+    $servidor = "localhost";
+    $usuario = "u593365251_root";
+    $contrasena = "Patatata12345!";
+    $BBDD = "u593365251_weConnect";
 
     // $servidor = "localhost";
     // $usuario = "root";

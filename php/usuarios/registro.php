@@ -10,30 +10,37 @@
     <link rel="stylesheet" href="../../css/usuario.css">
    
     <?php
-    error_reporting(E_ALL);
-    ini_set("display_errors", 1);
-    require('../util/config.php');
+        error_reporting(E_ALL);
+        ini_set("display_errors", 1);
+        require('../util/config.php');
+        require('../util/depurar.php');
 
-    // Definir la carpeta donde se guardarán las fotos de perfil
-    $uploadDir = '../util/img/';
+        // Definir la carpeta donde se guardarán las fotos de perfil
+        $uploadDir = '../util/img/';
     ?>
 </head>
 
 <body class="flex items-center justify-center min-h-screen">
-
     <?php
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errores = array();
 
-        $tmpNombre = trim($_POST["nombre"]);
-        $tmpUsuario = trim($_POST["usuario"]);
-        $tmpEmail = trim($_POST["email"]);
-        $tmpTelefono = trim($_POST["telefono"]); // Nuevo campo para teléfono
+        $tmpNombre = depurar($_POST["nombre"]);
+        $tmpUsuario = depurar($_POST["usuario"]);
+        $tmpEmail = depurar($_POST["email"]);
+        $tmpTelefono = depurar($_POST["telefono"]); // Nuevo campo para teléfono
         $tmpContrasena = $_POST["contrasena"];
 
         // Validación del nombre
         if (strlen($tmpNombre) < 2) {
             $errores[] = "El nombre debe tener al menos 2 caracteres";
+        }else{
+            // Validar que el nombre no contenga números
+            if (preg_match('/\d/', $tmpNombre)) {
+                $errores[] = "El nombre no puede contener números";
+            }else{
+                $nombre = $tmpNombre;
+            }
         }
 
         // Validación del usuario
@@ -42,27 +49,50 @@
         }
 
         // Verificar si el usuario ya existe
-        $checkUsuario = "SELECT * FROM usuario WHERE usuario = '$tmpUsuario'";
-        $resultUsuario = $_conexion->query($checkUsuario);
+        $stmt = $_conexion->prepare("SELECT * FROM usuario WHERE usuario = ?");
+        $stmt->bind_param("s", $tmpUsuario);
+        $stmt->execute();
+        $resultUsuario = $stmt->get_result();
         if ($resultUsuario->num_rows > 0) {
-            $errores[] = "Este nombre de usuario ya está en uso";
+            $errores[] = "Este usuario ya está registrado";
+        }else{
+            $usuario = $tmpUsuario;
         }
+
 
         // Verificar si el email ya existe
         $checkEmail = "SELECT * FROM usuario WHERE email = '$tmpEmail'";
         $resultEmail = $_conexion->query($checkEmail);
         if ($resultEmail->num_rows > 0) {
             $errores[] = "Este email ya está registrado";
+        }else {
+            $email = $tmpEmail;
         }
 
         // Validación del teléfono
-        if (!preg_match('/^[0-9]{9,15}$/', $tmpTelefono)) {
+        if (!preg_match('/^(\+|00)?\d{1,4}[\s\-\.]?\(?\d+\)?([\s\-\.]?\d+)*$/', $tmpTelefono)) {
             $errores[] = "Introduce un teléfono válido (solo números, 9 a 15 dígitos)";
+            //EJEMPLOS VALIDOS paara españa  612345678 912345678 +34612345678 0034912345678
+        }else{
+            $tmpTelefono = preg_replace('/[^\d+]/', '', $tmpTelefono);
+
+            // Si empieza por 0034, lo convierte a +34
+            if (strpos($tmpTelefono, '0034') === 0) {
+                $telefono = '+34' . substr($tmpTelefono, 4);
+            }
+            // Si empieza por 6, 7, 8 o 9 y tiene 9 dígitos, añade +34
+            elseif (preg_match('/^[6789]\d{8}$/', $tmpTelefono)) {
+                $telefono = '+34' . $tmpTelefono;
+            }else{
+                $telefono = $tmpTelefono;
+            }
         }
 
         // Validación de la contraseña (la misma que en tu script)
         if (strlen($tmpContrasena) < 8 || !preg_match('/[a-z]/', $tmpContrasena) || !preg_match('/[A-Z]/', $tmpContrasena) || !preg_match('/[0-9]/', $tmpContrasena)) {
             $errores[] = "La contraseña debe tener al menos 8 caracteres y contener al menos una mayúscula, una minúscula y un número";
+        }else{
+            $contrasena = $tmpContrasena;
         }
 
         // Procesamiento de la foto de perfil
@@ -95,14 +125,14 @@
         }
 
              if (empty($errores)) {
-            $contrasena_cifrada = password_hash($tmpContrasena, PASSWORD_DEFAULT);
-            $sql = "INSERT INTO usuario (nombre, usuario, email, telefono, contrasena, foto_perfil) VALUES (?, ?, ?, ?, ?, ?)";
-            $stmt = $_conexion->prepare($sql);
-            $stmt->bind_param("ssssss", $tmpNombre, $tmpUsuario, $tmpEmail, $tmpTelefono, $contrasena_cifrada, $fotoPerfil);
+                $contrasena_cifrada = password_hash($contrasena, PASSWORD_DEFAULT);
+                $sql = "INSERT INTO usuario (nombre, usuario, email, telefono, contrasena, foto_perfil) VALUES (?, ?, ?, ?, ?, ?)";
+                $stmt = $_conexion->prepare($sql);
+                $stmt->bind_param("ssssss", $nombre, $usuario, $email, $telefono, $contrasena_cifrada, $fotoPerfil);
 
-            if ($stmt->execute()) {
+                if ($stmt->execute()) {
                 // Obtener el ID del usuario recién registrado
-                $user_id = $_conexion->insert_id;
+                    $user_id = $_conexion->insert_id;
 
               
                 require '../util/send_welcome_email.php';
@@ -110,28 +140,28 @@
 
 
                 // Recuperar la información del usuario para la sesión (esto ya lo tienes)
-                $sql_sesion = "SELECT id_usuario, usuario, nombre, email, telefono, foto_perfil FROM usuario WHERE id_usuario = ?";
-                $stmt_sesion = $_conexion->prepare($sql_sesion);
-                $stmt_sesion->bind_param("i", $user_id);
-                $stmt_sesion->execute();
-                $resultado_sesion = $stmt_sesion->get_result();
-                if ($row_sesion = $resultado_sesion->fetch_assoc()) {
-                    // Iniciar la sesión y guardar la información del usuario (ya lo tienes)
-                    session_start();
-                    $_SESSION['usuario'] = array(
-                        'id_usuario' => $row_sesion['id_usuario'],
-                        'usuario' => $row_sesion['usuario'], // Asegúrate de usar la columna correcta
-                        'nombre' => $row_sesion['nombre'],
-                        'email' => $row_sesion['email'],
-                        'telefono' => $row_sesion['telefono'],
-                        'foto_perfil' => $row_sesion['foto_perfil']
-                    );
-                    // Redirección al index.php después del registro: (ya lo tienes)
-                    header("location: ../../index.php");
-                    exit;
-                } else {
-                    $errores[] = "Error al iniciar sesión después del registro";
-                }
+                    $sql_sesion = "SELECT id_usuario, usuario, nombre, email, telefono, foto_perfil FROM usuario WHERE id_usuario = ?";
+                    $stmt_sesion = $_conexion->prepare($sql_sesion);
+                    $stmt_sesion->bind_param("i", $user_id);
+                    $stmt_sesion->execute();
+                    $resultado_sesion = $stmt_sesion->get_result();
+                    if ($row_sesion = $resultado_sesion->fetch_assoc()) {
+                        // Iniciar la sesión y guardar la información del usuario (ya lo tienes)
+                        session_start();
+                        $_SESSION['usuario'] = array(
+                            'id_usuario' => $row_sesion['id_usuario'],
+                            'usuario' => $row_sesion['usuario'], // Asegúrate de usar la columna correcta
+                            'nombre' => $row_sesion['nombre'],
+                            'email' => $row_sesion['email'],
+                            'telefono' => $row_sesion['telefono'],
+                            'foto_perfil' => $row_sesion['foto_perfil']
+                        );
+                        // Redirección al index.php después del registro: (ya lo tienes)
+                        header("location: ../../index.php");
+                        exit;
+                    } else {
+                        $errores[] = "Error al iniciar sesión después del registro";
+                    }
             } else {
                 $errores[] = "Error al registrar el usuario en la base de datos";
             }
@@ -390,5 +420,4 @@
         registroForm.addEventListener('submit', validarFormulario);
     </script>
 </body>
-
 </html>

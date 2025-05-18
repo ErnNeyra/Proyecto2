@@ -237,5 +237,6 @@
     <footer class="bg-black py-4 text-center text-gray-400">
         <p>&copy; 2025 We-Connect. Todos los derechos reservados.</p>
     </footer>
+    <script src="../../js/script2.js"></script>
 </body>
 </html>
