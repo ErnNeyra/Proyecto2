@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
     <header class="bg-white shadow-md">
         <div class="container mx-auto py-4 px-6 flex items-center justify-between">
@@ -17,7 +19,7 @@
                 <a href="../servicios/servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
                 <?php
                 session_start();
-                if(isset($_SESSION["usuario"])){
+                if (isset($_SESSION["usuario"])) {
                     $aliasUsuario = htmlspecialchars($_SESSION['usuario']['usuario']);
                     echo '<div class="relative">';
                     echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-black focus:outline-none" aria-expanded="false" aria-haspopup="true">';
@@ -38,47 +40,74 @@
             </nav>
         </div>
     </header>
+
+    <!-- Buscador -->
+    <div class="w-full flex justify-center mt-8 mb-8">
+        <form class="w-full max-w-md flex">
+            <input 
+                type="text" 
+                name="busqueda" 
+                placeholder="Buscar productos o emprendedores..."
+                class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition text-gray-700 placeholder-gray-400"
+            >
+            <button 
+                type="submit"
+                class="ml-2 px-4 py-2 rounded-md bg-yellow-500 text-black font-semibold hover:bg-yellow-600 focus:outline-none focus:shadow-outline transition"
+            >
+                Buscar
+            </button>
+        </form>
+    </div>
     <?php
-        if(!isset($_SESSION["usuario"]["usuario"])){
-            //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
-            //se ejecute el código body
-            header("location: ../usuarios/login.php");
-            exit;
-        }
-        error_reporting( E_ALL );
-        ini_set("display_errors", 1 );
-        require('../util/config.php');
+    if (!isset($_SESSION["usuario"]["usuario"])) {
+        //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
+        //se ejecute el código body
+        header("location: ../usuarios/login.php");
+        exit;
+    }
+    error_reporting(E_ALL);
+    ini_set("display_errors", 1);
+    require('../util/config.php');
     ?>
     <main class="container mx-auto py-12 px-6 flex-grow">
         <div class="flex items-center justify-between mb-8">
-            <h1 class="text-3xl font-semibold text-gray-800">Explora los productos que ofrecen nuestros emprendedores</h1>
-            <a href="crearProducto.php" class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 focus:outline-none focus:shadow-outline">Crear Producto</a>
+            <h1 class="text-3xl font-semibold text-gray-800">Explora los productos que ofrecen nuestros emprendedores
+            </h1>
+            <a href="crearProducto.php"
+                class="bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 focus:outline-none focus:shadow-outline">Crear
+                Producto</a>
         </div>
+
+
+
         <?php
-            //$idProducto = $_GET['id_producto'];
-            //$sql = "SELECT * FROM productos WHERE id_producto = $idProducto";
-            // $stmt = $_conexion->prepare($sql);
-            $sql = "SELECT * FROM producto LIMIT 20";
-            $resultado = $_conexion -> query($sql);
+        //$idProducto = $_GET['id_producto'];
+        //$sql = "SELECT * FROM productos WHERE id_producto = $idProducto";
+        // $stmt = $_conexion->prepare($sql);
+        $sql = "SELECT * FROM producto LIMIT 20";
+        $resultado = $_conexion->query($sql);
         ?>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <?php
-            if($resultado -> num_rows == 0){
+            if ($resultado->num_rows == 0) {
                 echo "<h2 class='text-red-500'>No hay productos disponibles ahora mismo...</h2>";
             }
-            while($producto = $resultado -> fetch_assoc()){ ?>
+            while ($producto = $resultado->fetch_assoc()) { ?>
                 <div class="bg-white rounded-md shadow-md overflow-hidden border border-gray-200">
-                    <img src="<?php echo $producto["imagen"]?>" alt="<?php echo $producto["nombre"] ?>" class="w-full h-48 object-cover">
+                    <img src="<?php echo $producto["imagen"] ?>" alt="<?php echo $producto["nombre"] ?>"
+                        class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="font-semibold text-gray-700 mb-2"><?php echo $producto["nombre"] ?></h3>
                         <p class="text-gray-600 text-sm mb-2"><?php echo $producto["descripcion"] ?></p>
                         <p class="text-gray-500 text-xs mb-2">Ofrecido por: <?php echo $producto["usuario"] ?></p>
-    
-                        <a href="detalleProducto.php?id_producto=<?php echo $producto['id_producto']; ?>" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4">Ver Detalles</a>
+
+                        <a href="detalleProducto.php?id_producto=<?php echo $producto['id_producto']; ?>"
+                            class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4">Ver
+                            Detalles</a>
                     </div>
                 </div>
-            <?php
+                <?php
             } ?>
         </div>
     </main>
@@ -89,6 +118,7 @@
 
     <script src="../../js/script2.js"></script>
 </body>
+
 </html>
 <?php
 
