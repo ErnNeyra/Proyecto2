@@ -22,7 +22,7 @@
                     echo '<div class="relative">';
                     echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-black focus:outline-none" aria-expanded="false" aria-haspopup="true">';
                     echo '        <span>' . $aliasUsuario . '</span>';
-                    echo '        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
+                    echo '        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
                     echo '    </button>';
                     echo '    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-10 hidden">';
                     echo '        <a href="../usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Panel</a>';
@@ -124,7 +124,9 @@
                         }
                      ?>
                     <div class="mb-6">
-                        <button class="bg-yellow-500 text-black py-3 px-6 rounded-md hover:bg-yellow-600 focus:outline-none focus:shadow-outline">Contactar al Emprendedor</button>
+                        <?php if(isset($_SESSION["usuario"]["usuario"])): ?>
+                        <?php else: ?>
+                        <?php endif; ?>
                     </div>
                     <div>
                         <h2 class="text-xl font-semibold text-gray-800 mb-2">Ofrecido por:</h2>
@@ -222,10 +224,18 @@
         </div>
     </main>
 
+    <!-- Botón flotante de WhatsApp -->
+    <a href="https://wa.me/+34693680668?text=Hola%20estoy%20interesado%20en%20tu%20producto%20<?php echo urlencode($nombre); ?>%20que%20has%20publicado%20en%20We-Connect!%20Quiero%20saber%20más%20sobre%20él" 
+       class="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 rounded-full shadow-lg p-4 flex items-center justify-center gap-2"
+       target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M20.52 3.48A11.93 11.93 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.15 1.6 5.96L0 24l6.23-1.63A11.93 11.93 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.19-1.24-6.19-3.48-8.52zM12 22c-1.85 0-3.66-.5-5.23-1.45l-.37-.22-3.7.97.99-3.6-.24-.37A9.94 9.94 0 0 1 2 12c0-5.52 4.48-10 10-10s10 4.48 10 10-4.48 10-10 10zm5.2-7.6c-.28-.14-1.65-.81-1.9-.9-.25-.09-.43-.14-.61.14-.18.28-.7.9-.86 1.08-.16.18-.32.2-.6.07-.28-.14-1.18-.44-2.25-1.41-.83-.74-1.39-1.65-1.55-1.93-.16-.28-.02-.43.12-.57.13-.13.28-.34.42-.51.14-.17.18-.29.28-.48.09-.19.05-.36-.02-.5-.07-.14-.61-1.47-.84-2.01-.22-.53-.45-.46-.62-.47-.16-.01-.36-.01-.56-.01s-.51.07-.78.36c-.27.29-1.03 1.01-1.03 2.47 0 1.46 1.06 2.87 1.21 3.07.15.2 2.09 3.19 5.08 4.34.71.25 1.26.4 1.69.51.71.18 1.36.16 1.87.1.57-.07 1.65-.67 1.89-1.32.23-.65.23-1.2.16-1.32-.07-.12-.25-.19-.53-.33z"/>
+        </svg>
+        <span class="text-white font-semibold text-base">Chatear con el emprendedor</span>
+    </a>
+    
     <footer class="bg-black py-4 text-center text-gray-400">
         <p>&copy; 2025 We-Connect. Todos los derechos reservados.</p>
     </footer>
-    <script src="../../js/script2.js"></script> <script src="../../js/valoracion.js"></script> <script src="../../js/lightbox.js"></script> <script src="../../js/detalle-producto.js"></script> <script src="../../js/comentario.js"></script>
-  
 </body>
 </html>
