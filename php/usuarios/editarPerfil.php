@@ -43,7 +43,8 @@
 
         .form-group input[type="text"],
         .form-group input[type="email"],
-        .form-group input[type="password"] {
+        .form-group input[type="password"],
+        .form-group input[type="tel"] {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid #d1d5db;
@@ -153,6 +154,20 @@
                         pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
                         title="Por favor, introduce un email válido"
                         class="focus:border-yellow-500 focus:ring-yellow-500">
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono">Teléfono:</label>
+                    <input
+                        type="tel"
+                        id="telefono"
+                        name="telefono"
+                        value="<?php echo isset($usuario['telefono']) ? htmlspecialchars($usuario['telefono']) : ''; ?>"
+                        required
+                        pattern="^[0-9]{9,15}$"
+                        title="Introduce un teléfono válido (solo números, 9 a 15 dígitos)"
+                        class="focus:border-yellow-500 focus:ring-yellow-500">
+                    <div class="error-message" id="error-telefono"></div>
                 </div>
 
                 <div class="form-group">
@@ -421,6 +436,26 @@
                 alert('Logo agregado correctamente. No olvides guardar los cambios.');
             } catch (error) {
                 alert('Error al guardar el logo: ' + error.message);
+            }
+        });
+
+        // Validación de teléfono en el front
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const telefonoInput = document.getElementById('telefono');
+            const errorTelefonoDiv = document.getElementById('error-telefono');
+            let valido = true;
+
+            if (!/^[0-9]{9,15}$/.test(telefonoInput.value.trim())) {
+                errorTelefonoDiv.textContent = 'Introduce un teléfono válido (solo números, 9 a 15 dígitos)';
+                telefonoInput.classList.add('border-red-500');
+                valido = false;
+            } else {
+                errorTelefonoDiv.textContent = '';
+                telefonoInput.classList.remove('border-red-500');
+            }
+
+            if (!valido) {
+                e.preventDefault();
             }
         });
     </script>

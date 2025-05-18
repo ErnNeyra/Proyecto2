@@ -28,6 +28,7 @@
         $tmpNombre = trim($_POST["nombre"]);
         $tmpUsuario = trim($_POST["usuario"]);
         $tmpEmail = trim($_POST["email"]);
+        $tmpTelefono = trim($_POST["telefono"]); // Nuevo campo para teléfono
         $tmpContrasena = $_POST["contrasena"];
 
         // Validación del nombre
@@ -52,6 +53,11 @@
         $resultEmail = $_conexion->query($checkEmail);
         if ($resultEmail->num_rows > 0) {
             $errores[] = "Este email ya está registrado";
+        }
+
+        // Validación del teléfono
+        if (!preg_match('/^[0-9]{9,15}$/', $tmpTelefono)) {
+            $errores[] = "Introduce un teléfono válido (solo números, 9 a 15 dígitos)";
         }
 
         // Validación de la contraseña (la misma que en tu script)
@@ -90,9 +96,9 @@
 
              if (empty($errores)) {
             $contrasena_cifrada = password_hash($tmpContrasena, PASSWORD_DEFAULT);
-            $sql = "INSERT INTO usuario (nombre, usuario, email, contrasena, foto_perfil) VALUES (?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO usuario (nombre, usuario, email, telefono, contrasena, foto_perfil) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $_conexion->prepare($sql);
-            $stmt->bind_param("sssss", $tmpNombre, $tmpUsuario, $tmpEmail, $contrasena_cifrada, $fotoPerfil);
+            $stmt->bind_param("ssssss", $tmpNombre, $tmpUsuario, $tmpEmail, $tmpTelefono, $contrasena_cifrada, $fotoPerfil);
 
             if ($stmt->execute()) {
                 // Obtener el ID del usuario recién registrado
@@ -104,7 +110,7 @@
 
 
                 // Recuperar la información del usuario para la sesión (esto ya lo tienes)
-                $sql_sesion = "SELECT id_usuario, usuario, nombre, email, foto_perfil FROM usuario WHERE id_usuario = ?";
+                $sql_sesion = "SELECT id_usuario, usuario, nombre, email, telefono, foto_perfil FROM usuario WHERE id_usuario = ?";
                 $stmt_sesion = $_conexion->prepare($sql_sesion);
                 $stmt_sesion->bind_param("i", $user_id);
                 $stmt_sesion->execute();
@@ -117,6 +123,7 @@
                         'usuario' => $row_sesion['usuario'], // Asegúrate de usar la columna correcta
                         'nombre' => $row_sesion['nombre'],
                         'email' => $row_sesion['email'],
+                        'telefono' => $row_sesion['telefono'],
                         'foto_perfil' => $row_sesion['foto_perfil']
                     );
                     // Redirección al index.php después del registro: (ya lo tienes)
@@ -162,6 +169,12 @@
                 <label for="email" class="block text-sm text-gray-700 mb-1">Email:</label>
                 <input type="email" class="w-full p-2 border rounded" name="email" id="email" required>
                 <div class="error-message" id="error-email"></div>
+            </div>
+
+            <div>
+                <label for="telefono" class="block text-sm text-gray-700 mb-1">Teléfono:</label>
+                <input type="tel" class="w-full p-2 border rounded" name="telefono" id="telefono" required pattern="^[0-9]{9,15}$" placeholder="Ej: 612345678" />
+                <div class="error-message" id="error-telefono"></div>
             </div>
 
             <div>
@@ -228,11 +241,13 @@
         const nombreInput = document.getElementById('nombre');
         const usuarioInput = document.getElementById('usuario');
         const emailInput = document.getElementById('email');
+        const telefonoInput = document.getElementById('telefono'); // Nuevo input para teléfono
         const contrasenaInput = document.getElementById('contrasena');
         const fotoPerfilInput = document.getElementById('foto_perfil'); // Nuevo input
         const errorNombreDiv = document.getElementById('error-nombre'); // Nuevos divs de error
         const errorUsuarioDiv = document.getElementById('error-usuario');
         const errorEmailDiv = document.getElementById('error-email');
+        const errorTelefonoDiv = document.getElementById('error-telefono'); // Nuevo div de error para teléfono
         const errorContrasenaDiv = document.getElementById('error-contrasena');
         const errorFotoPerfilDiv = document.getElementById('error-foto_perfil');
 
@@ -335,6 +350,14 @@
                 esValido = false;
             } else {
                 limpiarError(emailInput, errorEmailDiv);
+            }
+
+            // Validar teléfono (solo números, 9 a 15 dígitos)
+            if (!/^[0-9]{9,15}$/.test(telefonoInput.value.trim())) {
+                mostrarError(telefonoInput, 'Introduce un teléfono válido (solo números, 9 a 15 dígitos)', errorTelefonoDiv);
+                esValido = false;
+            } else {
+                limpiarError(telefonoInput, errorTelefonoDiv);
             }
 
             // Validar contraseña
