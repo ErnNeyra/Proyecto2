@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     
     <link rel="stylesheet" href="css/index.css">
-     <!-- <link rel="stylesheet" href="css/styles.css"> -->
+    <link rel="stylesheet" href="css/styles.css">
     
 
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -37,12 +37,8 @@
                     session_start(); // Inicia la sesión
                     if (isset($_SESSION['usuario'])) {
                         $nombreUsuario = htmlspecialchars($_SESSION['usuario']['usuario']); // Usamos 'usuario'
-                        $imagenPerfil = 'php/util/img/usuario.png'; // Inicializamos la variable de la imagen de perfil
-
-                        // Verificamos si existe la foto de perfil del usuario en la sesión y no está vacía
-                        if (!empty($_SESSION['usuario']['foto_perfil'])) {
-                            $imagenPerfil = htmlspecialchars($_SESSION['usuario']['foto_perfil']);
-                        }
+                        $imagenPerfil = htmlspecialchars($_SESSION['usuario']['foto_perfil']);
+                        
 
                         // Estructura del desplegable
                         echo '<div class="relative">'; // Clase relativa para el posicionamiento absoluto del desplegable

@@ -84,7 +84,7 @@
                 // Generar nombre único
                 $extension = pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
                 $nombreImagen = uniqid('img_', true) . '.' . $extension;
-                $directorioDestino = "../util/img/";
+                $directorioDestino = "php/util/img/";
                 
                 $ubicacionFinal = $directorioDestino . $nombreImagen;
                 
