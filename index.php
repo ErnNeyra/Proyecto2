@@ -7,13 +7,8 @@
 
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     
-<<<<<<< HEAD
-    <link rel="stylesheet" href="css/style2.css">
-   
-=======
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/styles.css">
->>>>>>> 0324ecca3e5d745fd1e790693550adb7ebb762ba
     
 
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
