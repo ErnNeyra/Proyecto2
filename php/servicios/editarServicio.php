@@ -94,10 +94,10 @@
             } else {
                 $extension = pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
                 $nombreImagen = uniqid('img_', true) . '.' . $extension;
-                $ubicacionFinal = "/php/util/img/$nombreImagen";
+                $ubicacionFinal = "../util/img/$nombreImagen";
                 if (move_uploaded_file($_FILES["imagen"]["tmp_name"], $ubicacionFinal)) {
                     // Eliminar imagen anterior si no es la de por defecto
-                    if (!empty($imagenActual) && file_exists($imagenActual) && $imagenActual != '/php/util/img/usuario.png') {
+                    if (!empty($imagenActual) && file_exists($imagenActual) && $imagenActual != '../util/img/usuario.png') {
                         unlink($imagenActual);
                     }
                     $imagenFinal = $ubicacionFinal;

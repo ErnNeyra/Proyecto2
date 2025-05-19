@@ -84,7 +84,7 @@
                 // Generar nombre único
                 $extension = pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
                 $nombreImagen = uniqid('img_', true) . '.' . $extension;
-                $directorioDestino = "/php/util/img/";
+                $directorioDestino = "../util/img/";
                 $ubicacionFinal = $directorioDestino . $nombreImagen;
                 // Mover archivo
                 if (!move_uploaded_file($_FILES["imagen"]["tmp_name"], $ubicacionFinal)) {
