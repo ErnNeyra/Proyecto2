@@ -103,3 +103,4 @@ CREATE TABLE necesidades_ofertas (
     FOREIGN KEY (usuario_alias) REFERENCES usuario(usuario) ON DELETE CASCADE
   
 );
+

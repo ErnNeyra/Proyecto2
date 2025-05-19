@@ -6,7 +6,23 @@
     <title>Detalle del Producto | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../css/index.css"> <link rel="stylesheet" href="../../css/style.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <!-- favicon -->
+    <?php
+        error_reporting(E_ALL);
+        ini_set("display_errors",1);
+        require ('../util/config.php');
+        require ('../util/depurar.php');
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (!isset($_SESSION["usuario"]["usuario"])) {
+            //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
+            //se ejecute el código body
+            header("location: ../usuarios/login.php");
+            exit;
+        }
+    ?>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
     <header class="bg-white shadow-md">
@@ -23,14 +39,6 @@
 
                 <a href="../contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
                 <?php
-                    error_reporting(E_ALL);
-                    ini_set("display_errors",1);
-                    require ('../util/config.php');
-                    require ('../util/depurar.php');
-                     if (session_status() == PHP_SESSION_NONE) {
-                         session_start();
-                     }
-
                     if (!isset($_GET['id_producto'])) {
                         die("Error: ID de producto no especificado.");
                     }
@@ -120,7 +128,7 @@
                     // --- Mostrar menú de usuario ---
                     if(isset($_SESSION["usuario"]["usuario"])){
                         $aliasUsuarioActual = htmlspecialchars($_SESSION['usuario']['usuario']);
-                         $imagenPerfil = '../util/img/usuario.jpg'; // Ruta por defecto para el header
+                         $imagenPerfil = '../util/img/usuario.png'; // Ruta por defecto para el header
                          if (isset($_SESSION['usuario']['foto_perfil']) && !empty($_SESSION['usuario']['foto_perfil'])) {
                              $rutaImagen = '../util/' . ltrim($_SESSION['usuario']['foto_perfil'], '/');
                              if (file_exists($rutaImagen)) {
@@ -376,6 +384,17 @@
     </footer>
 
 
+
     <script src="../../js/desplegable.js"></script>
     <script src="../../js/lightbox.js"></script> <script src="../../js/comentario.js"></script> <script src="../../js/relatedProductsCarousel.js"></script> </body>
+
 </html>
+
+</html>
+
+</html>
+
+    <script src="../../js/script2.js"></script>
+</body>
+</html>
+

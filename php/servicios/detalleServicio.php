@@ -6,7 +6,23 @@
     <title>Detalle del Servicio | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../css/index.css"> <link rel="stylesheet" href="../../css/style.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <!-- favicon -->
+    <?php
+        error_reporting(E_ALL);
+        ini_set("display_errors",1);
+        require ('../util/config.php');
+        require ('../util/depurar.php');
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (!isset($_SESSION["usuario"]["usuario"])) {
+            //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
+            //se ejecute el código body
+            header("location: ../usuarios/login.php");
+            exit;
+        }
+    ?>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
     <header class="bg-white shadow-md">
@@ -20,15 +36,6 @@
                 <a href="../servicios/servicio.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Servicios</a>
                 <a href="../contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
                 <?php
-                    error_reporting(E_ALL);
-                    ini_set("display_errors",1);
-                    require ('../util/config.php');
-                    require ('../util/depurar.php');
-                     // Iniciar sesión solo si no ha sido iniciada
-                     if (session_status() == PHP_SESSION_NONE) {
-                         session_start();
-                     }
-
                     // Asegurarse de que el id_servicio está en la URL
                     if (!isset($_GET['id_servicio'])) {
                         die("Error: ID de servicio no especificado.");
@@ -119,7 +126,11 @@
                     // --- Mostrar menú de usuario ---
                     if(isset($_SESSION["usuario"]["usuario"])){
                         $aliasUsuarioActual = htmlspecialchars($_SESSION['usuario']['usuario']);
+<<<<<<< HEAD
                          $imagenPerfil = '../util/img/usuario.jpg';
+=======
+                         $imagenPerfil = '../util/img/usuario.png';
+>>>>>>> 39331ad4504567df7d5f33ab819c2b589da09df2
                          if (isset($_SESSION['usuario']['foto_perfil']) && !empty($_SESSION['usuario']['foto_perfil'])) {
                              $rutaImagen = '../util/' . ltrim($_SESSION['usuario']['foto_perfil'], '/');
                              if (file_exists($rutaImagen)) {

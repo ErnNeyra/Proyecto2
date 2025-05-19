@@ -1,6 +1,17 @@
 <?php
-    session_start();
-    require('../util/config.php');
+    error_reporting(E_ALL);
+    ini_set("display_errors",1);
+    require ('../util/config.php');
+    require ('../util/depurar.php');
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (!isset($_SESSION["usuario"]["usuario"])) {
+        //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
+        //se ejecute el código body
+        header("location: login.php");
+        exit;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -11,6 +22,8 @@
     <title>We-Connect | Editar Perfil</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../css/usuario.css">
+    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <!-- favicon -->
     <style>
         /* Estilos adicionales para el formulario de editar perfil */
         .edit-profile-panel {

@@ -3,7 +3,15 @@
     ini_set("display_errors",1);
     require ('../util/config.php');
     require ('../util/depurar.php');
-    session_start();
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (!isset($_SESSION["usuario"]["usuario"])) {
+        //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
+        //se ejecute el código body
+        header("location: ../usuarios/login.php");
+        exit;
+    }
 
     // Obtener datos actuales del servicio
     $idServicio = $_GET["id_servicio"] ?? null;
@@ -127,6 +135,8 @@
     <title>Editar Servicio | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <!-- favicon -->
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
 <header class="bg-white shadow-md">

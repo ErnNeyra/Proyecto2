@@ -3,16 +3,14 @@
     ini_set("display_errors",1);
     require ('../util/config.php');
     require ('../util/depurar.php');
-    session_start();
-
-    // Verificar si el usuario ha iniciado sesión
-    if (!isset($_SESSION['usuario'])) {
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (!isset($_SESSION["usuario"]["usuario"])) {
+        //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
+        //se ejecute el código body
         header("location: ../usuarios/login.php");
-        echo"<h2>Debes iniciar sesión para añadir un producto.</h2>";
-        exit();
-    } else {
-        echo "<h2>Bienvenid@ ".$_SESSION["usuario"]["usuario"]."</h2>";
-        echo "<h2>Tu ID de usuario es: ".$_SESSION["usuario"]["id_usuario"]."</h2>";
+        exit;
     }
 
     $errorNombre = $errorDescripcion = $errorPrecio = $errorCategoria = $errorImagen = $error = "";
@@ -137,6 +135,8 @@
     <title>Crear Nuevo Producto | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <!-- favicon -->
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
     <header class="bg-white shadow-md">

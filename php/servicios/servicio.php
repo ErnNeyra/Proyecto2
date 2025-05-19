@@ -6,6 +6,17 @@
     <title>Listado de Servicios | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <!-- favicon -->
+    <?php
+        session_start();
+        if (!isset($_SESSION["usuario"]["usuario"])) {
+            //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
+            //se ejecute el código body
+            header("location: ../usuarios/login.php");
+            exit;
+        }
+    ?>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
     <header class="bg-white shadow-md">
@@ -22,7 +33,6 @@
 
                 <a href="../contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
                 <?php
-                session_start();
                 if(isset($_SESSION["usuario"]["usuario"])){
                     $aliasUsuario = htmlspecialchars($_SESSION['usuario']['usuario']);
                     echo '<div class="relative">';
@@ -73,9 +83,6 @@
         </div>
 
         <?php
-            error_reporting( E_ALL );
-            ini_set("display_errors", 1 );
-            require('../util/config.php');
             //$idProducto = $_GET['id_producto'];
             //$sql = "SELECT * FROM productos WHERE id_producto = $idProducto";
             // $stmt = $_conexion->prepare($sql);

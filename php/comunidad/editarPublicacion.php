@@ -1,155 +1,153 @@
 <?php
 // Página para editar una publicación del Tablón existente
+    error_reporting(E_ALL);
+    ini_set("display_errors",1);
+    require ('../util/config.php');
+    require ('../util/depurar.php');
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (!isset($_SESSION["usuario"]["usuario"])) {
+        //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
+        //se ejecute el código body
+        header("location: ../usuarios/login.php");
+        exit;
+    }
 
-// Iniciar sesión
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+    $aliasUsuarioActual = htmlspecialchars($_SESSION["usuario"]["usuario"]);
 
-// Incluir archivos de utilidad (conexión BD y depuración) - Rutas relativas desde php/comunidad/
-require('../util/config.php');
-require('../util/depurar.php');
+    $idPublicacion = $_GET['id'] ?? null; // Obtener el ID de la publicación de la URL
+    $publicacion = null; // Para almacenar los datos de la publicación a editar
 
-// Redirigir si el usuario no está logueado
-if (!isset($_SESSION["usuario"]["usuario"])) {
-    header("location: ../usuarios/login.php?redirect=" . urlencode($_SERVER['REQUEST_URI']));
-    exit();
-}
+    $errorTitulo = $errorDescripcion = $errorCategoriaPrincipal = $errorCategoriaB2B = $error = ""; // Errores específicos
+    $mensaje_error_carga = ""; // Error si no se puede cargar la publicación
+    $success = "";
 
-$aliasUsuarioActual = htmlspecialchars($_SESSION["usuario"]["usuario"]);
-
-$idPublicacion = $_GET['id'] ?? null; // Obtener el ID de la publicación de la URL
-$publicacion = null; // Para almacenar los datos de la publicación a editar
-
-$errorTitulo = $errorDescripcion = $errorCategoriaPrincipal = $errorCategoriaB2B = $error = ""; // Errores específicos
-$mensaje_error_carga = ""; // Error si no se puede cargar la publicación
-$success = "";
-
-// --- Cargar la publicación existente para editar ---
-if ($idPublicacion === null || !is_numeric($idPublicacion)) {
-    $mensaje_error_carga = "ID de publicación no especificado o inválido.";
-} else {
-    $idPublicacion = (int)$idPublicacion;
-
-    // Seleccionar la publicación y verificar que pertenece al usuario logueado
-    // Incluimos categoria_nombre por si quieres mostrarlo (aunque se edita con el selector principal)
-    // Incluimos categoria_b2b por si decides re-añadirlo o mostrar su valor anterior
-    $sqlPublicacion = "SELECT id, tipo, titulo, descripcion, usuario_alias, fecha_publicacion, categoria_nombre, categoria_b2b FROM necesidades_ofertas WHERE id = ? AND usuario_alias = ?";
-    $stmtPublicacion = $_conexion->prepare($sqlPublicacion);
-
-    if ($stmtPublicacion === false) {
-        $mensaje_error_carga = "Error preparando la consulta para cargar la publicación.";
-        error_log("Error preparando consulta SELECT necesidades_ofertas en editarPublicacion.php: " . $_conexion->error);
+    // --- Cargar la publicación existente para editar ---
+    if ($idPublicacion === null || !is_numeric($idPublicacion)) {
+        $mensaje_error_carga = "ID de publicación no especificado o inválido.";
     } else {
-        $stmtPublicacion->bind_param("is", $idPublicacion, $_SESSION['usuario']['usuario']);
-        $stmtPublicacion->execute();
-        $resultadoPublicacion = $stmtPublicacion->get_result();
+        $idPublicacion = (int)$idPublicacion;
 
-        if ($resultadoPublicacion->num_rows === 0) {
-            $mensaje_error_carga = "Publicación no encontrada o no tienes permiso para editarla.";
+        // Seleccionar la publicación y verificar que pertenece al usuario logueado
+        // Incluimos categoria_nombre por si quieres mostrarlo (aunque se edita con el selector principal)
+        // Incluimos categoria_b2b por si decides re-añadirlo o mostrar su valor anterior
+        $sqlPublicacion = "SELECT id, tipo, titulo, descripcion, usuario_alias, fecha_publicacion, categoria_nombre, categoria_b2b FROM necesidades_ofertas WHERE id = ? AND usuario_alias = ?";
+        $stmtPublicacion = $_conexion->prepare($sqlPublicacion);
+
+        if ($stmtPublicacion === false) {
+            $mensaje_error_carga = "Error preparando la consulta para cargar la publicación.";
+            error_log("Error preparando consulta SELECT necesidades_ofertas en editarPublicacion.php: " . $_conexion->error);
         } else {
-            $publicacion = $resultadoPublicacion->fetch_assoc(); // Datos de la publicación cargada
-            // Limpiar datos para mostrar en el formulario
-            $publicacion['titulo'] = htmlspecialchars($publicacion['titulo']);
-            $publicacion['descripcion'] = htmlspecialchars($publicacion['descripcion']);
-            // categoria_b2b se mantiene por si acaso, si la eliminaste de BD ya no se seleccionará
-            $publicacion['categoria_b2b'] = htmlspecialchars($publicacion['categoria_b2b'] ?? '');
-            $publicacion['categoria_nombre'] = htmlspecialchars($publicacion['categoria_nombre'] ?? ''); // Categoría principal actual
+            $stmtPublicacion->bind_param("is", $idPublicacion, $_SESSION['usuario']['usuario']);
+            $stmtPublicacion->execute();
+            $resultadoPublicacion = $stmtPublicacion->get_result();
 
+            if ($resultadoPublicacion->num_rows === 0) {
+                $mensaje_error_carga = "Publicación no encontrada o no tienes permiso para editarla.";
+            } else {
+                $publicacion = $resultadoPublicacion->fetch_assoc(); // Datos de la publicación cargada
+                // Limpiar datos para mostrar en el formulario
+                $publicacion['titulo'] = htmlspecialchars($publicacion['titulo']);
+                $publicacion['descripcion'] = htmlspecialchars($publicacion['descripcion']);
+                // categoria_b2b se mantiene por si acaso, si la eliminaste de BD ya no se seleccionará
+                $publicacion['categoria_b2b'] = htmlspecialchars($publicacion['categoria_b2b'] ?? '');
+                $publicacion['categoria_nombre'] = htmlspecialchars($publicacion['categoria_nombre'] ?? ''); // Categoría principal actual
+
+            }
+            $stmtPublicacion->close();
         }
-        $stmtPublicacion->close();
     }
-}
 
-// --- Cargar categorías para el formulario ---
-// Solo necesitamos cargar las categorías si la publicación se cargó correctamente
-$categorias = [];
-if ($publicacion) {
-    $sqlCategorias = "SELECT nombre FROM categoria ORDER BY nombre"; // Ordenar alfabéticamente
-    $resultadoCategorias = $_conexion->query($sqlCategorias);
+    // --- Cargar categorías para el formulario ---
+    // Solo necesitamos cargar las categorías si la publicación se cargó correctamente
+    $categorias = [];
+    if ($publicacion) {
+        $sqlCategorias = "SELECT nombre FROM categoria ORDER BY nombre"; // Ordenar alfabéticamente
+        $resultadoCategorias = $_conexion->query($sqlCategorias);
 
-    if ($resultadoCategorias) {
-        while ($fila = $resultadoCategorias->fetch_assoc()) {
-            $categorias[] = $fila['nombre'];
-        }
-        $resultadoCategorias->free(); // Liberar memoria
-    } else {
-        $mensaje_error_carga = "Error al cargar las categorías para el formulario.";
-        error_log("Error al obtener categorías para el formulario de editar publicacion: " . $_conexion->error);
-    }
-}
-
-
-// --- Procesar el formulario si se envió (POST) ---
-if ($_SERVER["REQUEST_METHOD"] == "POST" && $publicacion && empty($mensaje_error_carga) && !empty($categorias)) {
-    // Validar y obtener los datos del formulario enviado
-    // Usar valor POST si existe, si no, el cargado
-    $tmpTitulo = depurar($_POST['titulo'] ?? $publicacion['titulo']);
-    if($tmpTitulo == "") { $errorTitulo = "El título es obligatorio"; } elseif(strlen($tmpTitulo) < 3 || strlen($tmpTitulo) > 100) { $errorTitulo = "El título debe tener entre 3 y 100 caracteres"; } else { $titulo = $tmpTitulo; }
-
-    $tmpDescripcion = depurar($_POST['descripcion'] ?? $publicacion['descripcion']);
-    if($tmpDescripcion == "") { $errorDescripcion = "La descripción es obligatoria"; } elseif(strlen($tmpDescripcion) < 10 || strlen($tmpDescripcion) > 500) { $errorDescripcion = "La descripción debe tener entre 10 y 500 caracteres"; } else { $descripcion = $tmpDescripcion; }
-
-     // Manejar categoria_b2b si decides mantenerla (aunque ya la eliminamos de la BD)
-     // Si la eliminaste, esta parte no hará nada útil.
-     $categoria_b2b = depurar($_POST['categoria_b2b'] ?? $publicacion['categoria_b2b']);
-
-
-    // Validar la categoría principal seleccionada
-    $categoria_principal_seleccionada = depurar($_POST['categoria_principal'] ?? $publicacion['categoria_nombre']); // Usar valor POST si existe, si no, el cargado
-    if (empty($categoria_principal_seleccionada)) {
-         $errorCategoriaPrincipal = "Por favor, selecciona una categoría principal.";
-    } else {
-        // Validar que la categoría seleccionada existe en nuestra lista cargada (seguridad)
-        if (!in_array($categoria_principal_seleccionada, $categorias)) {
-             $errorCategoriaPrincipal = "La categoría principal seleccionada no es válida.";
+        if ($resultadoCategorias) {
+            while ($fila = $resultadoCategorias->fetch_assoc()) {
+                $categorias[] = $fila['nombre'];
+            }
+            $resultadoCategorias->free(); // Liberar memoria
         } else {
-            // Si la categoría seleccionada es válida
-            $categoria_principal_para_db = $categoria_principal_seleccionada;
+            $mensaje_error_carga = "Error al cargar las categorías para el formulario.";
+            error_log("Error al obtener categorías para el formulario de editar publicacion: " . $_conexion->error);
         }
     }
 
 
-    // Si no hay errores de validación, proceder con la actualización
-    if(
-        empty($errorTitulo) &&
-        empty($errorDescripcion) &&
-        empty($errorCategoriaPrincipal) && // Validar error de categoría principal
-        empty($errorCategoriaB2B) // Validar error de categoria_b2b si aplicara
-    ) {
-        // Consulta UPDATE ahora incluye la columna categoria_nombre
-        // Si mantuviste categoria_b2b en la BD, también la incluirías aquí
-        // Si la eliminaste, la consulta es más simple
-        $sql = $_conexion->prepare("UPDATE necesidades_ofertas SET titulo = ?, descripcion = ?, categoria_nombre = ? WHERE id = ? AND usuario_alias = ?");
-        // Tipos de bind_param: s (titulo), s (descripcion), s (categoria_nombre), i (id), s (usuario_alias)
-        $sql->bind_param("sssis", $titulo, $descripcion, $categoria_principal_para_db, $idPublicacion, $aliasUsuarioActual);
+    // --- Procesar el formulario si se envió (POST) ---
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && $publicacion && empty($mensaje_error_carga) && !empty($categorias)) {
+        // Validar y obtener los datos del formulario enviado
+        // Usar valor POST si existe, si no, el cargado
+        $tmpTitulo = depurar($_POST['titulo'] ?? $publicacion['titulo']);
+        if($tmpTitulo == "") { $errorTitulo = "El título es obligatorio"; } elseif(strlen($tmpTitulo) < 3 || strlen($tmpTitulo) > 100) { $errorTitulo = "El título debe tener entre 3 y 100 caracteres"; } else { $titulo = $tmpTitulo; }
+
+        $tmpDescripcion = depurar($_POST['descripcion'] ?? $publicacion['descripcion']);
+        if($tmpDescripcion == "") { $errorDescripcion = "La descripción es obligatoria"; } elseif(strlen($tmpDescripcion) < 10 || strlen($tmpDescripcion) > 500) { $errorDescripcion = "La descripción debe tener entre 10 y 500 caracteres"; } else { $descripcion = $tmpDescripcion; }
+
+        // Manejar categoria_b2b si decides mantenerla (aunque ya la eliminamos de la BD)
+        // Si la eliminaste, esta parte no hará nada útil.
+        $categoria_b2b = depurar($_POST['categoria_b2b'] ?? $publicacion['categoria_b2b']);
 
 
-        if ($sql->execute()) {
-            $success = "Publicación actualizada con éxito.";
-             // Opcional: Recargar los datos de la publicación después de actualizar para mostrar los cambios
-            $publicacion['titulo'] = $titulo;
-            $publicacion['descripcion'] = $descripcion;
-            $publicacion['categoria_nombre'] = $categoria_principal_para_db;
-            // $publicacion['categoria_b2b'] = $categoria_b2b; // Si la mantienes
-
-             // header("Location: detallePublicacion.php?id=" . $idPublicacion); // Redirigir al detalle
-             // exit();
-
+        // Validar la categoría principal seleccionada
+        $categoria_principal_seleccionada = depurar($_POST['categoria_principal'] ?? $publicacion['categoria_nombre']); // Usar valor POST si existe, si no, el cargado
+        if (empty($categoria_principal_seleccionada)) {
+            $errorCategoriaPrincipal = "Por favor, selecciona una categoría principal.";
         } else {
-            $error = "Error al actualizar la publicación: " . $_conexion->error;
-             error_log("Error UPDATE necesidades_ofertas ID $idPublicacion por usuario $aliasUsuarioActual: " . $_conexion->error);
+            // Validar que la categoría seleccionada existe en nuestra lista cargada (seguridad)
+            if (!in_array($categoria_principal_seleccionada, $categorias)) {
+                $errorCategoriaPrincipal = "La categoría principal seleccionada no es válida.";
+            } else {
+                // Si la categoría seleccionada es válida
+                $categoria_principal_para_db = $categoria_principal_seleccionada;
+            }
         }
-         $sql->close(); // Cerrar el statement
+
+
+        // Si no hay errores de validación, proceder con la actualización
+        if(
+            empty($errorTitulo) &&
+            empty($errorDescripcion) &&
+            empty($errorCategoriaPrincipal) && // Validar error de categoría principal
+            empty($errorCategoriaB2B) // Validar error de categoria_b2b si aplicara
+        ) {
+            // Consulta UPDATE ahora incluye la columna categoria_nombre
+            // Si mantuviste categoria_b2b en la BD, también la incluirías aquí
+            // Si la eliminaste, la consulta es más simple
+            $sql = $_conexion->prepare("UPDATE necesidades_ofertas SET titulo = ?, descripcion = ?, categoria_nombre = ? WHERE id = ? AND usuario_alias = ?");
+            // Tipos de bind_param: s (titulo), s (descripcion), s (categoria_nombre), i (id), s (usuario_alias)
+            $sql->bind_param("sssis", $titulo, $descripcion, $categoria_principal_para_db, $idPublicacion, $aliasUsuarioActual);
+
+
+            if ($sql->execute()) {
+                $success = "Publicación actualizada con éxito.";
+                // Opcional: Recargar los datos de la publicación después de actualizar para mostrar los cambios
+                $publicacion['titulo'] = $titulo;
+                $publicacion['descripcion'] = $descripcion;
+                $publicacion['categoria_nombre'] = $categoria_principal_para_db;
+                // $publicacion['categoria_b2b'] = $categoria_b2b; // Si la mantienes
+
+                // header("Location: detallePublicacion.php?id=" . $idPublicacion); // Redirigir al detalle
+                // exit();
+
+            } else {
+                $error = "Error al actualizar la publicación: " . $_conexion->error;
+                error_log("Error UPDATE necesidades_ofertas ID $idPublicacion por usuario $aliasUsuarioActual: " . $_conexion->error);
+            }
+            $sql->close(); // Cerrar el statement
+        }
     }
-}
 
-$_conexion->close(); // Cerrar la conexión a la base de datos al final
+    $_conexion->close(); // Cerrar la conexión a la base de datos al final
 
-// Si no se pudo cargar la publicación inicialmente, mostrar mensaje de error y salir
-if (!$publicacion && !empty($mensaje_error_carga)) {
-     // Mostramos el header y footer antes de salir
-     ?>
+    // Si no se pudo cargar la publicación inicialmente, mostrar mensaje de error y salir
+    if (!$publicacion && !empty($mensaje_error_carga)) {
+        // Mostramos el header y footer antes de salir
+?>
      <!DOCTYPE html>
         <html lang="es">
         <head>
@@ -160,6 +158,8 @@ if (!$publicacion && !empty($mensaje_error_carga)) {
              <link rel="stylesheet" href="../../css/index.css">
             <link rel="stylesheet" href="../../css/styles.css">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+            <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+        <!-- favicon -->
         </head>
         <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
              <header class="main-header shadow-md sticky top-0 z-50">

@@ -7,6 +7,23 @@
     <title>Listado de Productos y Servicios | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <!-- favicon -->
+    <?php
+        error_reporting(E_ALL);
+        ini_set("display_errors",1);
+        require ('../util/config.php');
+        require ('../util/depurar.php');
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (!isset($_SESSION["usuario"]["usuario"])) {
+            //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
+            //se ejecute el código body
+            header("location: ../usuarios/login.php");
+            exit;
+        }
+    ?>
 </head>
 
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
@@ -24,7 +41,6 @@
 
                 <a href="../contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
                 <?php
-                session_start();
                 if (isset($_SESSION["usuario"])) {
                     $aliasUsuario = htmlspecialchars($_SESSION['usuario']['usuario']);
                     echo '<div class="relative">';
@@ -68,17 +84,6 @@
             </button>
         </form>
     </div>
-    <?php
-    if (!isset($_SESSION["usuario"]["usuario"])) {
-        //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
-        //se ejecute el código body
-        header("location: ../usuarios/login.php");
-        exit;
-    }
-    error_reporting(E_ALL);
-    ini_set("display_errors", 1);
-    require('../util/config.php');
-    ?>
     <main class="container mx-auto py-12 px-6 flex-grow">
         <div class="flex items-center justify-between mb-8">
             <h1 class="text-3xl font-semibold text-gray-800">Explora los productos que ofrecen nuestros emprendedores

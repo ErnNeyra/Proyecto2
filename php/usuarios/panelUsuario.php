@@ -1,10 +1,14 @@
 <?php
-    session_start();
-    require('../util/config.php');
-
-    // Verificar si el usuario está logueado Y si la información del usuario está completa en la sesión
-    if (!isset($_SESSION['usuario']) || !isset($_SESSION['usuario']['id_usuario'])) {
-        // Si falta la información esencial del usuario en la sesión, redirigir a la página de inicio de sesión
+    error_reporting(E_ALL);
+    ini_set("display_errors",1);
+    require ('../util/config.php');
+    require ('../util/depurar.php');
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (!isset($_SESSION["usuario"]["usuario"])) {
+        //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
+        //se ejecute el código body
         header("location: login.php");
         exit;
     }
@@ -43,7 +47,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil de <?php echo htmlspecialchars($usuario['usuario']); ?> | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<<<<<<< HEAD
        <link rel="stylesheet" href="../../css/panel.css">   
+=======
+    <link rel="stylesheet" href="../../css/panel.css">   
+    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <!-- favicon -->
+>>>>>>> 39331ad4504567df7d5f33ab819c2b589da09df2
     <style>
         .profile-image {
             width: 150px;
@@ -110,7 +120,7 @@
         <div class="bg-white rounded-lg shadow-md p-6 mb-8">
             <div class="md:flex items-start">
                 <div class="md:w-1/4 text-center mb-6 md:mb-0">
-                    <img src="<?php echo htmlspecialchars($usuario['foto_perfil'] ?? '../util/img/usuario.jpg'); ?>"
+                    <img src="<?php echo htmlspecialchars($usuario['foto_perfil'] ?? '../util/img/usuario.png'); ?>"
                          alt="Foto de perfil"
                          class="profile-image mx-auto mb-4">
                 </div>

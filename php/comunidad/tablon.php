@@ -1,105 +1,109 @@
 <?php
 // Página principal del Tablón de Necesidades y Ofertas con filtrado por categoría
 
-// Iniciar sesión
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Incluir archivos de utilidad (conexión BD y depuración) - Rutas relativas desde php/comunidad/
-require('../util/config.php');
-require('../util/depurar.php');
-
-
-$aliasUsuarioActual = isset($_SESSION["usuario"]["usuario"]) ? htmlspecialchars($_SESSION['usuario']['usuario']) : '';
-
-// --- Obtener la lista de categorías para el filtro ---
-$sqlCategoriasFiltro = "SELECT nombre FROM categoria ORDER BY nombre"; // Obtener solo nombres
-$resultadoCategoriasFiltro = $_conexion->query($sqlCategoriasFiltro);
-
-$categoriasFiltro = [];
-if ($resultadoCategoriasFiltro) {
-    while ($fila = $resultadoCategoriasFiltro->fetch_assoc()) {
-        $categoriasFiltro[] = $fila['nombre'];
+    error_reporting(E_ALL);
+    ini_set("display_errors",1);
+    require ('../util/config.php');
+    require ('../util/depurar.php');
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
     }
-    $resultadoCategoriasFiltro->free();
-} else {
-    error_log("Error al obtener categorías para el filtro del tablón: " . $_conexion->error);
-    // No es un error crítico, la página se mostrará sin filtro de categorías
-}
+    if (!isset($_SESSION["usuario"]["usuario"])) {
+        //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
+        //se ejecute el código body
+        header("location: ../usuarios/login.php");
+        exit;
+    }
 
-// --- Obtener la categoría seleccionada para filtrar (de la URL o del formulario) ---
-// Priorizar POST si se envía el formulario, si no, usar GET de la URL
-$filtroCategoria = depurar($_REQUEST['filter_cat'] ?? ''); // Usar $_REQUEST para GET o POST
+    $aliasUsuarioActual = isset($_SESSION["usuario"]["usuario"]) ? htmlspecialchars($_SESSION['usuario']['usuario']) : '';
 
-// Validar si la categoría recibida en el filtro es una categoría válida
-$categoria_filtro_valida = false;
-if (empty($filtroCategoria)) {
-    $categoria_filtro_valida = true; // No filtrar es válido
-} elseif (in_array($filtroCategoria, $categoriasFiltro)) {
-    $categoria_filtro_valida = true; // La categoría existe en la lista
-} else {
-    // Categoría de filtro inválida, ignorarla
-    $filtroCategoria = '';
-     $mensaje_error_filtro = "La categoría de filtro seleccionada no es válida.";
-}
+    // --- Obtener la lista de categorías para el filtro ---
+    $sqlCategoriasFiltro = "SELECT nombre FROM categoria ORDER BY nombre"; // Obtener solo nombres
+    $resultadoCategoriasFiltro = $_conexion->query($sqlCategoriasFiltro);
 
-
-// --- Construir la consulta SQL para obtener publicaciones ---
-$sqlPublicaciones = "SELECT id, tipo, titulo, descripcion, usuario_alias, fecha_publicacion, categoria_nombre FROM necesidades_ofertas"; // Seleccionar categoria_nombre
-
-$parametros = []; // Array para bind_param
-$tipos = ""; // String para bind_param (ej: "s")
-
-if (!empty($filtroCategoria) && $categoria_filtro_valida) {
-    // Añadir cláusula WHERE si hay un filtro de categoría válido
-    $sqlPublicaciones .= " WHERE categoria_nombre = ?";
-    $parametros[] = $filtroCategoria;
-    $tipos .= "s";
-}
-
-// Añadir ordenación
-$sqlPublicaciones .= " ORDER BY fecha_publicacion DESC";
-
-
-// --- Ejecutar la consulta ---
-$publicaciones = [];
-if (!empty($mensaje_error_filtro)) {
-     // No hacer consulta si el filtro es inválido
-} elseif ($_conexion) { // Asegurarse de que la conexión existe
-    $stmtPublicaciones = $_conexion->prepare($sqlPublicaciones);
-
-    if ($stmtPublicaciones === false) {
-        error_log("Error preparando consulta SELECT necesidades_ofertas en tablon.php: " . $_conexion->error);
-        // Manejar error de preparación
-        $mensaje_error_bd = "Error al cargar las publicaciones.";
+    $categoriasFiltro = [];
+    if ($resultadoCategoriasFiltro) {
+        while ($fila = $resultadoCategoriasFiltro->fetch_assoc()) {
+            $categoriasFiltro[] = $fila['nombre'];
+        }
+        $resultadoCategoriasFiltro->free();
     } else {
-        if (!empty($parametros)) {
-            // Si hay parámetros, enlazar
-            $stmtPublicaciones->bind_param($tipos, ...$parametros);
-        }
-
-        if ($stmtPublicaciones->execute()) {
-            $resultadoPublicaciones = $stmtPublicaciones->get_result();
-            if ($resultadoPublicaciones) {
-                while ($fila = $resultadoPublicaciones->fetch_assoc()) {
-                    $publicaciones[] = $fila; // Guarda todos los datos, incluida categoria_nombre
-                }
-                $resultadoPublicaciones->free();
-            }
-        } else {
-             error_log("Error ejecutando consulta SELECT necesidades_ofertas en tablon.php: " . $stmtPublicaciones->error);
-            $mensaje_error_bd = "Error al cargar las publicaciones.";
-        }
-        $stmtPublicaciones->close();
+        error_log("Error al obtener categorías para el filtro del tablón: " . $_conexion->error);
+        // No es un error crítico, la página se mostrará sin filtro de categorías
     }
-} else {
-     $mensaje_error_bd = "No se pudo conectar a la base de datos.";
-     error_log("Error de conexión a BD en tablon.php");
-}
+
+    // --- Obtener la categoría seleccionada para filtrar (de la URL o del formulario) ---
+    // Priorizar POST si se envía el formulario, si no, usar GET de la URL
+    $filtroCategoria = depurar($_REQUEST['filter_cat'] ?? ''); // Usar $_REQUEST para GET o POST
+
+    // Validar si la categoría recibida en el filtro es una categoría válida
+    $categoria_filtro_valida = false;
+    if (empty($filtroCategoria)) {
+        $categoria_filtro_valida = true; // No filtrar es válido
+    } elseif (in_array($filtroCategoria, $categoriasFiltro)) {
+        $categoria_filtro_valida = true; // La categoría existe en la lista
+    } else {
+        // Categoría de filtro inválida, ignorarla
+        $filtroCategoria = '';
+        $mensaje_error_filtro = "La categoría de filtro seleccionada no es válida.";
+    }
 
 
-$_conexion->close(); // Cerrar la conexión a la base de datos al final
+    // --- Construir la consulta SQL para obtener publicaciones ---
+    $sqlPublicaciones = "SELECT id, tipo, titulo, descripcion, usuario_alias, fecha_publicacion, categoria_nombre FROM necesidades_ofertas"; // Seleccionar categoria_nombre
+
+    $parametros = []; // Array para bind_param
+    $tipos = ""; // String para bind_param (ej: "s")
+
+    if (!empty($filtroCategoria) && $categoria_filtro_valida) {
+        // Añadir cláusula WHERE si hay un filtro de categoría válido
+        $sqlPublicaciones .= " WHERE categoria_nombre = ?";
+        $parametros[] = $filtroCategoria;
+        $tipos .= "s";
+    }
+
+    // Añadir ordenación
+    $sqlPublicaciones .= " ORDER BY fecha_publicacion DESC";
+
+
+    // --- Ejecutar la consulta ---
+    $publicaciones = [];
+    if (!empty($mensaje_error_filtro)) {
+        // No hacer consulta si el filtro es inválido
+    } elseif ($_conexion) { // Asegurarse de que la conexión existe
+        $stmtPublicaciones = $_conexion->prepare($sqlPublicaciones);
+
+        if ($stmtPublicaciones === false) {
+            error_log("Error preparando consulta SELECT necesidades_ofertas en tablon.php: " . $_conexion->error);
+            // Manejar error de preparación
+            $mensaje_error_bd = "Error al cargar las publicaciones.";
+        } else {
+            if (!empty($parametros)) {
+                // Si hay parámetros, enlazar
+                $stmtPublicaciones->bind_param($tipos, ...$parametros);
+            }
+
+            if ($stmtPublicaciones->execute()) {
+                $resultadoPublicaciones = $stmtPublicaciones->get_result();
+                if ($resultadoPublicaciones) {
+                    while ($fila = $resultadoPublicaciones->fetch_assoc()) {
+                        $publicaciones[] = $fila; // Guarda todos los datos, incluida categoria_nombre
+                    }
+                    $resultadoPublicaciones->free();
+                }
+            } else {
+                error_log("Error ejecutando consulta SELECT necesidades_ofertas en tablon.php: " . $stmtPublicaciones->error);
+                $mensaje_error_bd = "Error al cargar las publicaciones.";
+            }
+            $stmtPublicaciones->close();
+        }
+    } else {
+        $mensaje_error_bd = "No se pudo conectar a la base de datos.";
+        error_log("Error de conexión a BD en tablon.php");
+    }
+
+
+    $_conexion->close(); // Cerrar la conexión a la base de datos al final
 
 ?>
 <!DOCTYPE html>
@@ -113,9 +117,14 @@ $_conexion->close(); // Cerrar la conexión a la base de datos al final
     <link rel="stylesheet" href="../../css/styles.css">
     <link rel="stylesheet" href="../../css/tablon.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<<<<<<< HEAD
 
   
 
+=======
+    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <!-- favicon -->
+>>>>>>> 39331ad4504567df7d5f33ab819c2b589da09df2
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
 
@@ -128,87 +137,83 @@ $_conexion->close(); // Cerrar la conexión a la base de datos al final
                 <a href="../productos/producto.php" class="main-nav-link text-gray-700 hover:text-black mr-4">Productos</a>
                 <a href="../servicios/servicio.php" class="main-nav-link text-gray-700 hover:text-black mr-4">Servicios</a>
                 <a href="../contacto.php" class="main-nav-link text-gray-700 hover:text-black mr-4">Contacto</a>
-                 <a href="../recursos/recursos.php" class="main-nav-link text-gray-700 hover:text-black mr-4">Recursos</a>
+                <a href="../recursos/recursos.php" class="main-nav-link text-gray-700 hover:text-black mr-4">Recursos</a>
               
-
-
                 <?php
+                    if (isset($_SESSION['usuario'])) {
+                        // Obtener datos del usuario de la sesión, usando htmlspecialchars por seguridad
+                        $nombreUsuario = htmlspecialchars($_SESSION['usuario']['usuario']); // Usamos 'usuario'
+
+                        // Determinar la ruta de la imagen de perfil
+                        // Ruta por defecto desde php/categoria-index.php a php/util/
+                        $imagenPerfil = '../util/img/usuario.png'; // Ruta por defecto desde php/
+
+                        // Verificamos si existe la foto de perfil del usuario en la sesión y no está vacía
+                        if (isset($_SESSION['usuario']['foto_perfil']) && !empty($_SESSION['usuario']['foto_perfil'])) {
+                            // La ruta guardada en BD es relativa a 'util/', así que desde php/categoria-index.php es 'util/' + ruta_bd
+                            $rutaImagenBD = '../util/' . ltrim($_SESSION['usuario']['foto_perfil'], '/');
+                        
+                            if (file_exists($rutaImagenBD)) { // Esta comprobación asume que PHP está en la raíz del sitio o se ajusta include_path
+                                $imagenPerfil = htmlspecialchars($rutaImagenBD); // Usar la ruta validada
+                            }
+                            // Si no existe en el sistema de archivos, la variable $imagenPerfil mantiene la ruta por defecto
+                        }
+                    
+
+                        // Obtener el rol del usuario si está seteado (necesario para enlaces condicionales)
+                        $userRole = $_SESSION['usuario']['rol'] ?? '';
 
 
-if (isset($_SESSION['usuario'])) {
-    // Obtener datos del usuario de la sesión, usando htmlspecialchars por seguridad
-    $nombreUsuario = htmlspecialchars($_SESSION['usuario']['usuario']); // Usamos 'usuario'
+                        // Estructura del desplegable - Rutas relativas desde php/categoria-index.php
+                        echo '<div class="relative">'; // Clase relativa para el posicionamiento absoluto del desplegable
+                        echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-marca-primario transition duration-200 focus:outline-none" aria-expanded="false" aria-haspopup="true">';
+                        // Mostrar la foto de perfil
+                        echo '        <img class="h-8 w-8 rounded-full mr-2 object-cover" src="' . $imagenPerfil . '" alt="Imagen de Perfil de ' . $nombreUsuario . '">';
+                        echo '        <span>' . $nombreUsuario . '</span>';
+                        echo '        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
+                        echo '    </button>';
 
-    // Determinar la ruta de la imagen de perfil
-    // Ruta por defecto desde php/categoria-index.php a php/util/
-    $imagenPerfil = 'util/img/usuario.png'; // Ruta por defecto desde php/
+                        // Contenido del desplegable (oculto por defecto)
+                        echo '    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-10 hidden">';
+                        // Enlaces del desplegable - Rutas relativas desde php/categoria-index.php
+                        echo '        <a href="../usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Perfil</a>'; // Mantener "Mi Perfil" según tu código original
+                        echo '        <a href="../usuarios/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
 
-    // Verificamos si existe la foto de perfil del usuario en la sesión y no está vacía
-    if (isset($_SESSION['usuario']['foto_perfil']) && !empty($_SESSION['usuario']['foto_perfil'])) {
-        // La ruta guardada en BD es relativa a 'util/', así que desde php/categoria-index.php es 'util/' + ruta_bd
-        $rutaImagenBD = 'util/' . ltrim($_SESSION['usuario']['foto_perfil'], '/');
-       
-        if (file_exists($rutaImagenBD)) { // Esta comprobación asume que PHP está en la raíz del sitio o se ajusta include_path
-             $imagenPerfil = htmlspecialchars($rutaImagenBD); // Usar la ruta validada
-        }
-        // Si no existe en el sistema de archivos, la variable $imagenPerfil mantiene la ruta por defecto
-    }
-   
+                        // Enlaces de gestión (solo para vendedores/admin) - Añadidos/Integrados
+                        if ($userRole === 'vendedor' || $userRole === 'admin') {
+                            echo '        <hr class="border-gray-200">'; // Separador
+                            echo '        <a href="../productos/gestionarProductos.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Gestionar Productos</a>';
+                            echo '        <a href="../servicios/gestionarServicios.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Gestionar Servicios</a>';
+                        }
 
-    // Obtener el rol del usuario si está seteado (necesario para enlaces condicionales)
-    $userRole = $_SESSION['usuario']['rol'] ?? '';
+                        // Enlaces de comunidad/contenido
+                        echo '        <hr class="border-gray-200">'; // Separador
+                        echo '        <a href="tablon.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Tablón Comunidad</a>';
+                        // Enlace a la página principal de Categorías (asumimos que la página de listado está en php/categoria/index.php)
+                        echo '        <a href="../categoria/index.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Categorias</a>'; // Mantener "Categorias" según tu código
 
-
-    // Estructura del desplegable - Rutas relativas desde php/categoria-index.php
-    echo '<div class="relative">'; // Clase relativa para el posicionamiento absoluto del desplegable
-    echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-marca-primario transition duration-200 focus:outline-none" aria-expanded="false" aria-haspopup="true">';
-    // Mostrar la foto de perfil
-    echo '        <img class="h-8 w-8 rounded-full mr-2 object-cover" src="' . $imagenPerfil . '" alt="Imagen de Perfil de ' . $nombreUsuario . '">';
-    echo '        <span>' . $nombreUsuario . '</span>';
-    echo '        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
-    echo '    </button>';
-
-    // Contenido del desplegable (oculto por defecto)
-    echo '    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-10 hidden">';
-    // Enlaces del desplegable - Rutas relativas desde php/categoria-index.php
-    echo '        <a href="../usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Perfil</a>'; // Mantener "Mi Perfil" según tu código original
-    echo '        <a href="../usuarios/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
-
-    // Enlaces de gestión (solo para vendedores/admin) - Añadidos/Integrados
-    if ($userRole === 'vendedor' || $userRole === 'admin') {
-        echo '        <hr class="border-gray-200">'; // Separador
-        echo '        <a href="../productos/gestionarProductos.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Gestionar Productos</a>';
-        echo '        <a href="../servicios/gestionarServicios.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Gestionar Servicios</a>';
-    }
-
-    // Enlaces de comunidad/contenido
-    echo '        <hr class="border-gray-200">'; // Separador
-    echo '        <a href="tablon.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Tablón Comunidad</a>';
-    // Enlace a la página principal de Categorías (asumimos que la página de listado está en php/categoria/index.php)
-    echo '        <a href="../categoria/index.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Categorias</a>'; // Mantener "Categorias" según tu código
-
-    // Enlace a Mis Mensajes (Añadido/Integrado)
-    // Asumiendo que la carpeta mensajes existe con conversacioens.php dentro
-    // Si has descartado esta funcionalidad, puedes eliminar esta línea
-     if (file_exists('mensajes/conversaciones.php')) { // Verificar si el archivo de mensajes existe
-         echo '        <a href="mensajes/conversaciones.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200 font-semibold">Mis Mensajes</a>';
-     }
+                        // Enlace a Mis Mensajes (Añadido/Integrado)
+                        // Asumiendo que la carpeta mensajes existe con conversacioens.php dentro
+                        // Si has descartado esta funcionalidad, puedes eliminar esta línea
+                        if (file_exists('mensajes/conversaciones.php')) { // Verificar si el archivo de mensajes existe
+                            echo '        <a href="mensajes/conversaciones.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200 font-semibold">Mis Mensajes</a>';
+                        }
 
 
-    // Enlace para cerrar sesión
-    echo '        <hr class="border-gray-200">'; // Separador antes de cerrar sesión
-    echo '        <a href="usuarios/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
+                        // Enlace para cerrar sesión
+                        echo '        <hr class="border-gray-200">'; // Separador antes de cerrar sesión
+                        echo '        <a href="../usuarios/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
 
-    echo '    </div>'; // Cierre del div del desplegable
-    echo '</div>'; // Cierre del div relativo del desplegable
+                        echo '    </div>'; // Cierre del div del desplegable
+                        echo '</div>'; // Cierre del div relativo del desplegable
 
-} else {
-    // Código para usuarios NO logueados
-    // Rutas de login/registro relativas desde php/categoria-index.php
-    echo '<a href="usuarios/login.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Iniciar Sesión</a>';
-    echo '<a href="usuarios/registro.php" class="cta-button bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold">Regístrate</a>';
-}
-?>
+                    } else {
+                        // Código para usuarios NO logueados
+                        // Rutas de login/registro relativas desde php/categoria-index.php
+                        echo '<a href="../usuarios/login.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Iniciar Sesión</a>';
+                        echo '<a href="../usuarios/registro.php" class="cta-button bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold">Regístrate</a>';
+                    }
+                ?>
             </nav>
         </div>
     </header>
