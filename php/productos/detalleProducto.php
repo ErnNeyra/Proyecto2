@@ -6,7 +6,21 @@
     <title>Detalle del Producto | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../css/index.css"> <link rel="stylesheet" href="../../css/style.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <?php
+        error_reporting(E_ALL);
+        ini_set("display_errors",1);
+        require ('../util/config.php');
+        require ('../util/depurar.php');
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (!isset($_SESSION["usuario"]["usuario"])) {
+            //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
+            //se ejecute el código body
+            header("location: ../usuarios/login.php");
+            exit;
+        }
+    ?>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
     <header class="bg-white shadow-md">
@@ -23,14 +37,6 @@
 
                 <a href="../contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
                 <?php
-                    error_reporting(E_ALL);
-                    ini_set("display_errors",1);
-                    require ('../util/config.php');
-                    require ('../util/depurar.php');
-                     if (session_status() == PHP_SESSION_NONE) {
-                         session_start();
-                     }
-
                     if (!isset($_GET['id_producto'])) {
                         die("Error: ID de producto no especificado.");
                     }
@@ -138,13 +144,10 @@
                         echo '    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-10 hidden">';
                         echo '        <a href="../usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Panel</a>';
                         echo '        <a href="../usuarios/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
-<<<<<<< HEAD
                          echo '        <hr class="border-gray-200">';
                         echo '        <a href="../comunidad/tablon.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Tablón Comunidad</a>';
                         echo '        <a href="../categoria/index.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Categoría</a>';
                         echo '        <hr class="border-red-200">';
-=======
->>>>>>> 6fb7bbcbf981b0ad6af3190dbf3118e25e02922a
                          if (isset($_SESSION['usuario']['rol'])) {
                              if ($_SESSION['usuario']['rol'] === 'vendedor' || $_SESSION['usuario']['rol'] === 'admin') {
                                   echo '        <hr class="border-gray-200">';

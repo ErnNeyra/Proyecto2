@@ -6,6 +6,15 @@
     <title>Listado de Servicios | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <?php
+        session_start();
+        if (!isset($_SESSION["usuario"]["usuario"])) {
+            //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
+            //se ejecute el código body
+            header("location: ../usuarios/login.php");
+            exit;
+        }
+    ?>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
     <header class="bg-white shadow-md">
@@ -22,7 +31,6 @@
 
                 <a href="../contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
                 <?php
-                session_start();
                 if(isset($_SESSION["usuario"]["usuario"])){
                     $aliasUsuario = htmlspecialchars($_SESSION['usuario']['usuario']);
                     echo '<div class="relative">';

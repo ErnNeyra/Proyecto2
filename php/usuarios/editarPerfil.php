@@ -1,6 +1,17 @@
 <?php
-    session_start();
-    require('../util/config.php');
+    error_reporting(E_ALL);
+    ini_set("display_errors",1);
+    require ('../util/config.php');
+    require ('../util/depurar.php');
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (!isset($_SESSION["usuario"]["usuario"])) {
+        //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
+        //se ejecute el código body
+        header("location: login.php");
+        exit;
+    }
 ?>
 
 <!DOCTYPE html>

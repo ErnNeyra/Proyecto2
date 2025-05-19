@@ -3,7 +3,15 @@
     ini_set("display_errors",1);
     require ('../util/config.php');
     require ('../util/depurar.php');
-    session_start();
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (!isset($_SESSION["usuario"]["usuario"])) {
+        //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
+        //se ejecute el código body
+        header("location: ../usuarios/login.php");
+        exit;
+    }
 
     // Obtener datos actuales del servicio
     $idServicio = $_GET["id_servicio"] ?? null;

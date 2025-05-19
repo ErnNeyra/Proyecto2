@@ -3,13 +3,14 @@
     ini_set("display_errors",1);
     require ('../util/config.php');
     require ('../util/depurar.php');
-    session_start();
-
-    // Verificar si el usuario ha iniciado sesión
-    if (!isset($_SESSION['usuario'])) {
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (!isset($_SESSION["usuario"]["usuario"])) {
+        //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
+        //se ejecute el código body
         header("location: ../usuarios/login.php");
-        echo"<h2>Debes iniciar sesión para añadir un servicio.</h2>";
-        exit();
+        exit;
     }
 
     $errorNombre = $errorDescripcion = $errorPrecio = $errorCategoria = $errorImagen = $error = "";
@@ -142,10 +143,6 @@
                 <a href="../servicios/servicio.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Servicios</a>
                 <a href="../contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
             <?php
-                if (session_status() === PHP_SESSION_NONE) {
-                    session_start();
-                }
-
                 if (isset($_SESSION["usuario"])) {
                     $imagenPerfil = isset($_SESSION['usuario']['foto_perfil']) && !empty($_SESSION['usuario']['foto_perfil'])
                         ? htmlspecialchars($_SESSION['usuario']['foto_perfil'])

@@ -1,19 +1,17 @@
 <?php
-// Iniciar sesión para obtener el usuario logueado
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Incluir archivos de utilidad (conexión BD y depuración) - Rutas relativas desde php/comunidad/
-require('../util/config.php');
-require('../util/depurar.php');
-
-// Redirigir si el usuario no está logueado
-if (!isset($_SESSION["usuario"]["usuario"])) {
-    // Ruta relativa a login.php desde php/comunidad/
-    header("Location: ../usuarios/login.php?redirect=" . urlencode($_SERVER['REQUEST_URI']));
-    exit();
-}
+    error_reporting(E_ALL);
+    ini_set("display_errors",1);
+    require ('../util/config.php');
+    require ('../util/depurar.php');
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (!isset($_SESSION["usuario"]["usuario"])) {
+        //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
+        //se ejecute el código body
+        header("location: ../usuarios/login.php");
+        exit;
+    }
 
 $aliasUsuarioActual = htmlspecialchars($_SESSION['usuario']['usuario']);
 $mensajeExito = "";

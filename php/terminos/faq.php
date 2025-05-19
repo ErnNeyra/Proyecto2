@@ -86,7 +86,7 @@ if (isset($_SESSION['usuario'])) {
 
     // Enlace para cerrar sesión
     echo '        <hr class="border-gray-200">'; // Separador antes de cerrar sesión
-    echo '        <a href="usuarios/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
+    echo '        <a href="../usuarios/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
 
     echo '    </div>'; // Cierre del div del desplegable
     echo '</div>'; // Cierre del div relativo del desplegable
@@ -94,8 +94,8 @@ if (isset($_SESSION['usuario'])) {
 } else {
     // Código para usuarios NO logueados
     // Rutas de login/registro relativas desde php/categoria-index.php
-    echo '<a href="usuarios/login.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Iniciar Sesión</a>';
-    echo '<a href="usuarios/registro.php" class="cta-button bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold">Regístrate</a>';
+    echo '<a href="../usuarios/login.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Iniciar Sesión</a>';
+    echo '<a href="../usuarios/registro.php" class="cta-button bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold">Regístrate</a>';
 }
 ?>
             </nav>
@@ -146,10 +146,7 @@ if (isset($_SESSION['usuario'])) {
                                 class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Servicios</a></li>
                         <li><a href="../contacto.php"
                                 class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Contacto</a></li>
-<<<<<<< HEAD
                                 <a href="../recursos/recursos.php" class="main-nav-link text-gray-700 hover:text-black mr-4">Recursos</a>
-=======
->>>>>>> 6fb7bbcbf981b0ad6af3190dbf3118e25e02922a
                     </ul>
                 </div>
                 <div class="footer-section">
