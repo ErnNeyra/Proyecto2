@@ -7,8 +7,10 @@
 
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/styles.css">
-     <link rel="stylesheet" href="css/index.css"> <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css">
+    
+
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -265,13 +267,13 @@
                                 class="hover:text-marca-secundaria transition duration-200">Contacto</a></li>
                     </ul>
                 </div>
-                <div class="footer-section">
-                    <h3 class="text-lg font-semibold mb-4">Soporte</h3>
+               <div class="footer-section">
+                    <h3 class="text-lg font-semibold mb-4 text-white">Soporte</h3>
                     <ul class="list-none p-0">
-                        <li><a href="#" class="hover:text-marca-secundaria transition duration-200">Preguntas Frecuentes</a></li>
-                        <li><a href="#" class="hover:text-marca-secundaria transition duration-200">Términos de Servicio</a></li>
-                        <li><a href="#" class="hover:text-marca-secundaria transition duration-200">Política de Privacidad</a></li>
-                        <li><a href="php/contacto.php" class="hover:text-marca-secundaria transition duration-200">Ayuda</a></li>
+                        <li><a href="php/terminos/faq.php" class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Preguntas Frecuentes</a></li>
+                        <li><a href="php/terminos/terms.php" class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Términos de Servicio</a></li>
+                        <li><a href="php/terminos/privacy.php" class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Política de Privacidad</a></li>
+                        <li><a href="php/contacto.php" class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Ayuda</a></li>
                     </ul>
                 </div>
                 <div class="footer-section social-icons-footer">
@@ -292,7 +294,9 @@
         </div>
     </footer>
 
+    <script src="js/desplegable.js"></script>
+      <script src="js/script2.js"></script>
+    
 
-
-    <script src="js/desplegable.js"></script> <script src="js/script2.js"></script> </body>
+</body>
 </html>

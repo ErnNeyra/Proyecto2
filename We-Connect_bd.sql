@@ -64,3 +64,15 @@ CREATE TABLE servicio (
     FOREIGN KEY (categoria) REFERENCES categoria(nombre),
     FOREIGN KEY (usuario) REFERENCES usuario(usuario)
 );
+USE WeConnect_bd;
+
+CREATE TABLE comentarios_servicio (
+    id_comentario INT AUTO_INCREMENT PRIMARY KEY,
+    id_servicio INT NOT NULL,
+    usuario_alias VARCHAR(100) NOT NULL,
+    valoracion INT CHECK (valoracion BETWEEN 1 AND 5),
+    comentario TEXT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_servicio) REFERENCES servicio(id_servicio) ON DELETE CASCADE,
+    FOREIGN KEY (usuario_alias) REFERENCES usuario(usuario) ON DELETE CASCADE
+);
