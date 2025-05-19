@@ -136,13 +136,6 @@
                         echo '    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-10 hidden">';
                         echo '        <a href="../usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Panel</a>';
                         echo '        <a href="../usuarios/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
-<<<<<<< HEAD
-                         echo '        <hr class="border-gray-200">';
-                          echo '        <a href="../comunidad/tablon.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Tablón Comunidad</a>';
-                    echo '        <a href="../categoria/index.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Categoría</a>';
-                    echo '        <hr class="border-red-200">';
-=======
->>>>>>> 6fb7bbcbf981b0ad6af3190dbf3118e25e02922a
                          if (isset($_SESSION['usuario']['rol'])) {
                              if ($_SESSION['usuario']['rol'] === 'vendedor' || $_SESSION['usuario']['rol'] === 'admin') {
                                   echo '        <hr class="border-gray-200">';
