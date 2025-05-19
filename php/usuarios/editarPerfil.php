@@ -22,7 +22,7 @@
     <title>We-Connect | Editar Perfil</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../css/usuario.css">
-    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <link rel="icon" href="../util/img/faviconWC.png " type="image/x-icon">
     <!-- favicon -->
     <style>
         /* Estilos adicionales para el formulario de editar perfil */

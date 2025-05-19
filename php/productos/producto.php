@@ -7,7 +7,7 @@
     <title>Listado de Productos y Servicios | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <link rel="icon" href="../util/img/faviconWC.png " type="image/x-icon">
     <!-- favicon -->
     <?php
         error_reporting(E_ALL);
@@ -34,8 +34,6 @@
             </a>
             <nav class="flex items-center space-x-4">
                 <a href="../recursos/recursos.php" class="text-gray-700 hover:text-black mr-4 font-semibold">Recursos</a>
-                <a></a>
-                <a href="../productos/producto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Productos</a>
                 <a></a>
                 <a href="../servicios/servicio.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Servicios</a>
 

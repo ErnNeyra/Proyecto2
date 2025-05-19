@@ -51,7 +51,7 @@
        <link rel="stylesheet" href="../../css/panel.css">   
 =======
     <link rel="stylesheet" href="../../css/panel.css">   
-    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <link rel="icon" href="../util/img/faviconWC.png " type="image/x-icon">
     <!-- favicon -->
 >>>>>>> 39331ad4504567df7d5f33ab819c2b589da09df2
     <style>
