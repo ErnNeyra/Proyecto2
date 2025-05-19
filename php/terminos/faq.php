@@ -146,7 +146,10 @@ if (isset($_SESSION['usuario'])) {
                                 class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Servicios</a></li>
                         <li><a href="../contacto.php"
                                 class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Contacto</a></li>
+<<<<<<< HEAD
                                 <a href="../recursos/recursos.php" class="main-nav-link text-gray-700 hover:text-black mr-4">Recursos</a>
+=======
+>>>>>>> 6fb7bbcbf981b0ad6af3190dbf3118e25e02922a
                     </ul>
                 </div>
                 <div class="footer-section">

@@ -6,7 +6,6 @@
     session_start();
 
     // Verificar si el usuario ha iniciado sesión
-    
     if (!isset($_SESSION['usuario'])) {
         header("location: ../usuarios/login.php");
         echo"<h2>Debes iniciar sesión para añadir un servicio.</h2>";
