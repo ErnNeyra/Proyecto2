@@ -18,7 +18,7 @@
         require('../util/depurar.php');
 
         // Definir la carpeta donde se guardarán las fotos de perfil
-        $uploadDir = '/util/img/';
+        $uploadDir = '/php/util/img/';
     ?>
 </head>
 
@@ -123,7 +123,7 @@
             }
         } else {
             // Si no se subió ninguna foto, asignamos la ruta por defecto
-            $fotoPerfil = '/util/img/usuario.png';
+            $fotoPerfil = '/php/util/img/usuario.png';
         }
 
              if (empty($errores)) {
