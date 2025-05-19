@@ -7,6 +7,8 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/index.css">
+    <link rel="icon" href="util/img/.faviconWC.png " type="image/x-icon">
+    <!-- favicon -->
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
 

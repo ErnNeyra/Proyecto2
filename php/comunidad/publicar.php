@@ -13,78 +13,78 @@
         exit;
     }
 
-$aliasUsuarioActual = htmlspecialchars($_SESSION['usuario']['usuario']);
-$mensajeExito = "";
-$mensajeError = "";
+    $aliasUsuarioActual = htmlspecialchars($_SESSION['usuario']['usuario']);
+    $mensajeExito = "";
+    $mensajeError = "";
 
-// --- Cargar categorías desde la base de datos ---
-$sqlCategorias = "SELECT nombre FROM categoria ORDER BY nombre"; // Ordenar alfabéticamente
-$resultadoCategorias = $_conexion->query($sqlCategorias);
+    // --- Cargar categorías desde la base de datos ---
+    $sqlCategorias = "SELECT nombre FROM categoria ORDER BY nombre"; // Ordenar alfabéticamente
+    $resultadoCategorias = $_conexion->query($sqlCategorias);
 
-$categorias = [];
-if ($resultadoCategorias) {
-    while ($fila = $resultadoCategorias->fetch_assoc()) {
-        $categorias[] = $fila['nombre'];
-    }
-    $resultadoCategorias->free(); // Liberar memoria
-} else {
-    // Manejar error si la consulta de categorías falla
-    $mensajeError = "Error al cargar las categorías: " . $_conexion->error;
-    error_log("Error al obtener categorías para el formulario de publicar: " . $_conexion->error);
-}
-
-
-// Procesar el formulario si se envió
-if ($_SERVER["REQUEST_METHOD"] == "POST" && empty($mensajeError)) { // Procesar solo si no hubo error cargando categorías
-    // Validar y obtener los datos del formulario
-    $tipo = 'necesidad'; // Valor fijo como definimos antes para este formulario
-    $titulo = depurar($_POST['titulo'] ?? '');
-    $descripcion = depurar($_POST['descripcion'] ?? '');
-    // Se elimina la lectura de $_POST['categoria_b2b']
-    $categoria_seleccionada = depurar($_POST['categoria_principal'] ?? ''); // Obtener la categoría principal seleccionada
-
-    // Validaciones básicas (solo título, descripción y categoría principal son obligatorios)
-    if (empty($titulo) || empty($descripcion)) {
-        $mensajeError = "Por favor, completa todos los campos obligatorios (Título, Descripción).";
-    } elseif (empty($categoria_seleccionada)) {
-         $mensajeError = "Por favor, selecciona una categoría principal.";
-    } else {
-        // Validar que la categoría seleccionada existe en nuestra lista cargada (seguridad)
-        if (!in_array($categoria_seleccionada, $categorias)) {
-             $mensajeError = "La categoría seleccionada no es válida.";
-        } else {
-            // Si la categoría seleccionada es válida, la guardamos en la base de datos
-            // Usamos la variable $categoria_seleccionada para el campo categoria_nombre
-
-            // Insertar en la base de datos
-            // LA CONSULTA INSERT YA NO INCLUYE categoria_b2b
-            $stmt = $_conexion->prepare("INSERT INTO necesidades_ofertas (tipo, titulo, descripcion, usuario_alias, categoria_nombre) VALUES (?, ?, ?, ?, ?)");
-
-             // Tipos de bind_param: s (tipo), s (titulo), s (descripcion), s (usuario_alias), s (categoria_nombre)
-            $stmt->bind_param("sssss", $tipo, $titulo, $descripcion, $aliasUsuarioActual, $categoria_seleccionada);
-
-
-            if ($stmt->execute()) {
-                $mensajeExito = "¡Necesidad publicada con éxito! Redirigiendo al tablón...";
-                // Redirigir al tablón después de un breve retraso (opcional, o redirigir inmediatamente)
-                // Ruta relativa al tablón desde php/comunidad/
-                header("Refresh: 3; url=tablon.php"); // Redirige a tablon.php después de 3 segundos
-                // O redirección inmediata:
-                // header("Location: tablon.php");
-                // exit();
-
-            } else {
-                $mensajeError = "Error al crear la publicación: " . $_conexion->error;
-                 error_log("Error INSERT en necesidades_ofertas por usuario $aliasUsuarioActual: " . $_conexion->error); // Log el error
-            }
-
-            $stmt->close();
+    $categorias = [];
+    if ($resultadoCategorias) {
+        while ($fila = $resultadoCategorias->fetch_assoc()) {
+            $categorias[] = $fila['nombre'];
         }
+        $resultadoCategorias->free(); // Liberar memoria
+    } else {
+        // Manejar error si la consulta de categorías falla
+        $mensajeError = "Error al cargar las categorías: " . $_conexion->error;
+        error_log("Error al obtener categorías para el formulario de publicar: " . $_conexion->error);
     }
-    // Si hubo error, los valores del formulario se mantendrán gracias al htmlspecialchars($_POST['...'])
-}
 
-$_conexion->close(); // Cerrar la conexión a la base de datos al final
+
+    // Procesar el formulario si se envió
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && empty($mensajeError)) { // Procesar solo si no hubo error cargando categorías
+        // Validar y obtener los datos del formulario
+        $tipo = 'necesidad'; // Valor fijo como definimos antes para este formulario
+        $titulo = depurar($_POST['titulo'] ?? '');
+        $descripcion = depurar($_POST['descripcion'] ?? '');
+        // Se elimina la lectura de $_POST['categoria_b2b']
+        $categoria_seleccionada = depurar($_POST['categoria_principal'] ?? ''); // Obtener la categoría principal seleccionada
+
+        // Validaciones básicas (solo título, descripción y categoría principal son obligatorios)
+        if (empty($titulo) || empty($descripcion)) {
+            $mensajeError = "Por favor, completa todos los campos obligatorios (Título, Descripción).";
+        } elseif (empty($categoria_seleccionada)) {
+            $mensajeError = "Por favor, selecciona una categoría principal.";
+        } else {
+            // Validar que la categoría seleccionada existe en nuestra lista cargada (seguridad)
+            if (!in_array($categoria_seleccionada, $categorias)) {
+                $mensajeError = "La categoría seleccionada no es válida.";
+            } else {
+                // Si la categoría seleccionada es válida, la guardamos en la base de datos
+                // Usamos la variable $categoria_seleccionada para el campo categoria_nombre
+
+                // Insertar en la base de datos
+                // LA CONSULTA INSERT YA NO INCLUYE categoria_b2b
+                $stmt = $_conexion->prepare("INSERT INTO necesidades_ofertas (tipo, titulo, descripcion, usuario_alias, categoria_nombre) VALUES (?, ?, ?, ?, ?)");
+
+                // Tipos de bind_param: s (tipo), s (titulo), s (descripcion), s (usuario_alias), s (categoria_nombre)
+                $stmt->bind_param("sssss", $tipo, $titulo, $descripcion, $aliasUsuarioActual, $categoria_seleccionada);
+
+
+                if ($stmt->execute()) {
+                    $mensajeExito = "¡Necesidad publicada con éxito! Redirigiendo al tablón...";
+                    // Redirigir al tablón después de un breve retraso (opcional, o redirigir inmediatamente)
+                    // Ruta relativa al tablón desde php/comunidad/
+                    header("Refresh: 3; url=tablon.php"); // Redirige a tablon.php después de 3 segundos
+                    // O redirección inmediata:
+                    // header("Location: tablon.php");
+                    // exit();
+
+                } else {
+                    $mensajeError = "Error al crear la publicación: " . $_conexion->error;
+                    error_log("Error INSERT en necesidades_ofertas por usuario $aliasUsuarioActual: " . $_conexion->error); // Log el error
+                }
+
+                $stmt->close();
+            }
+        }
+        // Si hubo error, los valores del formulario se mantendrán gracias al htmlspecialchars($_POST['...'])
+    }
+
+    $_conexion->close(); // Cerrar la conexión a la base de datos al final
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -97,7 +97,8 @@ $_conexion->close(); // Cerrar la conexión a la base de datos al final
     <link rel="stylesheet" href="../../css/styles.css">
     <link rel="stylesheet" href="../../css/publicar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <!-- favicon -->
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
 

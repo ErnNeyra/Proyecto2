@@ -8,6 +8,8 @@
      <link rel="stylesheet" href="../../css/recursos.css">
     <link rel="stylesheet" href="../../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <!-- favicon -->
     <?php
         error_reporting(E_ALL);
         ini_set("display_errors",1);
@@ -37,20 +39,18 @@
                 <a href="../contacto.php" class="main-nav-link text-gray-700 hover:text-black mr-4">Contacto</a>
 
                 <?php
-
-
                     if (isset($_SESSION['usuario'])) {
                         // Obtener datos del usuario de la sesión, usando htmlspecialchars por seguridad
                         $nombreUsuario = htmlspecialchars($_SESSION['usuario']['usuario']); // Usamos 'usuario'
 
                         // Determinar la ruta de la imagen de perfil
                         // Ruta por defecto desde php/categoria-index.php a php/util/
-                        $imagenPerfil = 'util/img/usuario.png'; // Ruta por defecto desde php/
+                        $imagenPerfil = '../util/img/usuario.png'; // Ruta por defecto desde php/
 
                         // Verificamos si existe la foto de perfil del usuario en la sesión y no está vacía
                         if (isset($_SESSION['usuario']['foto_perfil']) && !empty($_SESSION['usuario']['foto_perfil'])) {
                             // La ruta guardada en BD es relativa a 'util/', así que desde php/categoria-index.php es 'util/' + ruta_bd
-                            $rutaImagenBD = 'util/' . ltrim($_SESSION['usuario']['foto_perfil'], '/');
+                            $rutaImagenBD = '../util/' . ltrim($_SESSION['usuario']['foto_perfil'], '/');
                         
                             if (file_exists($rutaImagenBD)) { // Esta comprobación asume que PHP está en la raíz del sitio o se ajusta include_path
                                 $imagenPerfil = htmlspecialchars($rutaImagenBD); // Usar la ruta validada
@@ -115,11 +115,6 @@
                 ?>
             </nav>
         </div>
-         <?php
-             // Incluir config.php y depurar.php
-             require('../util/config.php'); // Ruta relativa desde php/recursos/ a php/util/
-             require('../util/depurar.php'); // Ruta relativa desde php/recursos/ a php/util/
-         ?>
     </header>
 
     <section class="resources-hero py-20 md:py-32 flex items-center text-center">

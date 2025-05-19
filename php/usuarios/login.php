@@ -44,7 +44,6 @@
             } else {
                 $error_message = "Nombre de usuario no encontrado.";
             }
-
             $stmt->close();
         }
     }
@@ -58,6 +57,8 @@
     <title>Iniciar Sesión | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../css/usuario.css">
+    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <!-- favicon -->
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex items-center justify-center">
     <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">

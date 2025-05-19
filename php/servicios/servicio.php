@@ -6,6 +6,8 @@
     <title>Listado de Servicios | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <!-- favicon -->
     <?php
         session_start();
         if (!isset($_SESSION["usuario"]["usuario"])) {
@@ -81,9 +83,6 @@
         </div>
 
         <?php
-            error_reporting( E_ALL );
-            ini_set("display_errors", 1 );
-            require('../util/config.php');
             //$idProducto = $_GET['id_producto'];
             //$sql = "SELECT * FROM productos WHERE id_producto = $idProducto";
             // $stmt = $_conexion->prepare($sql);

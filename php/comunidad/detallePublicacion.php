@@ -15,49 +15,49 @@
         exit;
     }
 
-$aliasUsuarioActual = isset($_SESSION["usuario"]["usuario"]) ? htmlspecialchars($_SESSION['usuario']['usuario']) : '';
+    $aliasUsuarioActual = isset($_SESSION["usuario"]["usuario"]) ? htmlspecialchars($_SESSION['usuario']['usuario']) : '';
 
-// --- Obtener el ID de la publicación de la URL ---
-$idPublicacion = $_GET['id'] ?? null;
-$publicacion = null; // Para almacenar los datos de la publicación
+    // --- Obtener el ID de la publicación de la URL ---
+    $idPublicacion = $_GET['id'] ?? null;
+    $publicacion = null; // Para almacenar los datos de la publicación
 
-$mensaje_error = ""; // Para mensajes de error
+    $mensaje_error = ""; // Para mensajes de error
 
-// --- Cargar la publicación desde la base de datos ---
-if ($idPublicacion === null || !is_numeric($idPublicacion)) {
-    $mensaje_error = "ID de publicación no especificado o inválido.";
-} else {
-    $idPublicacion = (int)$idPublicacion;
-
-    // Consultar la base de datos para obtener los detalles de la publicación
-    // Incluimos la columna categoria_nombre en la selección
-    $sqlPublicacion = "SELECT id, tipo, titulo, descripcion, usuario_alias, fecha_publicacion, categoria_nombre FROM necesidades_ofertas WHERE id = ?";
-    $stmtPublicacion = $_conexion->prepare($sqlPublicacion);
-
-    if ($stmtPublicacion === false) {
-        $mensaje_error = "Error preparando la consulta para cargar la publicación.";
-        error_log("Error preparando consulta SELECT necesidades_ofertas en detallePublicacion.php: " . $_conexion->error);
+    // --- Cargar la publicación desde la base de datos ---
+    if ($idPublicacion === null || !is_numeric($idPublicacion)) {
+        $mensaje_error = "ID de publicación no especificado o inválido.";
     } else {
-        $stmtPublicacion->bind_param("i", $idPublicacion);
-        $stmtPublicacion->execute();
-        $resultadoPublicacion = $stmtPublicacion->get_result();
+        $idPublicacion = (int)$idPublicacion;
 
-        if ($resultadoPublicacion->num_rows === 0) {
-            $mensaje_error = "Publicación no encontrada.";
+        // Consultar la base de datos para obtener los detalles de la publicación
+        // Incluimos la columna categoria_nombre en la selección
+        $sqlPublicacion = "SELECT id, tipo, titulo, descripcion, usuario_alias, fecha_publicacion, categoria_nombre FROM necesidades_ofertas WHERE id = ?";
+        $stmtPublicacion = $_conexion->prepare($sqlPublicacion);
+
+        if ($stmtPublicacion === false) {
+            $mensaje_error = "Error preparando la consulta para cargar la publicación.";
+            error_log("Error preparando consulta SELECT necesidades_ofertas en detallePublicacion.php: " . $_conexion->error);
         } else {
-            $publicacion = $resultadoPublicacion->fetch_assoc(); // Obtiene todos los datos
-             // Limpiar datos para mostrar en la página
-            $publicacion['titulo'] = htmlspecialchars($publicacion['titulo']);
-            $publicacion['descripcion'] = htmlspecialchars($publicacion['descripcion']);
-            $publicacion['usuario_alias'] = htmlspecialchars($publicacion['usuario_alias']);
-            $publicacion['categoria_nombre'] = htmlspecialchars($publicacion['categoria_nombre'] ?? 'No asignada'); // Limpiar y manejar si es NULL
+            $stmtPublicacion->bind_param("i", $idPublicacion);
+            $stmtPublicacion->execute();
+            $resultadoPublicacion = $stmtPublicacion->get_result();
 
+            if ($resultadoPublicacion->num_rows === 0) {
+                $mensaje_error = "Publicación no encontrada.";
+            } else {
+                $publicacion = $resultadoPublicacion->fetch_assoc(); // Obtiene todos los datos
+                // Limpiar datos para mostrar en la página
+                $publicacion['titulo'] = htmlspecialchars($publicacion['titulo']);
+                $publicacion['descripcion'] = htmlspecialchars($publicacion['descripcion']);
+                $publicacion['usuario_alias'] = htmlspecialchars($publicacion['usuario_alias']);
+                $publicacion['categoria_nombre'] = htmlspecialchars($publicacion['categoria_nombre'] ?? 'No asignada'); // Limpiar y manejar si es NULL
+
+            }
+            $stmtPublicacion->close();
         }
-        $stmtPublicacion->close();
     }
-}
 
-$_conexion->close(); // Cerrar la conexión a la base de datos al final
+    $_conexion->close(); // Cerrar la conexión a la base de datos al final
 
 ?>
 <!DOCTYPE html>
@@ -69,9 +69,10 @@ $_conexion->close(); // Cerrar la conexión a la base de datos al final
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
    
     <link rel="stylesheet" href="../../css/styles.css">
-     <link rel="stylesheet" href="../../css/tablon.css">
+    <link rel="stylesheet" href="../../css/tablon.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <!-- favicon -->
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
 

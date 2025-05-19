@@ -15,95 +15,95 @@
         exit;
     }
 
-$aliasUsuarioActual = isset($_SESSION["usuario"]["usuario"]) ? htmlspecialchars($_SESSION['usuario']['usuario']) : '';
+    $aliasUsuarioActual = isset($_SESSION["usuario"]["usuario"]) ? htmlspecialchars($_SESSION['usuario']['usuario']) : '';
 
-// --- Obtener la lista de categorías para el filtro ---
-$sqlCategoriasFiltro = "SELECT nombre FROM categoria ORDER BY nombre"; // Obtener solo nombres
-$resultadoCategoriasFiltro = $_conexion->query($sqlCategoriasFiltro);
+    // --- Obtener la lista de categorías para el filtro ---
+    $sqlCategoriasFiltro = "SELECT nombre FROM categoria ORDER BY nombre"; // Obtener solo nombres
+    $resultadoCategoriasFiltro = $_conexion->query($sqlCategoriasFiltro);
 
-$categoriasFiltro = [];
-if ($resultadoCategoriasFiltro) {
-    while ($fila = $resultadoCategoriasFiltro->fetch_assoc()) {
-        $categoriasFiltro[] = $fila['nombre'];
-    }
-    $resultadoCategoriasFiltro->free();
-} else {
-    error_log("Error al obtener categorías para el filtro del tablón: " . $_conexion->error);
-    // No es un error crítico, la página se mostrará sin filtro de categorías
-}
-
-// --- Obtener la categoría seleccionada para filtrar (de la URL o del formulario) ---
-// Priorizar POST si se envía el formulario, si no, usar GET de la URL
-$filtroCategoria = depurar($_REQUEST['filter_cat'] ?? ''); // Usar $_REQUEST para GET o POST
-
-// Validar si la categoría recibida en el filtro es una categoría válida
-$categoria_filtro_valida = false;
-if (empty($filtroCategoria)) {
-    $categoria_filtro_valida = true; // No filtrar es válido
-} elseif (in_array($filtroCategoria, $categoriasFiltro)) {
-    $categoria_filtro_valida = true; // La categoría existe en la lista
-} else {
-    // Categoría de filtro inválida, ignorarla
-    $filtroCategoria = '';
-     $mensaje_error_filtro = "La categoría de filtro seleccionada no es válida.";
-}
-
-
-// --- Construir la consulta SQL para obtener publicaciones ---
-$sqlPublicaciones = "SELECT id, tipo, titulo, descripcion, usuario_alias, fecha_publicacion, categoria_nombre FROM necesidades_ofertas"; // Seleccionar categoria_nombre
-
-$parametros = []; // Array para bind_param
-$tipos = ""; // String para bind_param (ej: "s")
-
-if (!empty($filtroCategoria) && $categoria_filtro_valida) {
-    // Añadir cláusula WHERE si hay un filtro de categoría válido
-    $sqlPublicaciones .= " WHERE categoria_nombre = ?";
-    $parametros[] = $filtroCategoria;
-    $tipos .= "s";
-}
-
-// Añadir ordenación
-$sqlPublicaciones .= " ORDER BY fecha_publicacion DESC";
-
-
-// --- Ejecutar la consulta ---
-$publicaciones = [];
-if (!empty($mensaje_error_filtro)) {
-     // No hacer consulta si el filtro es inválido
-} elseif ($_conexion) { // Asegurarse de que la conexión existe
-    $stmtPublicaciones = $_conexion->prepare($sqlPublicaciones);
-
-    if ($stmtPublicaciones === false) {
-        error_log("Error preparando consulta SELECT necesidades_ofertas en tablon.php: " . $_conexion->error);
-        // Manejar error de preparación
-        $mensaje_error_bd = "Error al cargar las publicaciones.";
+    $categoriasFiltro = [];
+    if ($resultadoCategoriasFiltro) {
+        while ($fila = $resultadoCategoriasFiltro->fetch_assoc()) {
+            $categoriasFiltro[] = $fila['nombre'];
+        }
+        $resultadoCategoriasFiltro->free();
     } else {
-        if (!empty($parametros)) {
-            // Si hay parámetros, enlazar
-            $stmtPublicaciones->bind_param($tipos, ...$parametros);
-        }
-
-        if ($stmtPublicaciones->execute()) {
-            $resultadoPublicaciones = $stmtPublicaciones->get_result();
-            if ($resultadoPublicaciones) {
-                while ($fila = $resultadoPublicaciones->fetch_assoc()) {
-                    $publicaciones[] = $fila; // Guarda todos los datos, incluida categoria_nombre
-                }
-                $resultadoPublicaciones->free();
-            }
-        } else {
-             error_log("Error ejecutando consulta SELECT necesidades_ofertas en tablon.php: " . $stmtPublicaciones->error);
-            $mensaje_error_bd = "Error al cargar las publicaciones.";
-        }
-        $stmtPublicaciones->close();
+        error_log("Error al obtener categorías para el filtro del tablón: " . $_conexion->error);
+        // No es un error crítico, la página se mostrará sin filtro de categorías
     }
-} else {
-     $mensaje_error_bd = "No se pudo conectar a la base de datos.";
-     error_log("Error de conexión a BD en tablon.php");
-}
+
+    // --- Obtener la categoría seleccionada para filtrar (de la URL o del formulario) ---
+    // Priorizar POST si se envía el formulario, si no, usar GET de la URL
+    $filtroCategoria = depurar($_REQUEST['filter_cat'] ?? ''); // Usar $_REQUEST para GET o POST
+
+    // Validar si la categoría recibida en el filtro es una categoría válida
+    $categoria_filtro_valida = false;
+    if (empty($filtroCategoria)) {
+        $categoria_filtro_valida = true; // No filtrar es válido
+    } elseif (in_array($filtroCategoria, $categoriasFiltro)) {
+        $categoria_filtro_valida = true; // La categoría existe en la lista
+    } else {
+        // Categoría de filtro inválida, ignorarla
+        $filtroCategoria = '';
+        $mensaje_error_filtro = "La categoría de filtro seleccionada no es válida.";
+    }
 
 
-$_conexion->close(); // Cerrar la conexión a la base de datos al final
+    // --- Construir la consulta SQL para obtener publicaciones ---
+    $sqlPublicaciones = "SELECT id, tipo, titulo, descripcion, usuario_alias, fecha_publicacion, categoria_nombre FROM necesidades_ofertas"; // Seleccionar categoria_nombre
+
+    $parametros = []; // Array para bind_param
+    $tipos = ""; // String para bind_param (ej: "s")
+
+    if (!empty($filtroCategoria) && $categoria_filtro_valida) {
+        // Añadir cláusula WHERE si hay un filtro de categoría válido
+        $sqlPublicaciones .= " WHERE categoria_nombre = ?";
+        $parametros[] = $filtroCategoria;
+        $tipos .= "s";
+    }
+
+    // Añadir ordenación
+    $sqlPublicaciones .= " ORDER BY fecha_publicacion DESC";
+
+
+    // --- Ejecutar la consulta ---
+    $publicaciones = [];
+    if (!empty($mensaje_error_filtro)) {
+        // No hacer consulta si el filtro es inválido
+    } elseif ($_conexion) { // Asegurarse de que la conexión existe
+        $stmtPublicaciones = $_conexion->prepare($sqlPublicaciones);
+
+        if ($stmtPublicaciones === false) {
+            error_log("Error preparando consulta SELECT necesidades_ofertas en tablon.php: " . $_conexion->error);
+            // Manejar error de preparación
+            $mensaje_error_bd = "Error al cargar las publicaciones.";
+        } else {
+            if (!empty($parametros)) {
+                // Si hay parámetros, enlazar
+                $stmtPublicaciones->bind_param($tipos, ...$parametros);
+            }
+
+            if ($stmtPublicaciones->execute()) {
+                $resultadoPublicaciones = $stmtPublicaciones->get_result();
+                if ($resultadoPublicaciones) {
+                    while ($fila = $resultadoPublicaciones->fetch_assoc()) {
+                        $publicaciones[] = $fila; // Guarda todos los datos, incluida categoria_nombre
+                    }
+                    $resultadoPublicaciones->free();
+                }
+            } else {
+                error_log("Error ejecutando consulta SELECT necesidades_ofertas en tablon.php: " . $stmtPublicaciones->error);
+                $mensaje_error_bd = "Error al cargar las publicaciones.";
+            }
+            $stmtPublicaciones->close();
+        }
+    } else {
+        $mensaje_error_bd = "No se pudo conectar a la base de datos.";
+        error_log("Error de conexión a BD en tablon.php");
+    }
+
+
+    $_conexion->close(); // Cerrar la conexión a la base de datos al final
 
 ?>
 <!DOCTYPE html>
@@ -117,7 +117,8 @@ $_conexion->close(); // Cerrar la conexión a la base de datos al final
     <link rel="stylesheet" href="../../css/styles.css">
     <link rel="stylesheet" href="../../css/tablon.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  
+    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <!-- favicon -->
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
 
@@ -133,8 +134,6 @@ $_conexion->close(); // Cerrar la conexión a la base de datos al final
                 <a href="../recursos/recursos.php" class="main-nav-link text-gray-700 hover:text-black mr-4">Recursos</a>
               
                 <?php
-
-
                     if (isset($_SESSION['usuario'])) {
                         // Obtener datos del usuario de la sesión, usando htmlspecialchars por seguridad
                         $nombreUsuario = htmlspecialchars($_SESSION['usuario']['usuario']); // Usamos 'usuario'
