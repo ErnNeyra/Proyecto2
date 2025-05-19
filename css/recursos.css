@@ -1,0 +1,147 @@
+/* css/recursos.css */
+
+/* Estilos generales para la página de recursos */
+/* Aunque Tailwind ya proporciona una base, puedes añadir ajustes aquí */
+
+/* Sección Hero o Introducción destacada */
+.resources-hero {
+    /* Ruta de la imagen de fondo que subiste */
+    /* Asumiendo que la guardas en css/img/ */
+    background-image: url('/php/util/img/fonfo.png');
+
+    background-size: cover;
+    background-position: center;
+    /* Color del texto por defecto dentro del hero - se puede sobreescribir en elementos específicos */
+    color: white;
+
+    position: relative;
+    overflow: hidden;
+}
+
+/* Capa oscura semi-transparente sobre la imagen de fondo */
+.resources-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Opacidad ajustada para asegurar contraste con texto blanco */
+    background-color: rgba(0, 0, 0, 0.7); /* Opacidad del 70% */
+    z-index: 1; /* Asegura que la capa esté sobre la imagen pero bajo el contenido */
+}
+
+/* Asegura que el contenido (texto, etc.) del hero esté sobre la capa oscura */
+.resources-hero .container {
+    position: relative;
+    z-index: 2;
+    /* Aseguramos el color blanco para todo el contenido dentro del contenedor */
+    color: white;
+}
+
+/* Estilo específico para el título H1 en el hero */
+.resources-hero h1 {
+    /* EXPLÍCITAMENTE: Color blanco para el título H1 */
+    color: white;
+    /* Ajustar la sombra del texto para que resalte más */
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+    /* Puedes añadir !important si es absolutamente necesario anular otros estilos */
+    /* color: white !important; */
+}
+
+/* Estilo específico para el párrafo P en el hero */
+.resources-hero p {
+    /* Aseguramos el color blanco para el párrafo */
+     color: white;
+    /* Ajustar la sombra del texto del párrafo */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+     /* Puedes añadir !important si es absolutamente necesario */
+     /* color: white !important; */
+}
+
+
+/* --- Estilos para el Contenido Principal (dentro del div bg-white) --- */
+
+/* Estilo para los títulos de sección */
+.resources-section-title {
+    border-bottom: 2px solid #F59E0B; /* Color amarillo de Tailwind 500 - Tu color de marca */
+    padding-bottom: 8px; /* Espacio bajo la línea */
+    margin-bottom: 24px; /* Espacio antes del contenido de la sección */
+    display: inline-block; /* Para que la línea solo ocupe el ancho del texto */
+}
+
+/* Estilo para los contenedores de cada recurso (tarjetas) */
+/* Aplicado a los divs que envuelven los enlaces de recursos */
+.resource-card {
+    background-color: #ffffff; /* Fondo blanco */
+    border: 1px solid #e5e7eb; /* Borde gris claro (Tailwind gray-200) */
+    border-radius: 0.5rem; /* Bordes redondeados (Tailwind rounded-md) */
+    padding: 1.5rem; /* Espaciado interno (Tailwind p-6) */
+    margin-bottom: 1rem; /* Espacio entre tarjetas */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* Sombra ligera (Tailwind shadow-md) */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Transición suave al pasar el ratón */
+    display: flex; /* Para alinear icono y texto */
+    align-items: center; /* Centra verticalmente el contenido */
+}
+
+.resource-card:hover {
+    transform: translateY(-5px); /* Efecto de levantar ligeramente al pasar el ratón */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Sombra más pronunciada en hover */
+}
+
+/* Estilo para los enlaces dentro de las tarjetas de recurso */
+.resource-card a {
+    color: #4F46E5; /* Color indigo de Tailwind 600 */
+    text-decoration: none; /* Sin subrayado por defecto */
+    font-weight: 600; /* Semi-negrita */
+    transition: color 0.2s ease-in-out;
+    flex-grow: 1; /* Permite que el enlace ocupe el espacio restante */
+}
+
+.resource-card a:hover {
+    color: #4338CA; /* Tono más oscuro al pasar el ratón */
+    text-decoration: underline; /* Subrayado al pasar el ratón */
+}
+
+/* Estilo para el texto de descripción dentro de las tarjetas */
+.resource-card p {
+    margin-top: 0.5rem; /* Espacio entre el enlace y la descripción */
+    font-size: 0.875rem; /* Tamaño de texto pequeño (Tailwind text-sm) */
+    color: #6B7280; /* Color gris (Tailwind gray-500) */
+}
+
+
+/* Estilo para iconos dentro de los elementos de recurso */
+.resource-icon {
+    color: #F59E0B; /* Color amarillo - Tu color de marca */
+    margin-right: 1rem; /* Espacio a la derecha del icono (ajustado de 0.75 a 1) */
+    min-width: 1.5rem; /* Asegura que el icono no se encoja si hay mucho texto */
+    text-align: center; /* Centra el icono si tiene min-width */
+}
+
+
+/* Estilo para la sección "Comunidad y Colaboración" o "Próximamente" */
+.coming-soon-section {
+    background-color: #FEF3C7; /* Fondo amarillo muy claro (Tailwind yellow-100) */
+    border-left: 4px solid #F59E0B; /* Borde izquierdo amarillo (Tailwind yellow-500) */
+    color: #92400E; /* Color de texto oscuro (Tailwind yellow-800) */
+    padding: 1.5rem; /* Espaciado interno (ajustado a 1.5rem) */
+    border-radius: 0.25rem; /* Bordes ligeramente redondeados */
+    margin-top: 2.5rem; /* Espacio superior (ajustado) */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* Sombra ligera */
+}
+
+.coming-soon-section .font-bold {
+    color: #78350F; /* Un tono más oscuro para el título "Próximamente" (Tailwind yellow-900) */
+    font-size: 1.125rem; /* Tamaño de texto más grande (Tailwind text-lg) */
+    margin-bottom: 0.5rem; /* Espacio debajo del título */
+}
+
+.coming-soon-section ul {
+    margin-top: 1rem; /* Espacio encima de la lista */
+}
+
+.coming-soon-section li {
+    margin-bottom: 0.5rem; /* Espacio entre elementos de la lista */
+}
+

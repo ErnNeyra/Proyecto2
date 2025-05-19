@@ -43,6 +43,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil de <?php echo htmlspecialchars($usuario['usuario']); ?> | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+       <link rel="stylesheet" href="../../css/panel.css">   
     <style>
         .profile-image {
             width: 150px;
@@ -73,9 +74,14 @@
             <a href="../../index.php" class="logo inline-block">
                 <img src="../util/img/Logo.png" alt="We-Connect Logo" class="h-10 w-auto">
             </a>
-            <nav class="flex items-center">
-                <a href="../productos/producto.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
-                <a href="../servicios/servicio.php" class="text-gray-700 hover:text-black mr-4">Servicios</a>
+            <nav class="flex items-center space-x-4">
+                <a href="../recursos/recursos.php" class="text-gray-700 hover:text-black mr-4 font-semibold">Recursos</a>
+                <a></a>
+                <a href="../productos/producto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Productos</a>
+                <a></a>
+                <a href="../servicios/servicio.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Servicios</a>
+
+                <a href="../contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
               <?php
                 if(isset($_SESSION["usuario"]["usuario"])){
                     echo '<div class="relative">';
@@ -85,6 +91,11 @@
                     echo '    </button>';
                     echo '    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-10 hidden">';
                     echo '        <a href="editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
+                     echo '        <hr class="border-gray-200">';
+                        echo '        <a href="../comunidad/tablon.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Tablón Comunidad</a>';
+                        echo '        <a href="../categoria/index.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Categoría</a>';
+                        echo '        <hr class="border-red-200">';
+                    
                     echo '        <hr class="border-gray-200">';
                     echo '        <a href="logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
                     echo '    </div>';
@@ -117,7 +128,6 @@
                         </svg>
                         <?php echo htmlspecialchars($usuario['email']); ?>
                     </p>
-                    <p class="text-gray-600 mb-2"><?php echo htmlspecialchars($usuario['area_trabajo'] ?? 'Sin área de trabajo'); ?></p>
                     <p class="text-gray-600 mb-4">
                         <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
