@@ -9,7 +9,13 @@
     <link rel="icon" href="../util/img/faviconWC.png " type="image/x-icon">
     <!-- favicon -->
     <?php
-        session_start();
+        error_reporting(E_ALL);
+        ini_set("display_errors",1);
+        require ('../util/config.php');
+        require ('../util/depurar.php');
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
         if (!isset($_SESSION["usuario"]["usuario"])) {
             //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
             //se ejecute el código body
@@ -29,8 +35,6 @@
                 <a></a>
                 <a href="../productos/producto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Productos</a>
                 <a></a>
-                <a href="../servicios/servicio.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Servicios</a>
-
                 <a href="../contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
                 <?php
                 if(isset($_SESSION["usuario"]["usuario"])){

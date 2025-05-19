@@ -302,8 +302,7 @@
     </footer>
 
     <script src="js/desplegable.js"></script>
-      <script src="js/script2.js"></script>
+    <script src="js/script2.js"></script>
     
-
 </body>
 </html>
