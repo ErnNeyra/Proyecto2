@@ -8,7 +8,7 @@
     <script src="https://www.paypal.com/sdk/js?client-id=AWrC9V-h8MeR2Pif0XqXYIYjnS7TsU-hIrTfp500af2-QelD_uy0wTLT-0k2irrQjV8MjFWjGmkKoVLn"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../../css/usuario.css">
-    <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
+    <link rel="icon" href="../util/img/faviconWC.png " type="image/x-icon">
     <!-- favicon -->
    
     <?php
