@@ -1,0 +1,133 @@
+/* panel.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(to right, #ece9e6, #ffffff);
+    color: #333;
+    min-height: 100vh;
+}
+
+header {
+    background: #ffffffcc;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header .logo img {
+    height: 48px;
+}
+
+nav a {
+    font-weight: 600;
+    margin-right: 1rem;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #0077b6;
+}
+
+#user-dropdown-button {
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#user-dropdown {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+main {
+    padding-top: 3rem;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border: 4px solid #fff;
+}
+
+.bg-glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+h1, h2 {
+    font-weight: 700;
+}
+
+.item-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.item-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.item-card img {
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    object-fit: cover;
+    height: 100%;
+}
+
+.btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.btn-danger {
+    background-color: #e63946;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #d62828;
+}
+
+.btn-primary {
+    background-color: #0077b6;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #023e8a;
+}
+
+@media (max-width: 768px) {
+    .profile-image {
+        width: 100px;
+        height: 100px;
+    }
+
+    .item-card {
+        flex-direction: column;
+    }
+
+    .item-card img {
+        border-radius: 1rem 1rem 0 0;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

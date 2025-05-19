@@ -1,5 +1,3 @@
-
- 
 <?php
     session_start();
     require('../util/config.php'); // Asegúrate de que este archivo contiene tu conexión a la base de datos ($_conexion)

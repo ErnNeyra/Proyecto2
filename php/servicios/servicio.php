@@ -13,8 +13,14 @@
              <a href="../../index.php" class="logo inline-block">
                 <img src="../util/img/Logo.png" alt="We-Connect Logo" class="h-10 w-auto">
             </a>
-            <nav class="flex items-center">
-                <a href="../productos/producto.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
+            <nav class="flex items-center space-x-4">
+                <a href="../recursos/recursos.php" class="text-gray-700 hover:text-black mr-4 font-semibold">Recursos</a>
+                <a></a>
+                <a href="../productos/producto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Productos</a>
+                <a></a>
+                <a href="../servicios/servicio.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Servicios</a>
+
+                <a href="../contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
                 <?php
                 session_start();
                 if(isset($_SESSION["usuario"]["usuario"])){
@@ -28,6 +34,9 @@
                     echo '        <a href="../usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Panel</a>';
                     echo '        <a href="../usuarios/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
                     echo '        <hr class="border-gray-200">';
+                    echo '        <a href="../comunidad/tablon.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Tablón Comunidad</a>';
+                    echo '        <a href="../categoria/index.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Categoría</a>';
+                    echo '        <hr class="border-red-200">';
                     echo '        <a href="../usuarios/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
                     echo '    </div>';
                     echo '</div>';

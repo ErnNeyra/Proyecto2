@@ -64,3 +64,42 @@ CREATE TABLE servicio (
     FOREIGN KEY (categoria) REFERENCES categoria(nombre),
     FOREIGN KEY (usuario) REFERENCES usuario(usuario)
 );
+USE WeConnect_bd;
+
+CREATE TABLE comentarios_servicio (
+    id_comentario INT AUTO_INCREMENT PRIMARY KEY,
+    id_servicio INT NOT NULL,
+    usuario_alias VARCHAR(100) NOT NULL,
+    valoracion INT CHECK (valoracion BETWEEN 1 AND 5),
+    comentario TEXT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_servicio) REFERENCES servicio(id_servicio) ON DELETE CASCADE,
+    FOREIGN KEY (usuario_alias) REFERENCES usuario(usuario) ON DELETE CASCADE
+);
+CREATE TABLE comentarios_producto (
+    id_comentario INT AUTO_INCREMENT PRIMARY KEY,
+    id_producto INT NOT NULL,
+    usuario_alias VARCHAR(100) NOT NULL,
+    valoracion INT CHECK (valoracion BETWEEN 1 AND 5),
+    comentario TEXT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_producto) REFERENCES producto(id_producto) ON DELETE CASCADE,
+    FOREIGN KEY (usuario_alias) REFERENCES usuario(usuario) ON DELETE CASCADE
+);
+USE WeConnect_bd;
+
+
+CREATE TABLE necesidades_ofertas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tipo ENUM('necesidad', 'oferta') NOT NULL, 
+    titulo VARCHAR(255) NOT NULL,
+    descripcion TEXT NOT NULL,
+    usuario_alias VARCHAR(100) NOT NULL, 
+    fecha_publicacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  
+    categoria_b2b VARCHAR(100),
+    estado ENUM('activo', 'completado', 'cerrado') DEFAULT 'activo', 
+
+    FOREIGN KEY (usuario_alias) REFERENCES usuario(usuario) ON DELETE CASCADE
+  
+);

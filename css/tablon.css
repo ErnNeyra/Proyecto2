@@ -1,0 +1,88 @@
+  /* Estilos básicos para las publicaciones si no usas tablon.css */
+        .publicacion-card {
+            border: 1px solid #e5e7eb; /* Tailwind gray-200 */
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            background-color: #ffffff; /* Tailwind white */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 1rem; /* mb-4 */
+        }
+        .publicacion-card h3 {
+            font-weight: 600; /* font-semibold */
+            color: #1f2937; /* gray-800 */
+            margin-bottom: 0.5rem;
+        }
+        .publicacion-card p {
+            color: #374151; /* gray-700 */
+            font-size: 0.875rem; /* text-sm */
+        }
+         .publicacion-card .meta {
+            color: #6b7280; /* gray-500 */
+            font-size: 0.75rem; /* text-xs */
+            margin-top: 0.5rem;
+         }
+         .publicacion-card .meta strong {
+            font-weight: 600;
+            color: #4b5563; /* gray-600 */
+         }
+          .publicacion-card a.detalle-link {
+             color: #4F46E5; /* Tailwind indigo-600 */
+             font-weight: 500; /* font-medium */
+             font-size: 0.875rem; /* text-sm */
+             margin-top: 1rem;
+             display: inline-block; /* Para que se aplique el margin-top */
+          }
+           .publicacion-card a.detalle-link:hover {
+               text-decoration: underline;
+           }
+            /* Estilos específicos para la página de detalle si no usas tablon.css */
+        .publicacion-detail-card {
+            border: 1px solid #e5e7eb; /* Tailwind gray-200 */
+            border-radius: 0.5rem;
+            padding: 2rem;
+            background-color: #ffffff; /* Tailwind white */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .publicacion-detail-card h1 {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            color: #1f2937; /* gray-800 */
+            margin-bottom: 1rem;
+        }
+         .publicacion-detail-card .meta-info {
+             color: #6b7280; /* gray-500 */
+             font-size: 0.875rem; /* text-sm */
+             margin-bottom: 1.5rem;
+             padding-bottom: 1.5rem;
+             border-bottom: 1px solid #e5e7eb;
+         }
+          .publicacion-detail-card .meta-info strong {
+              font-weight: 600;
+              color: #4b5563; /* gray-600 */
+          }
+         .publicacion-detail-card p {
+             color: #374151; /* gray-700 */
+             font-size: 1rem; /* text-base */
+             line-height: 1.5;
+             margin-bottom: 1.5rem;
+         }
+         .action-links {
+              margin-top: 2rem;
+              border-top: 1px solid #e5e7eb;
+              padding-top: 1.5rem;
+         }
+          .action-links a {
+               display: inline-block;
+               margin-right: 1rem;
+               color: #4F46E5; /* indigo-600 */
+               font-weight: 500;
+               font-size: 0.875rem;
+          }
+          .action-links a:hover {
+               text-decoration: underline;
+          }
+           /* Estilo específico para la categoría si quieres destacarla */
+          .publicacion-detail-card .categoria-display {
+               font-weight: 600;
+               color: #1D4ED8; /* blue-700 */
+          }

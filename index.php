@@ -6,9 +6,12 @@
     <title>We-Connect: Tu Plataforma de Conexión Profesional</title>
 
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/index.css">
+     <link rel="stylesheet" href="css/styles.css">
+    
 
-    <link rel="stylesheet" href="css/styles.css">
-     <link rel="stylesheet" href="css/index.css"> <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -22,6 +25,7 @@
                 <img src="php/util/img/Logo.png" alt="We-Connect Logo" class="h-10 w-auto">
             </a>
             <nav class="flex items-center space-x-4 md:space-x-6">
+                <a href="php/recursos/recursos.php" class="text-gray-700 hover:text-black mr-4 font-semibold">Recursos</a>
                 <a href="php/productos/producto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Productos</a>
                 <a href="php/servicios/servicio.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Servicios</a>
                 <a href="php/contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
@@ -53,6 +57,10 @@
                         echo '        <a href="php/usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Perfil</a>';
                         echo '        <a href="php/usuarios/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
                         echo '        <hr class="border-gray-200">';
+                       echo '        <a href="php/comunidad/tablon.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Tablón Comunidad</a>';
+                        echo '        <a href="php/categoria/index.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Categoria</a>';
+
+                       echo '        <hr class="border-red-200">';
                         echo '        <a href="php/usuarios/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
                         echo '    </div>';
                         echo '</div>';
@@ -265,13 +273,13 @@
                                 class="hover:text-marca-secundaria transition duration-200">Contacto</a></li>
                     </ul>
                 </div>
-                <div class="footer-section">
-                    <h3 class="text-lg font-semibold mb-4">Soporte</h3>
+               <div class="footer-section">
+                    <h3 class="text-lg font-semibold mb-4 text-white">Soporte</h3>
                     <ul class="list-none p-0">
-                        <li><a href="#" class="hover:text-marca-secundaria transition duration-200">Preguntas Frecuentes</a></li>
-                        <li><a href="#" class="hover:text-marca-secundaria transition duration-200">Términos de Servicio</a></li>
-                        <li><a href="#" class="hover:text-marca-secundaria transition duration-200">Política de Privacidad</a></li>
-                        <li><a href="php/contacto.php" class="hover:text-marca-secundaria transition duration-200">Ayuda</a></li>
+                        <li><a href="php/terminos/faq.php" class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Preguntas Frecuentes</a></li>
+                        <li><a href="php/terminos/terms.php" class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Términos de Servicio</a></li>
+                        <li><a href="php/terminos/privacy.php" class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Política de Privacidad</a></li>
+                        <li><a href="php/contacto.php" class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Ayuda</a></li>
                     </ul>
                 </div>
                 <div class="footer-section social-icons-footer">
@@ -292,7 +300,9 @@
         </div>
     </footer>
 
+    <script src="js/desplegable.js"></script>
+      <script src="js/script2.js"></script>
+    
 
-
-    <script src="js/desplegable.js"></script> <script src="js/script2.js"></script> </body>
+</body>
 </html>

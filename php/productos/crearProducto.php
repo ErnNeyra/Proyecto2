@@ -6,67 +6,57 @@
     session_start();
 
     // Verificar si el usuario ha iniciado sesión
-   if (!isset($_SESSION['usuario'])) {
-        // Si no ha iniciado sesión, redirigir a la página de inicio de sesión
-        header("location: ../usuarios/login.php"); // O una página de error de acceso no autorizado
+    if (!isset($_SESSION['usuario'])) {
+        header("location: ../usuarios/login.php");
         echo"<h2>Debes iniciar sesión para añadir un producto.</h2>";
         exit();
-    }else{
-        // Puedes usar $id_usuario para realizar consultas a la base de datos o cualquier otra operación
+    } else {
         echo "<h2>Bienvenid@ ".$_SESSION["usuario"]["usuario"]."</h2>";
         echo "<h2>Tu ID de usuario es: ".$_SESSION["usuario"]["id_usuario"]."</h2>";
     }
-    $error = "";
+
+    $errorNombre = $errorDescripcion = $errorPrecio = $errorCategoria = $errorImagen = $error = "";
     $success = "";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        //Recibo el usuario con la sesión
         $usuarioSesion = $_SESSION['usuario'];
 
-        // Validación de campos
-        //Valido el nombre del producto
-        $tmpNombre = depurar(ucwords(strtolower($_POST['nombre'])));
+        // Validación del nombre
+        $tmpNombre = depurar(ucwords(strtolower($_POST['nombre'] ?? "")));
         if($tmpNombre == "") {
             $errorNombre = "El nombre es obligatorio";
+        } elseif(strlen($tmpNombre) < 3 || strlen($tmpNombre) > 100) {
+            $errorNombre = "El nombre debe tener entre 3 y 100 caracteres";
         } else {
-            if(strlen($tmpNombre) < 3 || strlen($tmpNombre) > 100) {
-                $errorNombre = "El nombre debe tener entre 3 y 100 caracteres";
-            } else {
-                $nombre = $tmpNombre;
-            }
+            $nombre = $tmpNombre;
         }
-        //Valido la descripción del producto
-        $tmpDescripcion = depurar(ucwords(strtolower($_POST['descripcion'])));
+
+        // Validación de la descripción
+        $tmpDescripcion = depurar(ucwords(strtolower($_POST['descripcion'] ?? "")));
         if($tmpDescripcion == "") {
             $errorDescripcion = "La descripción es obligatoria";
+        } elseif(strlen($tmpDescripcion) < 10 || strlen($tmpDescripcion) > 500) {
+            $errorDescripcion = "La descripción debe tener entre 10 y 500 caracteres";
         } else {
-            if(strlen($tmpDescripcion) < 10 || strlen($tmpDescripcion) > 500) {
-                $errorDescripcion = "La descripción debe tener entre 10 y 500 caracteres";
-            } else {
-                $descripcion = $tmpDescripcion;
-            }
+            $descripcion = $tmpDescripcion;
         }
-        //Valido el precio del producto
-        $tmpPrecio = depurar($_POST['precio']);
+
+        // Validación del precio con límite razonable
+        $tmpPrecio = depurar($_POST['precio'] ?? "");
         if($tmpPrecio == "") {
             $errorPrecio = "El precio es obligatorio";
+        } elseif(filter_var($tmpPrecio, FILTER_VALIDATE_FLOAT) === FALSE) {
+            $errorPrecio = "El precio debe ser un número válido";
+        } elseif($tmpPrecio < 1) {
+            $errorPrecio = "El precio debe ser al menos 1 €";
+        } elseif($tmpPrecio > 1000000) {
+            $errorPrecio = "El precio no puede superar los 1.000.000 €";
         } else {
-            if(filter_var($tmpPrecio, FILTER_VALIDATE_FLOAT) === FALSE) {
-                $errorPrecio = "El precio debe ser un número válido";
-            } else {
-                if($tmpPrecio <= 0) {
-                    $errorPrecio = "El precio debe ser mayor que 0";
-                } else {
-                    $precio = $tmpPrecio;
-                }
-            }
+            $precio = $tmpPrecio;
         }
 
-
-        //Valido la categoria del producto
-        $categoria = $_POST['categoria'];
-
-        // Validación de categoría
+        // Validación de la categoría
+        $categoria = $_POST['categoria'] ?? "";
         $checkCategoria = $_conexion->prepare("SELECT nombre FROM categoria WHERE nombre = ?");
         $checkCategoria->bind_param("s", $categoria);
         $checkCategoria->execute();
@@ -74,55 +64,66 @@
             $errorCategoria = "Categoría inválida";
         }
 
+        // Validación de imagen
+        $errorImagen = "";
+        $ubicacionFinal = ""; // Variable para guardar la ruta de la imagen
 
-        //Validación de imagen
-        //$_FILES es un array BIDIMENSIONAL, mientras que $_POST es un array UNIDIMENSIONAL
-        
-        $imagen = depurar($_FILES["imagen"]["name"]);
-        $ubicacionTemporal= depurar($_FILES["imagen"]["tmp_name"]);
-        $imagenTipo = $_FILES["imagen"]["type"];
         if (isset($_FILES["imagen"]) && $_FILES["imagen"]["error"] == 0) {
-        // Procesar imagen
-        } else {
-            $errorImagen = "Debe seleccionar una imagen válida.";
-        }
-        $permitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-        if (!in_array($imagenTipo, $permitidos)) {
-            $errorImagen = "Solo se permiten imágenes JPG, PNG, GIF o WebP.";
-        }
-        $extension = pathinfo($imagen, PATHINFO_EXTENSION);
-        $nombreImagen = uniqid('img_', true) . '.' . $extension;
-        $ubicacionFinal = "../util/img/$nombreImagen";
+            $permitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            $imagenTipo = $_FILES["imagen"]["type"];
+            $imagenTamano = $_FILES["imagen"]["size"];
+            $maxTamano = 2 * 1024 * 1024; // 2MB
 
-
-        //mueve el archivo que se ha cargado de una ubicación a otra
-        move_uploaded_file($ubicacionTemporal, $ubicacionFinal);
-
-        // Si no hay errores, proceder con la inserción
-        if(empty($error)) {
-            if(isset($nombre) && isset($descripcion) && isset($precio) && isset($usuarioSesion["usuario"]) && isset($categoria) && isset($ubicacionFinal)){
-                $sql = $_conexion->prepare("INSERT INTO producto
-                    (nombre, descripcion, precio, usuario, categoria, imagen)
-                    VALUES (?, ?, ?, ?, ?, ?)"
-                );
-                $sql->bind_param("ssdsss",
-                    $nombre, $descripcion, $precio, $usuarioSesion["usuario"], $categoria, $ubicacionFinal
-                );
-                if ($sql->execute()) {
-                    $success = "Producto creado con éxito.";
+            // Validar tipo de archivo
+            if (!in_array($imagenTipo, $permitidos)) {
+                $errorImagen = "Solo se permiten imágenes JPG, PNG, GIF o WebP.";
+            }
+            // Validar tamaño
+            elseif ($imagenTamano > $maxTamano) {
+                $errorImagen = "La imagen no puede superar los 2MB.";
+            }
+            else {
+                // Generar nombre único
+                $extension = pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
+                $nombreImagen = uniqid('img_', true) . '.' . $extension;
+                $directorioDestino = "../util/img/";
+                
+                $ubicacionFinal = $directorioDestino . $nombreImagen;
+                
+                // Mover archivo
+                if (move_uploaded_file($_FILES["imagen"]["tmp_name"], $ubicacionFinal)) {
+                    // La imagen se subió correctamente, $ubicacionFinal contiene la ruta
                 } else {
-                    $error = "Error al crear el producto: " . $_conexion->error;
+                    $errorImagen = "Error al subir la imagen.";
                 }
             }
+        } else {
+            $errorImagen = "Debes seleccionar una imagen válida.";
         }
 
+
+        // Si no hay errores, proceder con la inserción
+        if(
+            empty($errorNombre) &&
+            empty($errorDescripcion) &&
+            empty($errorPrecio) &&
+            empty($errorCategoria) &&
+            empty($errorImagen)
+        ) {
+            $sql = $_conexion->prepare("INSERT INTO producto (nombre, descripcion, precio, usuario, categoria, imagen) VALUES (?, ?, ?, ?, ?, ?)");
+            $sql->bind_param("ssdsss", $nombre, $descripcion, $precio, $usuarioSesion["usuario"], $categoria, $ubicacionFinal);
+            if ($sql->execute()) {
+                $success = "Producto creado con éxito.";
+            } else {
+                $error = "Error al crear el producto: " . $_conexion->error;
+            }
+        }
     }
 
+    // Cargar categorías para el formulario
     $sql = "SELECT nombre FROM categoria";
     $resultado = $_conexion -> query($sql);
     $categorias = [];
-    /* fetch_assoc() devuelve una fila de resultados como un array asociativo. Esto significa que podrás acceder
-    a cada columna de la fila por su nombre */
     while($fila = $resultado -> fetch_assoc()){
         array_push($categorias, $fila["nombre"]);
     }
@@ -143,8 +144,14 @@
             <a href="../../index.php" class="logo inline-block">
                 <img src="../util/img/Logo.png" alt="We-Connect Logo" class="h-10 w-auto">
             </a>
-            <nav class="flex items-center">
-                <a href="producto.php" class="text-gray-700 hover:text-black mr-4">Productos</a>
+           <nav class="flex items-center space-x-4">
+                <a href="../recursos/recursos.php" class="text-gray-700 hover:text-black mr-4 font-semibold">Recursos</a>
+                <a></a>
+                <a href="../productos/producto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Productos</a>
+                <a></a>
+                <a href="../servicios/servicio.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Servicios</a>
+
+                <a href="../contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
                 <?php
                     if(isset($_SESSION["usuario"])){
                         $aliasUsuario = htmlspecialchars($_SESSION['usuario']['usuario']);
@@ -157,6 +164,9 @@
                         echo '        <a href="../usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Panel</a>';
                         echo '        <a href="../usuarios/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
                         echo '        <hr class="border-gray-200">';
+                        echo '        <a href="../comunidad/tablon.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Tablón Comunidad</a>';
+                        echo '        <a href="../categoria/index.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Categoría</a>';
+                        echo '        <hr class="border-red-200">';
                         echo '        <a href="../usuarios/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
                         echo '    </div>';
                         echo '</div>';
@@ -186,19 +196,17 @@
             <form method="post" enctype="multipart/form-data">
                 <div class="mb-4">
                     <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Nombre:</label>
-                    <input type="text" id="nombre" name="nombre" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                    <?php if (isset($errorNombre)) echo "<span class='text-red-500 text-xs italic'>$errorNombre</span>"; ?>
+                    <input type="text" id="nombre" name="nombre" value="<?php echo htmlspecialchars($_POST['nombre'] ?? ''); ?>" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <?php if (!empty($errorNombre)) echo "<span class='text-red-500 text-xs italic'>$errorNombre</span>"; ?>
                 </div>
                 <div class="mb-4">
                     <label for="descripcion" class="block text-gray-700 text-sm font-bold mb-2">Descripción:</label>
-                    <textarea id="descripcion" name="descripcion" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
-                    <?php if (isset($errorDescripcion)) echo "<span class='text-red-500 text-xs italic'>$errorDescripcion</span>"; ?>
-                    
+                    <textarea id="descripcion" name="descripcion" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required><?php echo htmlspecialchars($_POST['descripcion'] ?? ''); ?></textarea>
+                    <?php if (!empty($errorDescripcion)) echo "<span class='text-red-500 text-xs italic'>$errorDescripcion</span>"; ?>
                     <!-- Botón para mejorar descripción -->
                     <button type="button" id="mejorarDescripcion" class="mt-2 bg-yellow-500 text-black py-1 px-3 rounded-md hover:bg-yellow-600 text-sm">
                         Mejorar Descripción
                     </button>
-                    
                     <!-- Div para mostrar la sugerencia -->
                     <div id="sugerenciaDescripcion" class="hidden mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
                         <p class="text-sm text-gray-700 mb-2">Sugerencia de descripción mejorada:</p>
@@ -210,24 +218,24 @@
                 </div>
                 <div class="mb-4">
                     <label for="precio" class="block text-gray-700 text-sm font-bold mb-2">Precio:</label>
-                    <input type="number" id="precio" name="precio" step="0.01" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                    <?php if (isset($errorPrecio)) echo "<span class='text-red-500 text-xs italic'>$errorPrecio</span>"; ?>
+                    <input type="number" id="precio" name="precio" step="0.01" value="<?php echo htmlspecialchars($_POST['precio'] ?? ''); ?>" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <?php if (!empty($errorPrecio)) echo "<span class='text-red-500 text-xs italic'>$errorPrecio</span>"; ?>
                 </div>
                 <div class="mb-4">
-                    <label for="imagen" class="block text-gray-700 text-sm font-bold mb-2">Imagen (opcional):</label>
-                    <input type="file" id="imagen" name="imagen" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <p class="text-gray-500 text-xs italic">Formatos permitidos: JPG, PNG. Tamaño máximo: [establecer límite].</p>
+                    <label for="imagen" class="block text-gray-700 text-sm font-bold mb-2">Imagen (obligatoria):</label>
+                    <input type="file" id="imagen" name="imagen" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <p class="text-gray-500 text-xs italic">Formatos permitidos: JPG, PNG, GIF, WebP. Tamaño máximo: 2MB.</p>
+                    <?php if (!empty($errorImagen)) echo "<span class='text-red-500 text-xs italic'>$errorImagen</span>"; ?>
                 </div>
                 <div class="mb-4">
                     <label for="categoria" class="block text-gray-700 text-sm font-bold mb-2">Categoría:</label>
                     <select required id="categoria" name="categoria" class="form-select form-select-lg">
-                    <option value="">---Selecciona una categoría---</option>
-                    <?php
-                    foreach ($categorias as $categoria): ?>
-                        <option value="<?php echo $categoria;?>"><?= $categoria ?></option>
-                    <?php endforeach; ?>
+                        <option value="">---Selecciona una categoría---</option>
+                        <?php foreach ($categorias as $cat): ?>
+                            <option value="<?php echo htmlspecialchars($cat); ?>" <?php if(($_POST['categoria'] ?? '') == $cat) echo "selected"; ?>><?= htmlspecialchars($cat) ?></option>
+                        <?php endforeach; ?>
                     </select>
-                    <?php if (isset($errorCategoria)) echo "<span class='text-red-500 text-xs italic'>$errorCategoria</span>"; ?>
+                    <?php if (!empty($errorCategoria)) echo "<span class='text-red-500 text-xs italic'>$errorCategoria</span>"; ?>
                 </div>
                 <div class="flex items-center justify-between">
                     <button type="submit" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:shadow-outline">Crear Producto</button>
@@ -240,8 +248,6 @@
     <footer class="bg-black py-4 text-center text-gray-400">
         &copy; 2025 We-Connect. Todos los derechos reservados.
     </footer>
-</body>
-</html>
     <script>
         // Funcionalidad para mejorar descripción
         document.getElementById('mejorarDescripcion').addEventListener('click', async function() {
@@ -267,7 +273,6 @@
                 });
 
                 const data = await response.json();
-
                 if (data.success) {
                     textoSugerencia.textContent = data.success;
                     sugerenciaDiv.classList.remove('hidden');
@@ -289,6 +294,5 @@
             document.getElementById('sugerenciaDescripcion').classList.add('hidden');
         });
     </script>
-    <script src="../../js/script2.js"></script>
 </body>
 </html>

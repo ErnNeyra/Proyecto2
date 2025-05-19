@@ -1,877 +1,368 @@
-/*
- * Archivo CSS Principal para We-Connect (styles.css)
- * Diseño profesional y elegante, optimizado para trabajar con Tailwind CSS.
- */
-
-/* ==========================================================================
-   Variables de Marca y Diseño (Refinadas y Completas)
-   ========================================================================== */
+/* ===============================
+   Variables, Colores y Diseño
+   =============================== */
 
 :root {
-    /* Colores de Marca */
-    --color-marca-primario: #1a3d5e; /* Azul Oscuro Profundo */
-    --color-marca-primario-rgb: 26, 61, 94; /* Para rgba en sombras/borders */
-    --color-marca-primario-oscuro: #15314b; /* Un tono más oscuro para hover, etc. */
-
-    --color-marca-secundaria: #f3a638; /* Dorado Vibrante */
-    --color-marca-secundaria-rgb: 243, 166, 56; /* Para rgba */
-    --color-marca-secundaria-oscuro: #e0972d; /* Un tono más oscuro */
-
-    /* Colores de Texto */
-    --color-texto-principal: #333; /* Texto general y etiquetas de formulario */
-    --color-texto-oscuro: #1F2937; /* Títulos, elementos importantes */
-    --color-texto-claro: #6B7280; /* Texto secundario, descripciones, placeholders */
-    --color-texto-inverso: #f8f8f8; /* Texto sobre fondos oscuros */
-
-    /* Colores de Fondo */
-    --color-fondo-claro: #f8f8f8; /* Secciones claras */
-    --color-fondo-oscuro: #121212; /* Footer, secciones oscuras */
-    --color-fondo-card: #ffffff; /* Fondos de tarjetas o módulos */
-    --color-fondo-transparente-claro: rgba(255, 255, 255, 0.9); /* Para headers pegajosos */
-    --color-fondo-transparente-oscuro: rgba(0, 0, 0, 0.7); /* Para overlays o elementos sobre fondos */
-
-
-    /* Sombras */
-    --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
-    --sombra-media: 0 8px 20px rgba(0, 0, 0, 0.15);
-    --sombra-fuerte: 0 12px 30px rgba(0, 0, 0, 0.2);
-    --sombra-card-hover: var(--sombra-media); /* Variable para consistencia en hover de tarjetas */
-    --sombra-header: var(--sombra-suave);
-
-    /* Transiciones */
-    --transicion-default: 0.3s ease-in-out;
-    --transicion-rapida: 0.2s ease-out;
-    --transicion-lenta: 0.5s ease;
-
-    /* Espaciado (Definimos variables para consistencia, aunque Tailwind también las tiene) */
-    --espacio-xs: 0.25rem; /* 4px */
-    --espacio-sm: 0.5rem; /* 8px */
-    --espacio-md: 1rem; /* 16px */
-    --espacio-lg: 1.5rem; /* 24px */
-    --espacio-xl: 2rem; /* 32px */
-    --espacio-2xl: 3rem; /* 48px */
-
-
-    /* Radio de Borde */
-    --borde-redondo-sm: 4px;
-    --borde-redondo-md: 8px;
-    --borde-redondo-lg: 12px;
-    --borde-redondo-completo: 9999px;
+  /* ... (sin cambios en las variables que ya tenías) ... */
 }
 
-/* Utilidades de Marca (Si no usas @apply o extiendes Tailwind config) */
-/* Considera eliminar estas clases y usar las utilidades de Tailwind si ya las configuraste */
-.bg-marca-secundaria { background-color: var(--color-marca-secundaria); }
-.text-marca-secundaria { color: var(--color-marca-secundaria); }
-/* Asegúrate de que tus utilidades de Tailwind usen estas mismas variables en tailwind.config.js */
+/* ===============================
+   Utilidades de Marca
+   =============================== */
 
+.bg-marca-secundaria {
+  background-color: var(--color-marca-secundaria);
+}
+.text-marca-secundaria {
+  color: var(--color-marca-secundaria);
+}
 
-/* ==========================================================================
-   Estilos Generales y Tipografía (Pulido)
-   ========================================================================== */
+/* ===============================
+   Estilos Globales y Tipografía
+   =============================== */
 
 body {
-    font-family: 'Open Sans', sans-serif;
-    color: var(--color-texto-principal);
-    line-height: 1.7;
-    /* Tailwind maneja bg-gray-100, font-sans, min-h-screen, flex, flex-col */
-    -webkit-font-smoothing: antialiased; /* Mejorar renderizado de fuente en Webkit */
-    -moz-osx-font-smoothing: grayscale; /* Mejorar renderizado de fuente en Firefox */
+  font-family: 'Open Sans', sans-serif;
+  color: var(--color-texto-principal);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Poppins', sans-serif; /* Usando Poppins como en la sugerencia anterior */
-    color: var(--color-texto-oscuro);
-    line-height: 1.3;
-    margin-bottom: var(--espacio-sm); /* Margen inferior por defecto */
+  font-family: 'Poppins', sans-serif;
+  color: var(--color-texto-oscuro);
+  line-height: 1.3;
+  margin-bottom: var(--espacio-sm);
 }
 
 p {
-     margin-bottom: var(--espacio-md); /* Margen inferior por defecto */
+  margin-bottom: var(--espacio-md);
 }
 
 a {
-    text-decoration: none;
-    color: inherit; /* Por defecto, hereda el color del padre */
-    transition: color var(--transicion-rapida), opacity var(--transicion-rapida), transform var(--transicion-rapida);
+  text-decoration: none;
+  color: inherit;
+  transition: color var(--transicion-rapida), opacity var(--transicion-rapida), transform var(--transicion-rapida);
 }
-
 a:hover {
-    opacity: 0.9; /* Ligeramente transparente */
+  opacity: 0.9;
+  color: var(--color-marca-secundaria);
+}
+a:focus-visible {
+  outline: 2px solid var(--color-marca-secundaria);
+  outline-offset: 2px;
 }
 
-/* Estilos de Botón Genéricos (Si decides centralizarlos aquí) */
-/* Puedes usar @apply en tu CSS si usas PostCSS */
+/* ===============================
+   Botones Globales
+   =============================== */
+
 .btn {
-    display: inline-block;
-    padding: var(--espacio-sm) var(--espacio-md);
-    border-radius: var(--borde-redondo-sm);
-    font-weight: 600;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color var(--transicion-default), transform var(--transicion-default), box-shadow var(--transicion-default);
-    border: none;
-    user-select: none; /* Prevenir selección de texto */
+  display: inline-block;
+  padding: var(--espacio-sm) var(--espacio-md);
+  border-radius: var(--borde-redondo-sm);
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color var(--transicion-default), transform var(--transicion-default), box-shadow var(--transicion-default);
+  border: none;
+  user-select: none;
 }
 
 .btn-primary {
-    background-color: var(--color-marca-primario);
-    color: var(--color-texto-inverso);
+  background-color: var(--color-marca-primario);
+  color: var(--color-texto-inverso);
 }
 .btn-primary:hover {
-    background-color: var(--color-marca-primario-oscuro);
-    transform: translateY(-2px);
-    box-shadow: var(--sombra-suave);
+  background-color: var(--color-marca-primario-oscuro);
+  transform: translateY(-2px);
+  box-shadow: var(--sombra-suave);
 }
 
 .btn-secondary {
-    background-color: var(--color-marca-secundaria);
-    color: var(--color-texto-oscuro);
+  background-color: var(--color-marca-secundaria);
+  color: var(--color-texto-oscuro);
 }
 .btn-secondary:hover {
-    background-color: var(--color-marca-secundaria-oscuro);
-    transform: translateY(-2px);
-    box-shadow: var(--sombra-suave);
+  background-color: var(--color-marca-secundaria-oscuro);
+  transform: translateY(-2px);
+  box-shadow: var(--sombra-suave);
 }
 
 .btn-outline {
-    background-color: transparent;
-    border: 2px solid var(--color-marca-primario);
-    color: var(--color-marca-primario);
+  background-color: transparent;
+  border: 2px solid var(--color-marca-primario);
+  color: var(--color-marca-primario);
 }
 .btn-outline:hover {
-    background-color: var(--color-marca-primario);
-    color: var(--color-texto-inverso);
-    transform: translateY(-2px);
-    box-shadow: var(--sombra-suave);
+  background-color: var(--color-marca-primario);
+  color: var(--color-texto-inverso);
+  transform: translateY(-2px);
+  box-shadow: var(--sombra-suave);
 }
 
+/* ===============================
+   Header (Mejorado)
+   =============================== */
 
-/* ==========================================================================
-   Header (Pulido con Transparencia y Sombra)
-   ========================================================================== */
-
-/* Header */
 header {
-    background-color: #fff; /* Fondo blanco para el header */
-    border-bottom: 1px solid #E2E8F0; /* Línea sutil en la parte inferior */
+  background-color: #fff;
+  border-bottom: 1px solid #E2E8F0;
 }
 
 header .logo {
-    color: #1A202C; /* Color del logo */
-    /* Las clases font-bold text-2xl de Tailwind ya aplican el tamaño y negrita */
+  color: var(--color-marca-primario);
 }
 
 header nav a {
-    color: #4A5568; /* Color de los enlaces de navegación (gris oscuro) */
-     /* Las clases text-gray-700 transition duration-200 de Tailwind están bien */
+  color: #4A5568;
+  transition: color var(--transicion-rapida);
 }
-
 header nav a:hover {
-    color: var(--color-primario); /* Usar color de marca al pasar el ratón */
-     /* Tailwind hover:text-yellow-500 puede sobrescribir esto si no ajustas la especificidad o el config de Tailwind */
+  color: var(--color-marca-secundaria);
 }
 
-/* Estilos para el desplegable de usuario */
 #user-dropdown-button {
-    cursor: pointer;
-     /* Las clases flex items-center text-gray-700 hover:text-yellow-500 transition duration-200 focus:outline-none de Tailwind están bien */
-     color: #4A5568; /* Asegurar color inicial */
+  cursor: pointer;
+  color: #4A5568;
 }
 #user-dropdown-button:hover {
-     color: var(--color-primario); /* Usar color de marca al pasar el ratón */
+  color: var(--color-marca-secundaria);
 }
 
-
 #user-dropdown {
-    /* Las clases hidden, absolute, right-0, mt-2, w-48, bg-white, rounded-md, shadow-xl, z-10 de Tailwind están bien */
-    border: 1px solid #E2E8F0; /* Borde sutil para el desplegable */
+  border: 1px solid #E2E8F0;
 }
 
 #user-dropdown a {
-    color: #4A5568; /* Color de los enlaces del desplegable */
-     /* Las clases block px-4 py-2 text-gray-800 transition duration-200 de Tailwind están bien */
+  color: #4A5568;
 }
-
 #user-dropdown a:hover {
-    background-color: #F7FAFC; /* Fondo suave al pasar el ratón */
-    color: #1A202C; /* Texto más oscuro al pasar el ratón */
-     /* Tailwind hover:bg-gray-100 puede sobrescribir esto */
+  background-color: #F7FAFC;
+  color: #1A202C;
 }
 
-/* Estilos específicos para el botón de registro en el header */
 header .cta-button {
-     background-color: var(--color-primario); /* Usa el color de marca primario */
-     color: #1A202C; /* Texto oscuro */
-     /* Las clases py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold de Tailwind están bien */
+  background-color: var(--color-marca-secundaria);
+  color: var(--color-texto-oscuro);
 }
-
 header .cta-button:hover {
-     background-color: #C0A000; /* Un tono más oscuro al pasar el ratón */
-     color: #fff; /* Texto blanco */
+  background-color: var(--color-marca-secundaria-oscuro);
+  color: #fff;
 }
 
-
-/* ==========================================================================
-   Hero Section (Animaciones de Entrada con JS, Fondo Opcional)
-   ========================================================================== */
+/* ===============================
+   Hero Section (Con Animaciones)
+   =============================== */
 
 .hero-section {
-    /* Tailwind maneja text-center, py-12, flex items-center justify-center */
-    /* Tailwind maneja bg-gray-200 o puedes añadir tu imagen de fondo aquí */
-    /* min-height: 70vh; */ /* Asegura una altura mínima decente */
-    position: relative; /* Necesario si usas imagen de fondo y overlay */
-    overflow: hidden; /* Limitar cualquier overflow */
-    color: var(--color-texto-oscuro); /* Color por defecto si no hay overlay oscuro */
-
-    /* Opcional: Imagen de fondo */
-    /* background-image: url('img/tu-imagen-hero.jpg'); */
-    /* background-size: cover; */
-    /* background-position: center; */
-    /* background-attachment: fixed; */ /* Efecto parallax suave */
+  position: relative;
+  overflow: hidden;
+  color: var(--color-texto-oscuro);
+  background-color: var(--color-fondo-claro);
 }
 
-/* Opcional: Overlay si usas imagen de fondo */
-.hero-section::before {
-    /* content: ''; */
-    /* position: absolute; */
-    /* top: 0; left: 0; right: 0; bottom: 0; */
-    /* background-color: var(--color-fondo-transparente-oscuro); */ /* Overlay oscuro semi-transparente */
-    /* z-index: 1; */
-    /* pointer-events: none; */ /* Permitir clics a través */
-}
-/* .hero-section > .container { */
-/* position: relative; */
-/* z-index: 2; */ /* Asegurar que el contenido esté sobre el overlay */
-/* } */
-/* .hero-section h1, .hero-section p, .hero-section a { */
-/* color: var(--color-texto-inverso); */ /* Texto blanco sobre overlay */
-/* text-shadow: 2px 2px 6px rgba(0,0,0,0.5); */ /* Sombra de texto para legibilidad */
-/* } */
-
-
-/* Aplicar animaciones de entrada controladas por JS (usando 'is-visible') */
-/* Los estilos INICIALES (opacity: 0, transform: translateY) deben estar
-   definidos en las clases fade-in-up o similares. */
-
-.hero-section h1 {
-    /* Tailwind maneja text-4xl, font-bold, text-gray-800, mb-6 */
-    /* Retire la animación directa aquí. La aplicaremos con JS y una clase. */
-    /* animation: fadeInUp 1s ease-out; */
-    /* Si quieres animación por JS: */
-    /* opacity: 0; */
-    /* transform: translateY(30px); */
-}
-
-.hero-section p {
-    /* Tailwind maneja text-lg, text-gray-600, mb-8 */
-    /* Retire la animación directa. */
-    /* animation: fadeInUp 1s ease-out 0.3s; */
-     /* Si quieres animación por JS: */
-     /* opacity: 0; */
-     /* transform: translateY(30px); */
-}
-
-.hero-section a {
-    /* Tailwind maneja bg-yellow-500, text-black, py-3, px-6, rounded-md, hover:bg-yellow-600, text-lg */
-    /* font-weight: 600; */
-    /* transition: background-color var(--transicion-default), transform var(--transicion-default); */
-    /* animation: pulse-subtle 2s infinite ease-in-out; */ /* Mantenemos la animación de pulso continua */
-    /* display: inline-block; */ /* Asegura que la animación transform funcione */
-    /* Si quieres animación de entrada por JS: */
-    /* opacity: 0; */
-    /* transform: translateY(30px); */
-}
-
-/* Clase para aplicar la animación de entrada controlada por JS */
-/* Esta clase se añade al elemento contenedor o a los elementos individuales */
-/* cuando son visibles en el viewport */
 .hero-section.is-visible h1,
 .hero-section.is-visible p,
-.hero-section.is-visible a.btn { /* Añade selectores para todos los elementos que deben aparecer */
-    animation: fadeInUp 0.8s ease-out forwards; /* Aplicar animación de entrada */
-}
-
-.hero-section.is-visible p {
-    animation-delay: 0.3s; /* Retraso para el párrafo */
-}
-
 .hero-section.is-visible a.btn {
-     animation-delay: 0.6s; /* Retraso para el botón CTA */
-     /* La animación pulse-subtle se sigue ejecutando si se aplica directamente al elemento */
-     /* Si quieres que el pulso empiece DESPUÉS de la entrada, puedes aplicar la animación pulse-subtle también con un delay */
-     /* animation: fadeInUp 0.8s ease-out 0.6s forwards, pulse-subtle 2s infinite ease-in-out 1.4s; */
+  animation: fadeInUp 0.8s ease-out forwards;
 }
-
+.hero-section.is-visible p {
+  animation-delay: 0.3s;
+}
+.hero-section.is-visible a.btn {
+  animation-delay: 0.6s;
+}
 
 .hero-section a:hover {
-     transform: scale(1.05); /* Agrandar ligeramente al pasar el ratón (si no usas pulse-subtle) */
-     /* Si usas pulse-subtle, el hover scale puede entrar en conflicto. Define el hover en pulse-subtle o desactiva uno. */
-     /* Con pulse-subtle activo, quizás solo quieras cambiar el color de fondo en hover. */
+  transform: scale(1.05);
 }
 
+/* ===============================
+   Cómo Funciona (Cards)
+   =============================== */
 
-/* ==========================================================================
-   Sección Cómo Funciona (Refactorizado con Clases Dedicadas)
-   ========================================================================== */
-
-/* Usa una clase dedicada para los elementos de la cuadrícula para mejor modularidad */
-/* Ejemplo: en tu HTML, en lugar de <div class="p-6 ..."> usa <div class="how-it-works-item p-6 ..."> */
 .how-it-works-item {
-    /* Tailwind maneja text-center, padding, border, rounded, shadow */
-    transition: transform var(--transicion-default), box-shadow var(--transicion-default), background-color var(--transicion-default);
-    background-color: var(--color-fondo-card); /* Fondo blanco */
-    border: 1px solid #eee; /* Borde suave */
-    box-shadow: var(--sombra-suave); /* Sombra sutil */
-    border-radius: var(--borde-redondo-md); /* Bordes redondeados */
-    padding: var(--espacio-lg); /* Espaciado interno consistente */
-    display: flex; /* Usar flexbox para mejor alineación interna */
-    flex-direction: column;
-    align-items: center; /* Centrar contenido verticalmente */
-    text-align: center; /* Centrar texto */
-    height: 100%; /* Asegurar altura consistente en la cuadrícula */
+  transition: transform var(--transicion-default), box-shadow var(--transicion-default), background-color var(--transicion-default);
+  background-color: var(--color-fondo-card);
+  border: 1px solid #eee;
+  box-shadow: var(--sombra-suave);
+  border-radius: var(--borde-redondo-md);
+  padding: var(--espacio-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 100%;
 }
-
 .how-it-works-item:hover {
-    transform: translateY(-8px); /* Efecto elevación */
-    box-shadow: var(--sombra-card-hover); /* Sombra más pronunciada en hover */
-    background-color: #fff; /* Asegurar fondo blanco en hover */
+  transform: translateY(-8px);
+  box-shadow: var(--sombra-card-hover);
 }
 
 .how-it-works-item i {
-    /* Tailwind maneja mx-auto, h-12, w-12, text-yellow-500, fas */
-    color: var(--color-marca-secundaria);
-    font-size: 3.5rem; /* Tamaño del icono */
-    margin-bottom: var(--espacio-md); /* Espacio debajo del icono */
+  color: var(--color-marca-secundaria);
+  font-size: 3.5rem;
+  margin-bottom: var(--espacio-md);
 }
 
 .how-it-works-item h3 {
-    /* Tailwind maneja font-semibold, text-black, mt-2 */
-    color: var(--color-texto-oscuro);
-    font-size: 1.3rem; /* Ajustar tamaño de título */
-    margin-bottom: var(--espacio-sm);
+  color: var(--color-texto-oscuro);
+  font-size: 1.3rem;
+  margin-bottom: var(--espacio-sm);
 }
 
 .how-it-works-item p {
-    /* Tailwind maneja text-gray-600 */
-    color: var(--color-texto-claro);
-    flex-grow: 1; /* Permitir que el párrafo ocupe el espacio restante */
+  color: var(--color-texto-claro);
+  flex-grow: 1;
 }
 
+/* ===============================
+   Animaciones
+   =============================== */
 
-/* ==========================================================================
-   Sección Productos Destacados (Carrusel y Tarjetas - Pulido)
-   ========================================================================== */
-
-#featured-products {
-    /* Tailwind maneja py-8 */
-    background-color: var(--color-fondo-claro); /* Fondo sutil */
-    padding-top: var(--espacio-2xl); /* Más padding arriba */
-    padding-bottom: var(--espacio-2xl); /* Más padding abajo */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-#productos-carrusel-container {
-    /* Tailwind maneja relative, overflow-hidden */
-    cursor: grab;
-    /* Asegúrate de que el contenedor padre del carrusel tenga un ancho definido
-       y overflow-x: auto; o similar para permitir el scroll/arrastre. */
-    /* Ejemplo: <div class="overflow-x-auto"> <div id="productos-carrusel-container" ...> */
+@keyframes pulse-subtle {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
-#productos-carrusel-container.dragging {
-    cursor: grabbing;
-}
-
-#productos-carrusel {
-    /* Tailwind maneja whitespace-nowrap, scroll-smooth, transition-transform, duration-300, py-4 */
-    /* display: flex; */ /* Usar flexbox para los items del carrusel */
-    /* gap: var(--espacio-md); */ /* Añadir espacio entre las tarjetas si no lo hace Tailwind */
-}
-
 .producto-card {
-    /* Tailwind maneja inline-block, mr-4, w-72, shadow-md, rounded-md, overflow-hidden, border, border-gray-200, bg-white */
-    transition: transform var(--transicion-default), box-shadow var(--transicion-default), border-color var(--transicion-default);
-    display: flex;
-    flex-direction: column;
-    height: 100%; /* Asegurar altura consistente */
     background-color: var(--color-fondo-card);
-    border: 1px solid #eee;
-    box-shadow: var(--sombra-suave);
+    border: 1px solid #E5E7EB; /* gris claro */
     border-radius: var(--borde-redondo-md);
-    overflow: hidden; /* Ocultar desbordamiento de la imagen en hover */
-    min-width: 280px; /* Asegurar un ancho mínimo para la tarjeta */
-    flex-shrink: 0; /* Prevenir que se encoja en flexbox */
+    box-shadow: var(--sombra-suave);
+    transition: transform var(--transicion-default), box-shadow var(--transicion-default);
+    width: 18rem; /* 72 = w-72 en Tailwind */
+    display: inline-block;
+    margin-right: var(--espacio-md);
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
 .producto-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-6px);
     box-shadow: var(--sombra-card-hover);
-    border-color: var(--color-marca-primario); /* Borde de acento en hover */
 }
 
 .producto-card img {
-    /* Tailwind maneja w-full, h-40, object-cover */
-    transition: transform 0.6s ease-out, opacity 0.6s ease-out;
-    display: block;
     width: 100%;
-    height: 200px; /* Altura fija para la imagen */
+    height: 200px;
     object-fit: cover;
-}
-
-.producto-card:hover img {
-    transform: scale(1.05); /* Zoom ligeramente aumentado */
-    opacity: 0.95; /* Ligeramente transparente */
 }
 
 .producto-card-content {
-    /* Tailwind maneja p-4 */
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     padding: var(--espacio-md);
-}
-
-.producto-card-content h3 {
-    /* Tailwind maneja font-semibold, text-gray-700 */
-    color: var(--color-texto-oscuro);
-    font-size: 1.25rem;
-    margin-bottom: var(--espacio-xs);
-}
-
-.producto-card-content p {
-    /* Tailwind maneja text-gray-600, text-sm */
-    color: var(--color-texto-claro);
-    font-size: 1rem;
-    margin-bottom: var(--espacio-sm);
-    flex-grow: 1;
-}
-
-.producto-card-content a {
-    /* Tailwind maneja text-yellow-600, hover:text-yellow-700, font-semibold, mt-2, inline-block */
-    color: var(--color-marca-primario);
-    font-weight: 600;
-    transition: color var(--transicion-rapida);
-    display: inline-block;
-    margin-top: var(--espacio-sm);
-}
-.producto-card-content a:hover {
-    color: var(--color-marca-secundaria);
-    text-decoration: underline; /* Subrayado al pasar el ratón */
-}
-
-/* Controles del Carrusel (Pulido) */
-/* Asumiendo que usas botones con clases prev-producto y next-producto */
-/* Carrusel general */
-/* Contenedor del carrusel */
-#carousel {
-  max-width: 900px;
-  margin: 40px auto;
-  border-radius: 10px;
-  overflow: hidden;
-  background-color: #fff;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Cada slide */
-.carousel-item {
-  display: none;
-  text-align: center;
-  padding: 20px;
-}
-
-.carousel-item.active {
-  display: block;
-}
-
-/* Imagen del producto */
-.carousel-item img {
-  width: 100%;
-  max-height: 500px;
-  object-fit: contain;
-  border-radius: 10px;
-}
-
-/* Título del producto */
-.carousel-item h2 {
-  margin-top: 15px;
-  font-size: 22px;
-  color: #333;
-}
-
-/* Botón de acción */
-.carousel-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #2c3e50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.carousel-button:hover {
-  background-color: #34495e;
-}
-
-/* Controles del carrusel */
-.carousel-controls {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 30px;
-}
-
-.carousel-controls button {
-  background: none;
-  border: none;
-  font-size: 32px;
-  cursor: pointer;
-  color: #2c3e50;
-}
-
-.carousel-controls button:hover {
-  color: #000;
-}
-
-
-/* Botón Pausa/Play (Pulido) */
-#pause-play-button {
-    /* Tailwind maneja absolute, bottom-10, right-4, rounded-full, w-8, h-8, flex, items-center, justify-center, focus:outline-none, z-10 */
-    /* Copia estilos de .carousel-control si no usas @extend */
-    background-color: var(--color-fondo-transparente-oscuro);
-    color: white;
-    border-radius: var(--borde-redondo-completo);
-    width: 30px; height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color var(--transicion-rapida), opacity var(--transicion-rapida);
-    opacity: 0.7;
-    z-index: 50;
-    position: absolute; /* Posición ejemplo */
-    bottom: var(--espacio-md);
-    right: var(--espacio-md);
-}
-#pause-play-button:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-    opacity: 1;
-}
-
-
-/* ==========================================================================
-   Sección Por Qué Elegirnos (Refactorizado con Clases Dedicadas)
-   ========================================================================== */
-
-/* Usa una clase dedicada para los elementos de la cuadrícula */
-/* Ejemplo: en tu HTML, en lugar de <div class="p-6 ..."> usa <div class="why-choose-us-item p-6 ..."> */
-.why-choose-us-item {
-    /* Tailwind maneja text-center, p-6, border, border-gray-200, rounded-md, shadow-sm */
-    transition: transform var(--transicion-default), box-shadow var(--transicion-default), background-color var(--transicion-default);
-    background-color: var(--color-fondo-card);
-    border: 1px solid #eee;
-    box-shadow: var(--sombra-suave);
-    border-radius: var(--borde-redondo-md);
-    padding: var(--espacio-lg); /* Espaciado interno consistente */
-    display: flex; /* Usar flexbox para mejor alineación interna */
-    flex-direction: column;
-    align-items: center; /* Centrar contenido verticalmente */
-    text-align: center; /* Centrar texto */
-    height: 100%; /* Asegurar altura consistente en la cuadrícula */
-}
-
-.why-choose-us-item:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--sombra-card-hover);
-    background-color: #fff;
-}
-
-.why-choose-us-item i {
-    /* Tailwind maneja fas, text-4xl, text-yellow-500, mb-3 */
-    color: var(--color-marca-secundaria);
-    font-size: 3.5rem; /* Tamaño del icono */
-    margin-bottom: var(--espacio-md);
-}
-
-.why-choose-us-item h3 {
-    /* Tailwind maneja text-xl, font-semibold, text-gray-700, mb-2 */
-    color: var(--color-texto-oscuro);
-    font-size: 1.3rem;
-    margin-bottom: var(--espacio-sm);
-}
-
-.why-choose-us-item p {
-    /* Tailwind maneja text-gray-600 */
-    color: var(--color-texto-claro);
-    flex-grow: 1;
-}
-
-
-/* ==========================================================================
-   Sección Testimonios (Estilo de Tarjetas Pulido)
-   ========================================================================== */
-
-.testimonials {
-    /* Tailwind maneja py-12, bg-gray-200 */
-    background-color: var(--color-fondo-claro);
-    padding-top: var(--espacio-2xl); /* Más padding arriba */
-    padding-bottom: var(--espacio-2xl); /* Más padding abajo */
-}
-
-.testimonial-card {
-    /* Tailwind maneja bg-white, rounded-md, shadow-md, p-6, text-center, border, border-gray-200 */
-    transition: transform var(--transicion-default), box-shadow var(--transicion-default), border-color var(--transicion-default);
-    background-color: var(--color-fondo-card);
-    border: 1px solid #eee;
-    box-shadow: var(--sombra-suave);
-    border-radius: var(--borde-redondo-md);
-    padding: var(--espacio-lg); /* Espaciado interno consistente */
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    height: 100%; /* Asegurar altura consistente */
+    height: 100%;
 }
 
-.testimonial-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--sombra-card-hover);
-    border-color: var(--color-marca-primario); /* Borde de acento en hover */
-}
-
-.testimonial-card img {
-    /* Tailwind maneja w-24, h-24, rounded-full, mx-auto, mb-4, object-cover */
-    border: 3px solid var(--color-marca-secundaria);
-    border-radius: var(--borde-redondo-completo); /* Imagen redonda */
-    width: 96px; height: 96px; /* Tamaño fijo para la imagen */
-    object-fit: cover;
-    margin-bottom: var(--espacio-md); /* Espacio debajo de la imagen */
-    transition: transform var(--transicion-rapida), border-color var(--transicion-rapida);
-}
-.testimonial-card:hover img {
-    transform: scale(1.08); /* Ligero zoom en la imagen */
-    border-color: var(--color-marca-primario); /* Cambiar color del borde en hover */
-}
-
-.testimonial-card h3 {
-    /* Tailwind maneja text-xl, font-semibold, text-gray-700, mb-2 */
-    color: var(--color-texto-oscuro);
-    font-size: 1.15rem; /* Tamaño de nombre */
-    margin-bottom: var(--espacio-xs);
-}
-
-.testimonial-card p.quote {
-    /* Tailwind maneja text-gray-600, italic */
-    color: var(--color-texto-claro);
-    font-style: italic;
-    margin-bottom: var(--espacio-md);
-    flex-grow: 1; /* Permitir que la cita ocupe espacio */
-}
-.testimonial-card p.source { /* Clase opcional para la fuente del testimonio */
-    color: var(--color-texto-oscuro);
-    font-weight: 600;
-    font-style: normal;
-    margin-top: var(--espacio-sm);
-    font-size: 0.95rem;
-}
-
-
-/* ==========================================================================
-   Sección Contacto (Vista Previa - Pulido)
-   ========================================================================== */
-
-.contact-preview {
-    /* Tailwind maneja py-12, bg-white */
-    padding-top: var(--espacio-2xl); /* Más padding arriba */
-    padding-bottom: var(--espacio-2xl); /* Más padding abajo */
-}
-
-.contact-preview h2 {
-    /* Tailwind maneja text-2xl, font-semibold, text-gray-800, mb-6, text-center */
-    color: var(--color-texto-oscuro);
-    text-align: center;
-    margin-bottom: var(--espacio-xl);
-}
-
-.contact-form {
-    /* Tailwind maneja max-w-lg, mx-auto, p-6, border, border-gray-200, rounded-md, shadow-sm */
-    background-color: var(--color-fondo-card); /* Fondo de tarjeta */
-    border: 1px solid #eee;
-    box-shadow: var(--sombra-media); /* Sombra más pronunciada para destacar */
-    border-radius: var(--borde-redondo-md);
-    padding: var(--espacio-2xl); /* Mayor espaciado interno */
-    max-width: 600px; /* Limitar ancho */
-    margin: 0 auto; /* Centrar */
-}
-
-.contact-form p {
-    /* Tailwind maneja text-gray-600, mb-4, text-center */
-    color: var(--color-texto-claro);
-    text-align: center;
-    margin-bottom: var(--espacio-xl);
-}
-
-.contact-form label {
-    /* Tailwind maneja block, text-gray-700, font-semibold, mb-2 */
-    color: var(--color-texto-principal);
-    display: block;
-    margin-bottom: var(--espacio-xs);
-    font-weight: 600;
-    font-size: 0.95rem;
-}
-
-.contact-form input,
-.contact-form textarea {
-    /* Tailwind maneja w-full, px-3, py-2, border, border-gray-300, rounded-md, focus:outline, focus:ring-2, focus:ring-yellow-500 */
-    display: block;
-    width: 100%;
-    padding: var(--espacio-sm);
-    margin-bottom: var(--espacio-lg); /* Espacio debajo de cada campo */
-    border: 1px solid #ccc;
-    border-radius: var(--borde-redondo-sm);
-    font-size: 1rem;
-    color: var(--color-texto-oscuro); /* Color del texto que escribe el usuario */
-    background-color: #fff; /* Fondo blanco explícito */
-    transition: border-color var(--transicion-rapida), box-shadow var(--transicion-rapida);
-    box-sizing: border-box;
-}
-
-.contact-form input::placeholder, /* Estilo para el placeholder */
-.contact-form textarea::placeholder {
-    color: var(--color-texto-claro);
-    opacity: 1; /* Firefox por defecto reduce la opacidad */
-}
-
-
-.contact-form input:focus,
-.contact-form textarea:focus {
-    border-color: var(--color-marca-primario);
-    /* Usamos rgba con la variable RGB */
-    box-shadow: 0 0 0 3px rgba(var(--color-marca-primario-rgb), 0.2);
-    outline: none;
-    background-color: #fff; /* Mantener fondo blanco al enfocar */
-}
-
-.contact-form textarea {
-    min-height: 180px; /* Altura mínima */
-    resize: vertical;
-}
-
-
-.contact-form button[type="submit"] {
-    /* Tailwind maneja w-full, bg-yellow-500, text-black, py-2, px-4, rounded-md, hover:bg-yellow-600, transition, duration-200, font-semibold */
-    /* Si usas las clases btn genéricas, aplica btn-secondary */
-    /* @apply btn btn-secondary; */ /* Ejemplo con @apply */
-    width: 100%; /* Ocupa todo el ancho */
+.producto-card h4 {
     font-size: 1.1rem;
-    padding: var(--espacio-md);
-    /* Si no usas @apply, necesitas definir el estilo aquí */
-    background-color: var(--color-marca-secundaria);
-    color: var(--color-texto-oscuro);
     font-weight: 600;
-    border-radius: var(--borde-redondo-sm);
-    transition: background-color var(--transicion-default), transform var(--transicion-default), box-shadow var(--transicion-default);
-    border: none;
-    cursor: pointer;
-}
-.contact-form button[type="submit"]:hover {
-    /* Aquí estaba darken(). Lo reemplazamos con la variable oscura */
-    background-color: var(--color-marca-secundaria-oscuro);
-    transform: translateY(-2px);
-    box-shadow: var(--sombra-suave);
+    color: var(--color-texto-oscuro);
+    margin-bottom: var(--espacio-xs);
 }
 
+.producto-card p {
+    flex-grow: 1;
+    color: var(--color-texto-claro);
+    font-size: 0.95rem;
+    margin-bottom: var(--espacio-sm);
+}
 
-/* ==========================================================================
-   Pie de Página (Estilo y Distribución Pulido)
+.producto-card .precio {
+    font-weight: 700;
+    color: var(--color-marca-primario);
+    font-size: 1.1rem;
+    margin-bottom: var(--espacio-sm);
+}
+
+.producto-card .btn {
+    align-self: flex-start;
+}
+
+/* ==========================================================================  
+   Footer (Elegante y Contraste Claro)  
    ========================================================================== */
 
 footer {
-    /* Tailwind maneja bg-black, py-8, text-center, text-gray-400 */
     background-color: var(--color-fondo-oscuro);
-    color: var(--color-texto-claro);
-    padding-top: var(--espacio-2xl); /* Más padding arriba */
-    padding-bottom: var(--espacio-2xl); /* Más padding abajo */
+    color: var(--color-texto-inverso);
+    padding: var(--espacio-xl) var(--espacio-md);
     font-size: 0.95rem;
 }
 
-footer .container {
-     /* Tailwind maneja mx-auto */
-}
-
-footer h3 {
-    color: var(--color-texto-inverso); /* Títulos blancos */
-    margin-bottom: var(--espacio-lg);
-    font-size: 1.2rem;
-    font-weight: 700;
-}
-
-footer p {
-    margin-bottom: var(--espacio-sm);
-}
-
 footer a {
-    color: var(--color-texto-claro);
-    transition: color var(--transicion-rapida);
+    color: var(--color-texto-inverso);
+    transition: color var(--transicion-rapida), text-decoration var(--transicion-rapida);
 }
+
 footer a:hover {
     color: var(--color-marca-secundaria);
     text-decoration: underline;
 }
 
-footer ul {
+footer .footer-top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-xl);
+    justify-content: space-between;
+    margin-bottom: var(--espacio-lg);
+}
+
+footer .footer-column {
+    flex: 1 1 200px;
+}
+
+footer .footer-column h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: var(--espacio-sm);
+    color: var(--color-marca-secundaria);
+}
+
+footer .footer-column ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-footer ul li {
+footer .footer-column ul li {
     margin-bottom: var(--espacio-xs);
 }
 
-/* Ajusta si usas una estructura de columnas en el footer con Tailwind */
-/* Si Tailwind crea columnas md:grid-cols-3, este estilo aplicaría a la sección de enlaces */
-.footer-section-links ul li {
-    margin-bottom: var(--espacio-sm); /* Un poco más de espacio en listas de enlaces */
-}
-
-
-footer .social-icons {
-    /* Tailwind maneja flex, justify-center, items-center, mt-4 */
-}
-
-footer .social-icons a {
-    /* Tailwind maneja text-gray-400, hover:text-white, mx-3, text-xl */
-    color: var(--color-texto-claro);
-    font-size: 1.6rem; /* Tamaño de los iconos */
-    margin: 0 var(--espacio-sm); /* Espacio entre iconos */
-    transition: color var(--transicion-rapida), transform var(--transicion-rapida);
-    display: inline-block;
-}
-
-footer .social-icons a:hover {
-    color: var(--color-marca-secundaria);
-    transform: translateY(-3px) scale(1.1); /* Elevación y ligero aumento */
-}
-
-footer .copyright {
-    /* Tailwind maneja text-sm */
-    color: rgba(255, 255, 255, 0.7); /* Texto de copyright sutil */
-    margin-top: var(--espacio-2xl); /* Mayor espacio superior */
+footer .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: var(--espacio-md);
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
+    color: #ccc;
 }
 
-
-/* ==========================================================================
-   Animaciones Keyframes
+/* ==========================================================================  
+   Utilidades y Animaciones Globales  
    ========================================================================== */
 
-/* Animación de aparición con desplazamiento (usada en el Hero y potencialmente con Scroll Reveal) */
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(40px); /* Partir desde más abajo */
+        transform: translateY(30px);
     }
     to {
         opacity: 1;
@@ -879,168 +370,268 @@ footer .copyright {
     }
 }
 
-/* Animación de pulso sutil para CTAs (puede usarse en cualquier lugar) */
 @keyframes pulse-subtle {
     0%, 100% {
         transform: scale(1);
-        opacity: 1; /* Opacidad completa */
     }
     50% {
-        transform: scale(1.02); /* Ligero aumento */
-        opacity: 0.95; /* Ligeramente menos opaco */
+        transform: scale(1.03);
     }
 }
-
-/* Animación de aparición al hacer scroll (Requiere JS para añadir 'is-visible') */
-/* Aplica esto a los contenedores o elementos individuales de cada sección */
-.fade-in-up-scroll {
-    opacity: 0;
-    transform: translateY(40px); /* Igual que fadeInUp keyframe */
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Transición para cuando se añade 'is-visible' */
-}
-.fade-in-up-scroll.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-    /* Opcional: Añadir animation-delay si quieres que los elementos de un mismo contenedor aparezcan secuencialmente
-       Esto a menudo se maneja mejor con JS si tienes muchos elementos. */
-    /* animation: fadeInUp 0.8s ease-out forwards; */ /* Alternativa usando el keyframe */
-}
-
-
-/* ==========================================================================
-   Responsivo (Ajustes y Estructura para Breakpoints)
+/* ==========================================================================  
+   Formularios  
    ========================================================================== */
 
-/* Ajustes generales para padding y espaciado en pantallas más pequeñas */
-@media (max-width: 1024px) { /* Breakpoint 'lg' de Tailwind */
-    .container {
-        padding-left: var(--espacio-md);
-        padding-right: var(--espacio-md);
-    }
-
-    section {
-        padding-top: var(--espacio-xl);
-        padding-bottom: var(--espacio-xl);
-    }
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+    width: 100%;
+    padding: var(--espacio-sm);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--borde-redondo-md);
+    font-size: 1rem;
+    background-color: white;
+    color: var(--color-texto-oscuro);
+    transition: border-color var(--transicion-default), box-shadow var(--transicion-default);
 }
 
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--color-marca-primario);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.2);
+}
 
-@media (max-width: 768px) { /* Breakpoint 'md' de Tailwind */
-    .hero-section h1 {
-        font-size: 2.8rem; /* Tamaño de fuente ajustado */
+label {
+    display: block;
+    margin-bottom: var(--espacio-xs);
+    font-weight: 600;
+    color: var(--color-texto-oscuro);
+}
+
+.form-group {
+    margin-bottom: var(--espacio-md);
+}
+
+/* ==========================================================================  
+   Modal (para popups o anuncios)  
+   ========================================================================== */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal.abierto {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-contenido {
+    background-color: white;
+    padding: var(--espacio-lg);
+    border-radius: var(--borde-redondo-lg);
+    max-width: 500px;
+    width: 90%;
+    box-shadow: var(--sombra-fuerte);
+    animation: fadeInUp 0.4s ease;
+}
+
+/* ==========================================================================  
+   Utilidades Adicionales  
+   ========================================================================== */
+
+.texto-centrado {
+    text-align: center;
+}
+
+.oculto {
+    display: none !important;
+}
+
+.visible {
+    display: block !important;
+}
+
+.espaciado {
+    margin-top: var(--espacio-lg);
+    margin-bottom: var(--espacio-lg);
+}
+
+/* ==========================================================================  
+   Media Queries Básicas  
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .navegacion ul {
+        flex-direction: column;
+        gap: var(--espacio-sm);
     }
 
-    .hero-section p {
-        font-size: 1.1rem;
+    .destacados {
+        padding: var(--espacio-lg) var(--espacio-md);
     }
 
-    /* Ajustes para tarjetas y items en grid */
-    .how-it-works-item,
-    .why-choose-us-item,
-    .testimonial-card,
     .producto-card {
-        padding: var(--espacio-md); /* Reducir padding */
-    }
-
-     .how-it-works-item i,
-     .why-choose-us-item i {
-         font-size: 3rem; /* Iconos un poco más pequeños */
-         margin-bottom: var(--espacio-md);
-     }
-
-    .testimonial-card img {
-        width: 80px; height: 80px; /* Reducir tamaño imagen testimonio */
+        width: 100%;
+        margin-right: 0;
         margin-bottom: var(--espacio-md);
     }
 
-    .contact-form {
-        padding: var(--espacio-xl); /* Reducir padding del formulario */
+    footer .footer-top {
+        flex-direction: column;
+        gap: var(--espacio-lg);
     }
-
-     footer {
-        padding-top: var(--espacio-xl);
-        padding-bottom: var(--espacio-xl);
-     }
-
-     footer .social-icons a {
-         font-size: 1.4rem; /* Iconos sociales más pequeños */
-         margin: 0 var(--espacio-sm);
-     }
 }
 
-@media (max-width: 640px) { /* Breakpoint 'sm' de Tailwind */
-    .hero-section h1 {
-        font-size: 2.2rem;
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 2rem;
     }
 
-    .hero-section p {
+    .hero p {
         font-size: 1rem;
     }
 
-    /* Ajustar espaciados */
-    h1 { font-size: 2em; }
-    h2 { font-size: 1.6em; }
-    h3 { font-size: 1.3em; }
-
-    section {
-        padding-top: var(--espacio-lg);
-        padding-bottom: var(--espacio-lg);
+    .boton,
+    .btn {
+        font-size: 0.9rem;
+        padding: 0.6rem 1rem;
     }
 
-    .contact-form {
+    .modal-contenido {
         padding: var(--espacio-md);
     }
-     .contact-form button[type="submit"] {
-         padding: var(--espacio-sm); /* Padding del botón en móviles */
-     }
+}
+/* ==========================================================================  
+   Animaciones clave  
+   ========================================================================== */
 
-    footer {
-        padding-top: var(--espacio-lg);
-        padding-bottom: var(--espacio-lg);
-     }
-
-    footer .social-icons a {
-        font-size: 1.2rem;
-        margin: 0 var(--espacio-xs);
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-/* Considera ajustar la complejidad de animaciones en dispositivos de gama baja o con `@media (prefers-reduced-motion: reduce)` */
-@media (prefers-reduced-motion: reduce) {
-  /* Deshabilita animaciones CSS que no sean críticas */
-  .hero-section h1, .hero-section p, .hero-section a,
-  .how-it-works-item, .why-choose-us-item, .testimonial-card, .producto-card {
-      animation: none !important;
-      transition: none !important;
-      transform: none !important;
-  }
-
-  /* Asegura que los elementos ocultos por animaciones iniciales sean visibles */
-  .fade-in-up-scroll {
-      opacity: 1 !important;
-      transform: none !important;
-  }
-
-  /* Deshabilita efectos visuales como el parallax si se usa */
-  .hero-section.space-background, /* Si re-usas el fondo del espacio */
-  .hero-section {
-     background-attachment: scroll !important;
-  }
-
-  /* Elimina los efectos hover que causan movimiento */
-  .producto-card:hover,
-  .testimonial-card:hover,
-  .why-choose-us-item:hover,
-  .how-it-works-item:hover,
-  footer .social-icons a:hover,
-  header .cta-button:hover,
-  .contact-form button[type="submit"]:hover {
-      transform: none !important;
-      box-shadow: var(--sombra-suave) !important; /* Mantener sombra base */
-  }
-  .producto-card:hover img,
-  .testimonial-card:hover img {
-      transform: none !important;
-  }
+@keyframes desvanecer {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
+/* ==========================================================================  
+   Z-Index Común  
+   ========================================================================== */
+
+:root {
+    --z-fondo: 0;
+    --z-base: 1;
+    --z-menu: 10;
+    --z-modal: 100;
+    --z-superior: 9999;
+}
+
+/* ==========================================================================  
+   Tema Oscuro (opcional con media query)  
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+
+    header,
+    footer,
+    .modal-contenido {
+        background-color: #1e1e1e;
+    }
+
+    input,
+    textarea,
+    select {
+        background-color: #222;
+        color: #eee;
+        border-color: #444;
+    }
+
+    .boton,
+    .btn {
+        background-color: var(--color-marca-secundario);
+        color: white;
+    }
+
+    a {
+        color: #90caf9;
+    }
+
+    a:hover {
+        color: #64b5f6;
+    }
+}
+
+/* ==========================================================================  
+   Clases Helper para Layout  
+   ========================================================================== */
+
+.flex {
+    display: flex;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.gap-sm {
+    gap: var(--espacio-sm);
+}
+
+.gap-md {
+    gap: var(--espacio-md);
+}
+
+.m-auto {
+    margin: auto;
+}
+
+.p-md {
+    padding: var(--espacio-md);
+}
+
+/* ==========================================================================  
+   FIN DEL ARCHIVO CSS  
+   ========================================================================== */
