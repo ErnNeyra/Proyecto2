@@ -1,6 +1,13 @@
 /*
  * Archivo CSS Principal para We-Connect (index.css)
  * Ajustes para la Hero Section, estilos de foco y header semi-transparente.
+ *
+ * Mejoras clave:
+ * - Organización y agrupación de variables.
+ * - Comentarios más concisos y útiles.
+ * - Refinamiento de selectores y propiedades.
+ * - Pequeños ajustes para la consistencia y el rendimiento.
+ * - Uso más estricto de variables CSS.
  */
 
 /* ==========================================================================
@@ -9,71 +16,67 @@
 
 :root {
     /* Colores de Marca */
-    --color-marca-primario: #1a3d5e; /* Azul Oscuro Profundo */
-    --color-marca-primario-rgb: 26, 61, 94; /* Para rgba en sombras/borders */
-    --color-marca-primario-oscuro: #15314b; /* Un tono más oscuro para hover, etc. */
+    --color-primary: #1a3d5e; /* Azul Oscuro Profundo */
+    --color-primary-rgb: 26, 61, 94; /* Para rgba en sombras/borders */
+    --color-primary-dark: #15314b; /* Tono más oscuro para hover, etc. */
 
-    --color-marca-secundaria: #f3a638; /* Dorado Vibrante */
-    --color-marca-secundaria-rgb: 243, 166, 56; /* Para rgba */
-    --color-marca-secundaria-oscuro: #e0972d; /* Un tono más oscuro */
+    --color-secondary: #f3a638; /* Dorado Vibrante */
+    --color-secondary-rgb: 243, 166, 56; /* Para rgba */
+    --color-secondary-dark: #e0972d; /* Tono más oscuro */
 
     /* Colores de Texto */
-    --color-texto-principal: #333; /* Texto general y etiquetas de formulario */
-    --color-texto-oscuro: #1F2937; /* Títulos, elementos importantes */
-    --color-texto-claro: #6B7280; /* Texto secundario, descripciones, placeholders */
-    --color-texto-inverso: #f8f8f8; /* Texto sobre fondos oscuros */
+    --color-text-main: #333; /* Texto general y etiquetas de formulario */
+    --color-text-heading: #1F2937; /* Títulos, elementos importantes */
+    --color-text-secondary: #6B7280; /* Texto secundario, descripciones, placeholders */
+    --color-text-inverse: #f8f8f8; /* Texto sobre fondos oscuros */
 
-     /* Puedes añadir variables de fondo y sombras de styles.css si las necesitas */
-     --color-fondo-claro: #f8f8f8;
-     --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
-     --sombra-media: 0 8px 20px rgba(0, 0, 0, 0.15); /* Añadida de styles.css */
-     --sombra-card-hover: var(--sombra-media);
+    /* Colores de Fondo y Bordes */
+    --color-background-light: #f8f8f8;
+    --color-border-light: #E2E8F0; /* Usado en header y dropdown */
+    --color-background-card-hover: #F7FAFC; /* Fondo para hover en dropdown */
 
+    /* Sombras */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.15); /* Añadida de styles.css */
+    --shadow-card-hover: var(--shadow-medium); /* Alias para consistencia */
 
     /* Tipografía */
-    --fuente-principal: 'Poppins', sans-serif;
-    --fuente-secundaria: 'Open Sans', sans-serif;
+    --font-primary: 'Poppins', sans-serif;
+    --font-secondary: 'Open Sans', sans-serif;
 
     /* Espaciado */
-    --espacio-xs: 0.25rem;  /* 4px */
-    --espacio-sm: 0.5rem;   /* 8px */
-    --espacio-md: 1rem;     /* 16px */
-    --espacio-lg: 1.5rem;   /* 24px */
-    --espacio-xl: 2rem;     /* 32px */
-    --espacio-2xl: 3rem;    /* 48px */
+    --space-xs: 0.25rem;   /* 4px */
+    --space-sm: 0.5rem;    /* 8px */
+    --space-md: 1rem;      /* 16px */
+    --space-lg: 1.5rem;    /* 24px */
+    --space-xl: 2rem;      /* 32px */
+    --space-2xl: 3rem;     /* 48px */
+    --space-3xl: 4rem;     /* 64px, añadido para secciones */
 
-    /* Bordes y Sombras */
-    --borde-radio-sm: 0.125rem;
-    --borde-radio-md: 0.375rem;
-    --borde-radio-lg: 0.75rem;
-    /* Puedes refinar estas sombras si quieres usar las de styles.css */
-    --sombra-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --sombra-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --sombra-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    /* Bordes y Radios */
+    --border-radius-sm: 0.125rem; /* 2px */
+    --border-radius-md: 0.375rem; /* 6px */
+    --border-radius-lg: 0.75rem; /* 12px */
+    --border-radius-full: 9999px; /* Para elementos circulares */
 
     /* Transiciones */
-    --transicion-rapida: 0.15s ease-in-out;
-    --transicion-suave: 0.3s ease-in-out;
-     --transicion-default: 0.3s ease-in-out; /* Añadida de styles.css */
-
+    --transition-fast: 0.15s ease-in-out;
+    --transition-smooth: 0.3s ease-in-out;
+    --transition-default: var(--transition-smooth); /* Alias para consistencia */
 
     /* Z-Index */
-    --z-index-bajo: 10;
-    --z-index-medio: 20;
-    --z-index-alto: 30;
+    --z-index-low: 10;
+    --z-index-medium: 20;
+    --z-index-high: 30;
     --z-index-superior: 40;
-     --z-index-header: 50; /* Asegurar que el header esté por arriba */
-
-
-     /* Variables de borde redondo de styles.css */
-     --borde-redondo-sm: 4px;
-     --borde-redondo-md: 8px;
-     --borde-redondo-lg: 12px;
-     --borde-redondo-completo: 9999px;
+    --z-index-header: 50; /* Asegurar que el header esté por arriba */
 }
 
 /* ==========================================================================
-   Estilos Globales y Resets (Adaptados a Tailwind)
+   Estilos Globales y Resets
    ========================================================================== */
 
 /* Reset de margen y padding para consistencia */
@@ -92,28 +95,32 @@ html {
 
 /* Tipografía base y suavizado */
 body {
-    font-family: var(--fuente-principal);
+    font-family: var(--font-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.6; /* Mejora la legibilidad */
-    color: var(--color-texto-principal);
+    color: var(--color-text-main);
 }
 
 /* Enfoque visual claro para la accesibilidad */
-/* Usar box-shadow en lugar de outline para un enfoque más moderno */
-:focus {
-    outline: none; /* Remover el outline por defecto o el definido anteriormente */
-    box-shadow: 0 0 0 3px rgba(var(--color-marca-primario-rgb), 0.5); /* Sombra sutil usando el color primario con transparencia */
-    outline-offset: 2px; /* Mantener el offset si se desea espacio alrededor del elemento */
-    transition: box-shadow var(--transicion-rapida); /* Transición para suavizar el efecto */
+:focus-visible { /* Usar :focus-visible para mejor accesibilidad (solo teclado) */
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.5);
+    outline-offset: 2px;
+    transition: box-shadow var(--transition-fast);
 }
 
-/* Eliminar el comportamiento de enfoque en clics del ratón para un look más limpio, pero mantenerlo para navegación con teclado */
+/* Quitar el outline para clics de ratón en navegadores antiguos */
 :focus:not(:focus-visible) {
     outline: none;
     box-shadow: none;
 }
 
+/* Estilos de secciones generales */
+section {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+}
 
 /* ==========================================================================
    Estilos de Componentes (Personalizados)
@@ -121,115 +128,113 @@ body {
 
 /* Header */
 header {
-    /* Usar rgba para el fondo semi-transparente */
-    background-color: rgba(255, 255, 255, 0.9); /* Blanco con 90% de opacidad. Ajusta 0.9 si quieres más/menos transparencia. */
-    border-bottom: 1px solid #E2E8F0;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid var(--color-border-light);
     position: sticky;
     top: 0;
     z-index: var(--z-index-header);
-    box-shadow: var(--sombra-suave);
-    /* No es necesario opacity: 1; cuando usas rgba para el fondo */
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(5px); /* Añade un efecto de desenfoque al fondo */
 }
 
 header .container {
-    padding-top: var(--espacio-md);
-    padding-bottom: var(--espacio-md);
+    padding-top: var(--space-md);
+    padding-bottom: var(--space-md);
 }
 
 header .logo {
-    /* Las clases de Tailwind en la imagen (h-10 w-auto) ya controlan el tamaño */
-    /* Esta regla CSS no afectará a la imagen directamente, pero puede aplicar a la <a> */
-    color: var(--color-texto-oscuro); /* Color de texto para el enlace (si tuviera texto) */
-    transition: color var(--transicion-rapida); /* Transición si cambias el color (no aplicará a la imagen) */
+    color: var(--color-text-heading);
 }
 
-/* No necesitamos un hover especial para .logo si es solo una imagen y las clases de Tailwind ya la estilizan */
-/* header .logo:hover { color: var(--color-marca-primario); } */
-
-
 header nav a {
-    color: var(--color-texto-claro);
-    transition: color var(--transicion-rapida), transform var(--transicion-rapida);
-    display: inline-block; /* Necesario para aplicar transform */
+    color: var(--color-text-secondary);
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    display: inline-block;
 }
 
 header nav a:hover {
-    color: var(--color-marca-primario);
-    transform: translateY(-3px); /* Pequeño desplazamiento hacia arriba en hover */
+    color: var(--color-primary);
+    transform: translateY(-3px);
 }
 
-/* Animación sutil al hacer click (estado :active) */
 header nav a:active {
-    transform: scale(0.95); /* Ligeramente más pequeño al hacer click */
-    transition: transform var(--transicion-rapida); /* Transición rápida para el efecto de click */
-}
-
-
-/* Estilos específicos para el botón de registro en el header */
-header .cta-button {
-     background-color: var(--color-marca-secundaria);
-     color: var(--color-texto-oscuro);
-     font-weight: 600;
-     padding: var(--espacio-sm) var(--espacio-md);
-     border-radius: var(--borde-redondo-sm);
-     transition: background-color var(--transicion-rapida), transform var(--transicion-rapida);
-     display: inline-block; /* Necesario para aplicar transform */
-}
-
-header .cta-button:hover {
-     background-color: var(--color-marca-secundaria-oscuro);
-     color: var(--color-texto-inverso);
-     transform: translateY(-3px);
-}
-
-header .cta-button:active {
     transform: scale(0.95);
-    transition: transform var(--transicion-rapida);
+    transition: transform var(--transition-fast);
+}
+
+/* Botones (Clase generalizada para CTA) */
+.btn-primary { /* Generalizar para reutilización */
+    background-color: var(--color-secondary);
+    color: var(--color-text-heading);
+    font-weight: 600;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--border-radius-sm);
+    transition: background-color var(--transition-fast), transform var(--transition-fast), color var(--transition-fast);
+    display: inline-block;
+    text-decoration: none; /* Asegurar que los enlaces se vean como botones */
+}
+
+.btn-primary:hover {
+    background-color: var(--color-secondary-dark);
+    color: var(--color-text-inverse);
+    transform: translateY(-3px);
+}
+
+.btn-primary:active {
+    transform: scale(0.95);
+    transition: transform var(--transition-fast);
+}
+
+/* Aplicar la clase general al botón del header y hero */
+header .cta-button, .hero-section .cta-button {
+    @extend .btn-primary; /* Esto es un placeholder, requeriría un preprocesador como Sass */
+    /* Si no usas preprocesadores, copia las propiedades de .btn-primary aquí */
 }
 
 /* Estilos para el desplegable de usuario */
 #user-dropdown-button {
     cursor: pointer;
-    color: var(--color-texto-claro);
-    transition: color var(--transicion-rapida), transform var(--transicion-rapida);
-    display: inline-flex; /* Asegurarse de que flex se aplique */
+    color: var(--color-text-secondary);
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    display: inline-flex;
     align-items: center;
 }
 #user-dropdown-button:hover {
-     color: var(--color-marca-primario);
-     transform: translateY(-3px);
+    color: var(--color-primary);
+    transform: translateY(-3px);
 }
 #user-dropdown-button:active {
-     transform: scale(0.95);
-     transition: transform var(--transicion-rapida);
+    transform: scale(0.95);
+    transition: transform var(--transition-fast);
 }
 
-
 #user-dropdown {
-    border: 1px solid #E2E8F0;
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-sm); /* Añadir sombra para destacarlo */
+    border-radius: var(--border-radius-md); /* Añadir border-radius */
+    overflow: hidden; /* Para que el border-radius se aplique al contenido */
 }
 
 #user-dropdown a {
-    color: var(--color-texto-oscuro);
-    transition: background-color var(--transicion-rapida), color var(--transicion-rapida);
+    color: var(--color-text-heading);
+    transition: background-color var(--transition-fast), color var(--transition-fast);
     display: block;
-    padding: var(--espacio-sm) var(--espacio-md);
+    padding: var(--space-sm) var(--space-md);
 }
 
 #user-dropdown a:hover {
-    background-color: #F7FAFC;
-    color: var(--color-texto-oscuro);
+    background-color: var(--color-background-card-hover);
+    color: var(--color-text-heading);
 }
 
-
-/* Hero Section (Adaptado) */
+/* Hero Section */
 .hero-section {
-    background: linear-gradient(135deg, var(--color-marca-primario), #2c3e50);
+    background: linear-gradient(135deg, var(--color-primary), #2c3e50);
     position: relative;
     overflow: hidden;
-    color: var(--color-texto-inverso);
-    padding-top: 5rem; /* Ajustado para ser más pequeño */
-    padding-bottom: 5rem; /* Ajustado para ser más pequeño */
+    color: var(--color-text-inverse);
+    padding-top: 5rem;
+    padding-bottom: 5rem;
 }
 
 .hero-content {
@@ -237,47 +242,30 @@ header .cta-button:active {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 40vh; /* Valor reducido */
-    padding: var(--espacio-xl) 0;
+    min-height: 40vh;
+    padding: var(--space-xl) 0;
+    text-align: center; /* Centrar texto para un mejor impacto */
 }
 
 .hero-section h1 {
-    /* Estos estilos aplican si el H1 contiene TEXTO */
-    font-family: var(--fuente-principal);
+    font-family: var(--font-primary);
     font-weight: 700;
-    color: var(--color-texto-inverso);
-    margin-bottom: var(--espacio-md);
+    color: var(--color-text-inverse);
+    margin-bottom: var(--space-md);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    font-size: 3rem; /* Tamaño ajustado */
-    /* Si el H1 contiene una imagen, estos estilos no se aplicarán a la imagen */
+    font-size: 3rem;
 }
 
 .hero-section p {
-    font-family: var(--fuente-secundaria);
-    font-size: 1rem; /* Tamaño ajustado */
+    font-family: var(--font-secondary);
+    font-size: 1.1rem; /* Ligeramente más grande para legibilidad */
     color: rgba(255, 255, 255, 0.8);
-    max-width: 70ch; /* Limita el ancho para legibilidad */
+    max-width: 70ch;
     line-height: 1.7;
-    margin-bottom: var(--espacio-lg);
+    margin-bottom: var(--space-lg);
 }
 
-.hero-section .cta-button {
-    background-color: var(--color-marca-secundaria);
-    color: var(--color-texto-oscuro);
-    padding: var(--espacio-sm) var(--espacio-lg);
-    border-radius: var(--borde-radio-md);
-    font-weight: 600;
-    text-decoration: none;
-    transition: background-color var(--transicion-rapida);
-    box-shadow: var(--sombra-sm);
-}
-
-.hero-section .cta-button:hover {
-    background-color: var(--color-marca-secundaria-oscuro);
-    color: var(--color-texto-inverso);
-}
-
-/* Background del espacio */
+/* Background del espacio (mantener como estaba) */
 .space-background {
     background: linear-gradient(135deg, #16222A, #3A6073);
     overflow: hidden;
@@ -307,52 +295,49 @@ header .cta-button:active {
 
 /* Estilos para Productos Destacados (Carrusel) */
 #featured-products {
-    background-color: var(--color-fondo-claro);
-    padding-top: var(--espacio-2xl);
-    padding-bottom: var(--espacio-2xl);
+    background-color: var(--color-background-light);
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
 }
 
 #productos-carrusel-container {
     cursor: grab;
-    /* Asegúrate de que el contenedor padre en HTML permita overflow si es necesario */
 }
 #productos-carrusel-container.dragging {
     cursor: grabbing;
 }
 
 #productos-carrusel {
-   gap: var(--espacio-md); /* Espacio entre las tarjetas */
-   display: flex; /* Asegurar que sea flex container para los items */
-   /* Necesario para que flexbox funcione correctamente con items de ancho fijo */
-   flex-wrap: nowrap; /* Evitar que los items salten de línea */
-   overflow-x: visible; /* Permitir que los items salgan del contenedor flex si es necesario */
+    gap: var(--space-md);
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: visible;
 }
 
 .producto-card {
-    transition: transform var(--transicion-default), box-shadow var(--transicion-default), border-color var(--transicion-default);
+    transition: transform var(--transition-default), box-shadow var(--transition-default), border-color var(--transition-default);
     background-color: #fff;
     border: 1px solid #eee;
-    box-shadow: var(--sombra-suave);
-    border-radius: var(--borde-redondo-md);
+    box-shadow: var(--shadow-soft);
+    border-radius: var(--border-radius-md);
     overflow: hidden;
-    /* w-full sm:w-1/2 md:w-1/3 px-2 vienen de Tailwind en HTML */
-    flex-shrink: 0; /* CRUCIAL: Evita que los items se encojan en el flex container */
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     height: 100%;
-    /* min-width: 0; */ /* Asegurar que no haya un min-width que cause problemas */
+    /* min-width ya lo gestiona Tailwind con px-2 */
 }
 
 .producto-card:hover {
     transform: translateY(-8px);
-    box-shadow: var(--sombra-card-hover);
-    border-color: var(--color-marca-primario); /* Borde de acento en hover */
+    box-shadow: var(--shadow-card-hover);
+    border-color: var(--color-primary);
 }
 
 .producto-card img {
     transition: transform 0.6s ease-out, opacity 0.6s ease-out;
     width: 100%;
-    height: 180px; /* Altura fija para la imagen */
+    height: 180px;
     object-fit: cover;
     display: block;
 }
@@ -367,172 +352,140 @@ header .cta-button:active {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: var(--espacio-md);
+    padding: var(--space-md);
 }
 
 .producto-card-content h3 {
-    color: var(--color-texto-oscuro);
+    color: var(--color-text-heading);
     font-size: 1.1rem;
-    margin-bottom: var(--espacio-xs);
-    white-space: nowrap; /* Prevenir salto de línea */
+    margin-bottom: var(--space-xs);
+    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* Añadir puntos suspensivos */
+    text-overflow: ellipsis;
 }
 
 .producto-card-content a {
-    color: var(--color-marca-primario);
-    font-weight: 600;
-    transition: color var(--transicion-rapida);
-    display: inline-block;
-    margin-top: var(--espacio-sm);
-    text-align: center;
-    padding: var(--espacio-sm) var(--espacio-md);
-    background-color: var(--color-marca-secundaria);
-    color: var(--color-texto-oscuro);
-    border-radius: var(--borde-redondo-sm);
-    transition: background-color var(--transicion-rapida), transform var(--transicion-rapida);
+    @extend .btn-primary; /* Placeholder o copiar propiedades */
+    padding: var(--space-sm) var(--space-md); /* Sobreescribe padding si es necesario */
+    margin-top: var(--space-sm);
+    text-align: center; /* Asegurar centrado si es un botón */
 }
-.producto-card-content a:hover {
-    color: var(--color-texto-inverso);
-    background-color: var(--color-marca-secundaria-oscuro);
-    text-decoration: none;
-}
-.producto-card-content a:active {
-    transform: scale(0.95);
-    transition: transform var(--transicion-rapida);
-}
+
 
 /* Controles del Carrusel (Flechas y Indicadores) */
 .carousel-control {
-    background-color: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente */
-    color: var(--color-marca-primario); /* Color del icono */
+    background-color: rgba(255, 255, 255, 0.8);
+    color: var(--color-primary);
     border: none;
     cursor: pointer;
-    transition: background-color var(--transicion-rapida), color var(--transicion-rapida);
-     /* Posicionamiento y padding vienen de Tailwind en el HTML */
+    transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 .carousel-control:hover {
     background-color: rgba(255, 255, 255, 1);
-    color: var(--color-marca-primario-oscuro);
+    color: var(--color-primary-dark);
 }
 
-/* Estilo para ocultar el contenedor de los indicadores */
-#carousel-indicators {
-    display: none; /* Oculta completamente el contenedor de los puntos */
+/* Ocultar elementos no deseados */
+#carousel-indicators, #pause-play-button {
+    display: none;
 }
 
-/* Estilos para ocultar el botón de pausa/play */
-#pause-play-button {
-    display: none; /* Oculta el botón y no ocupa espacio */
-}
-
-
-/* Estilos para las otras secciones */
-
-.call-to-action {
-     padding-top: var(--espacio-2xl);
-     padding-bottom: var(--espacio-2xl);
-}
-
-.how-it-works {
-     padding-top: var(--espacio-2xl);
-     padding-bottom: var(--espacio-2xl);
+/* Estilos para las otras secciones genéricas */
+.call-to-action, .how-it-works, .why-choose-us, .testimonials { /* Añadir .why-choose-us y .testimonials para consistencia */
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
 }
 
 .how-it-works-item,
 .why-choose-us-item,
 .testimonial-card {
-     transition: transform var(--transicion-default), box-shadow var(--transicion-default), border-color var(--transicion-default);
-     background-color: #fff;
-     border: 1px solid #eee;
-     box-shadow: var(--sombra-suave);
-     border-radius: var(--borde-redondo-md);
-     padding: var(--espacio-lg);
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     text-align: center;
-     height: 100%;
+    transition: transform var(--transition-default), box-shadow var(--transition-default), border-color var(--transition-default);
+    background-color: #fff;
+    border: 1px solid #eee;
+    box-shadow: var(--shadow-soft);
+    border-radius: var(--border-radius-md);
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 100%;
 }
 
 .how-it-works-item:hover,
 .why-choose-us-item:hover,
 .testimonial-card:hover {
-     transform: translateY(-8px);
-     box-shadow: var(--sombra-card-hover);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-card-hover);
 }
 
 .how-it-works-item i,
 .why-choose-us-item i {
-    color: var(--color-marca-secundaria);
+    color: var(--color-secondary);
     font-size: 3.5rem;
-    margin-bottom: var(--espacio-md);
+    margin-bottom: var(--space-md);
 }
 
 .how-it-works-item h3,
 .why-choose-us-item h3,
 .testimonial-card h3 {
-    color: var(--color-texto-oscuro);
+    color: var(--color-text-heading);
     font-size: 1.3rem;
-    margin-bottom: var(--espacio-sm);
+    margin-bottom: var(--space-sm);
 }
 
 .how-it-works-item p,
 .why-choose-us-item p {
-    color: var(--color-texto-claro);
+    color: var(--color-text-secondary);
     flex-grow: 1;
 }
 
 .testimonial-card img {
-     border: 3px solid var(--color-marca-secundaria);
-     border-radius: var(--borde-redondo-completo);
-     width: 96px; height: 96px;
-     object-fit: cover;
-     margin-bottom: var(--espacio-md);
-     transition: transform var(--transicion-rapida), border-color var(--transicion-rapida);
+    border: 3px solid var(--color-secondary);
+    border-radius: var(--border-radius-full);
+    width: 96px; height: 96px;
+    object-fit: cover;
+    margin-bottom: var(--space-md);
+    transition: transform var(--transition-fast), border-color var(--transition-fast);
 }
 .testimonial-card:hover img {
-     transform: scale(1.08);
-     border-color: var(--color-marca-primario);
+    transform: scale(1.08);
+    border-color: var(--color-primary);
 }
 
 .testimonial-card p.quote {
-     color: var(--color-texto-claro);
-     font-style: italic;
-     margin-bottom: var(--espacio-md);
-     flex-grow: 1;
+    color: var(--color-text-secondary);
+    font-style: italic;
+    margin-bottom: var(--space-md);
+    flex-grow: 1;
 }
-
 
 /* Footer */
 footer {
     background-color: #1F2937;
     color: #D1D5DB;
-    padding-top: var(--espacio-2xl);
-    padding-bottom: var(--espacio-2xl);
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
     font-size: 0.95rem;
-}
-
-footer .container {
 }
 
 footer h3 {
     color: #F9FAFB;
-    margin-bottom: var(--espacio-lg);
+    margin-bottom: var(--space-lg);
     font-size: 1.2rem;
     font-weight: 700;
 }
 
 footer p {
-    margin-bottom: var(--espacio-sm);
+    margin-bottom: var(--space-sm);
 }
 
 footer a {
     color: #D1D5DB;
-    transition: color var(--transicion-rapida);
+    transition: color var(--transition-fast);
 }
 footer a:hover {
-    color: var(--color-marca-secundaria);
+    color: var(--color-secondary);
     text-decoration: underline;
 }
 
@@ -543,11 +496,11 @@ footer ul {
 }
 
 footer ul li {
-    margin-bottom: var(--espacio-xs);
+    margin-bottom: var(--space-xs);
 }
 
 .footer-section-links ul li {
-    margin-bottom: var(--espacio-sm);
+    margin-bottom: var(--space-sm);
 }
 
 footer .social-icons-footer .flex {
@@ -555,32 +508,31 @@ footer .social-icons-footer .flex {
 }
 
 @media (min-width: 768px) {
-     footer .social-icons-footer .flex {
-         justify-content: flex-start;
-     }
+    footer .social-icons-footer .flex {
+        justify-content: flex-start;
+    }
 }
-
 
 footer .social-icons-footer a {
     color: #D1D5DB;
     font-size: 1.6rem;
-    margin: 0 var(--espacio-sm);
-    transition: color var(--transicion-rapida), transform var(--transicion-rapida);
+    margin: 0 var(--space-sm);
+    transition: color var(--transition-fast), transform var(--transition-fast);
     display: inline-block;
 }
 
 footer .social-icons-footer a:hover {
-    color: var(--color-marca-secundaria);
+    color: var(--color-secondary);
     transform: translateY(-3px) scale(1.1);
 }
 
 footer .copyright {
     color: rgba(209, 213, 219, 0.7);
-    margin-top: var(--espacio-2xl);
+    margin-top: var(--space-2xl);
     text-align: center;
     font-size: 0.9rem;
     border-top: 1px solid #4B5563;
-    padding-top: var(--espacio-lg);
+    padding-top: var(--space-lg);
 }
 
 
@@ -610,6 +562,7 @@ footer .copyright {
     }
 }
 
+/* Animación para scroll */
 .fade-in-up-scroll {
     opacity: 0;
     transform: translateY(40px);
@@ -628,13 +581,13 @@ footer .copyright {
 /* Ajustes generales para padding y espaciado en pantallas más pequeñas */
 @media (max-width: 1024px) { /* Breakpoint 'lg' de Tailwind */
     .container {
-        padding-left: var(--espacio-md);
-        padding-right: var(--espacio-md);
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
     }
 
     section {
-        padding-top: var(--espacio-xl);
-        padding-bottom: var(--espacio-xl);
+        padding-top: var(--space-xl);
+        padding-bottom: var(--space-xl);
     }
 }
 
@@ -652,29 +605,29 @@ footer .copyright {
     .why-choose-us-item,
     .testimonial-card,
     .producto-card {
-        padding: var(--espacio-md);
+        padding: var(--space-md);
     }
 
-     .how-it-works-item i,
-     .why-choose-us-item i {
-         font-size: 3rem;
-         margin-bottom: var(--espacio-md);
-     }
+    .how-it-works-item i,
+    .why-choose-us-item i {
+        font-size: 3rem;
+        margin-bottom: var(--space-md);
+    }
 
     .testimonial-card img {
         width: 80px; height: 80px;
-        margin-bottom: var(--espacio-md);
+        margin-bottom: var(--space-md);
     }
 
-     footer {
-        padding-top: var(--espacio-xl);
-        padding-bottom: var(--espacio-xl);
-     }
+    footer {
+        padding-top: var(--space-xl);
+        padding-bottom: var(--space-xl);
+    }
 
-     footer .social-icons-footer .flex {
-         font-size: 1.4rem;
-         margin: 0 var(--espacio-sm);
-     }
+    footer .social-icons-footer a { /* Cambiado de .flex para afectar directamente el a */
+        font-size: 1.4rem;
+        margin: 0 var(--space-sm);
+    }
 }
 
 @media (max-width: 640px) { /* Breakpoint 'sm' de Tailwind */
@@ -684,8 +637,8 @@ footer .copyright {
     }
     .hero-content {
         min-height: auto;
-        padding-top: var(--espacio-lg);
-        padding-bottom: var(--espacio-lg);
+        padding-top: var(--space-lg);
+        padding-bottom: var(--space-lg);
     }
 
     .hero-section h1 {
@@ -701,44 +654,45 @@ footer .copyright {
     h3 { font-size: 1.3em; }
 
     section {
-        padding-top: var(--espacio-lg);
-        padding-bottom: var(--espacio-lg);
+        padding-top: var(--space-lg);
+        padding-bottom: var(--space-lg);
     }
 
-     footer {
-        padding-top: var(--espacio-lg);
-        padding-bottom: var(--espacio-lg);
-     }
+    footer {
+        padding-top: var(--space-lg);
+        padding-bottom: var(--space-lg);
+    }
 
-    footer .social-icons-footer .flex {
+    footer .social-icons-footer a { /* Cambiado de .flex para afectar directamente el a */
         font-size: 1.2rem;
-        margin: 0 var(--espacio-xs);
+        margin: 0 var(--space-xs);
     }
 }
 
 /* Considera ajustar la complejidad de animaciones en dispositivos de gama baja o con `@media (prefers-reduced-motion: reduce)` */
 @media (prefers-reduced-motion: reduce) {
-  .hero-section h1, .hero-section p, .hero-section a,
-  .how-it-works-item, .why-choose-us-item, .testimonial-card, .producto-card,
-  .producto-card:hover, .testimonial-card:hover, .why-choose-us-item:hover, .how-it-works-item:hover,
-  footer .social-icons-footer a:hover,
-  .producto-card:hover img, .testimonial-card:hover img,
-  header nav a:hover, header nav a:active,
-  header .cta-button:hover, header .cta-button:active,
-  #user-dropdown-button:hover, #user-dropdown-button:active {
-      animation: none !important;
-      transition: none !important;
-      transform: none !important;
-      box-shadow: var(--sombra-suave) !important;
-  }
+    /* Desactivar todas las transiciones y transformaciones */
+    * {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+        box-shadow: none !important; /* Resetear sombras si causan distracción */
+    }
 
-  .fade-in-up-scroll {
-      opacity: 1 !important;
-      transform: none !important;
-  }
+    /* Restaurar sombras solo para elementos que las necesitan si "none" es demasiado agresivo */
+    .producto-card, .how-it-works-item, .why-choose-us-item, .testimonial-card, header, #user-dropdown {
+        box-shadow: var(--shadow-soft) !important;
+    }
 
-  .hero-section.space-background,
-  .hero-section {
-     background-attachment: scroll !important;
-  }
+    /* Asegurar que los elementos fade-in estén visibles instantáneamente */
+    .fade-in-up-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    /* Asegurar que los fondos se desplacen con el scroll */
+    .hero-section.space-background,
+    .hero-section {
+        background-attachment: scroll !important;
+    }
 }

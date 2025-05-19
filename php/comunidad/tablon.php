@@ -114,17 +114,11 @@
     <title>Tablón Comunidad | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     
-    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/index.css">
     <link rel="stylesheet" href="../../css/tablon.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<<<<<<< HEAD
-
-  
-
-=======
     <link rel="icon" href="../util/img/.faviconWC.png " type="image/x-icon">
     <!-- favicon -->
->>>>>>> 39331ad4504567df7d5f33ab819c2b589da09df2
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
 
