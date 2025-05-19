@@ -365,8 +365,14 @@
             </div>
         </div>
     </footer>
+<<<<<<< HEAD
 
 
     <script src="../../js/desplegable.js"></script>
     <script src="../../js/lightbox.js"></script> <script src="../../js/comentario.js"></script> <script src="../../js/relatedProductsCarousel.js"></script> </body>
 </html>
+=======
+    <script src="../../js/script2.js"></script>
+</body>
+</html>
+>>>>>>> fb7cb498cf3ef04097a88d26c3ed5c9f5f58bbd6
