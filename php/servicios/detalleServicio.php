@@ -30,13 +30,13 @@
             <a href="../../index.php" class="logo inline-block">
                 <img src="../util/img/Logo.png" alt="We-Connect Logo" class="h-10 w-auto">
             </a>
-            <nav class="flex items-center space-x-4">
+          <nav class="flex items-center space-x-4">
                 <a href="../recursos/recursos.php" class="text-gray-700 hover:text-black mr-4 font-semibold">Recursos</a>
-                <a href="../productos/producto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Productos</a>
+        
                 <a href="../servicios/servicio.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Servicios</a>
+
                 <a href="../contacto.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Contacto</a>
                 <?php
-                    // Asegurarse de que el id_servicio está en la URL
                     if (!isset($_GET['id_servicio'])) {
                         die("Error: ID de servicio no especificado.");
                     }
@@ -68,12 +68,12 @@
                     $usuarioPropietario = htmlspecialchars($servicio["usuario"]);
                     $stmtServicio->close();
 
-                    // --- Obtener comentarios y valoraciones ---
-                    $sqlComentarios = "SELECT cs.*, u.usuario AS nombre_usuario_comentario, u.foto_perfil
-                                      FROM comentarios_servicio cs
-                                      JOIN usuario u ON cs.usuario_alias = u.usuario
-                                      WHERE cs.id_servicio = ?
-                                      ORDER BY cs.fecha_creacion DESC";
+                    // --- Obtener comentarios y valoraciones para servicios ---
+                    $sqlComentarios = "SELECT cp.*, u.usuario AS nombre_usuario_comentario, u.foto_perfil
+                                      FROM comentarios_servicio cp
+                                      JOIN usuario u ON cp.usuario_alias = u.usuario
+                                      WHERE cp.id_servicio = ?
+                                      ORDER BY cp.fecha_creacion DESC";
 
                     $stmtComentarios = $_conexion->prepare($sqlComentarios);
                     if ($stmtComentarios === false) { die("Error preparando la consulta de comentarios: " . $_conexion->error); }
@@ -89,7 +89,7 @@
                     }
                     $stmtComentarios->close();
 
-                    // --- Calcular valoración promedio ---
+                    // --- Calcular valoración promedio para servicios ---
                     $sqlPromedio = "SELECT AVG(valoracion) AS promedio, COUNT(id_comentario) AS total_valoraciones
                                     FROM comentarios_servicio
                                     WHERE id_servicio = ?";
@@ -106,7 +106,7 @@
                     // --- Obtener servicios relacionados (misma categoría, excluyendo el actual) ---
                     $sqlRelacionados = "SELECT * FROM servicio
                                         WHERE categoria = ? AND id_servicio != ?
-                                        ORDER BY fecha_agregado DESC LIMIT 10"; // Limitar a 10 relacionados
+                                        ORDER BY fecha_agregado DESC LIMIT 10";
 
                     $stmtRelacionados = $_conexion->prepare($sqlRelacionados);
                     if ($stmtRelacionados === false) { die("Error preparando la consulta de relacionados: " . $_conexion->error); }
@@ -126,13 +126,9 @@
                     // --- Mostrar menú de usuario ---
                     if(isset($_SESSION["usuario"]["usuario"])){
                         $aliasUsuarioActual = htmlspecialchars($_SESSION['usuario']['usuario']);
-<<<<<<< HEAD
-                         $imagenPerfil = '../util/img/usuario.jpg';
-=======
-                         $imagenPerfil = '../util/img/usuario.png';
->>>>>>> 39331ad4504567df7d5f33ab819c2b589da09df2
+                         $imagenPerfil = '/php/util/img/usuario.png'; // Ruta por defecto para el header
                          if (isset($_SESSION['usuario']['foto_perfil']) && !empty($_SESSION['usuario']['foto_perfil'])) {
-                             $rutaImagen = '../util/' . ltrim($_SESSION['usuario']['foto_perfil'], '/');
+                             $rutaImagen = '/php/util/' . ltrim($_SESSION['usuario']['foto_perfil'], '/');
                              if (file_exists($rutaImagen)) {
                                  $imagenPerfil = $rutaImagen;
                              }
@@ -140,7 +136,8 @@
 
                         echo '<div class="relative">';
                         echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-black focus:outline-none" aria-expanded="false" aria-haspopup="true">';
-                        echo '        <img class="h-8 w-8 rounded-full mr-2 object-cover" src="' . htmlspecialchars($imagenPerfil) . '" alt="Imagen de Perfil">';
+                         echo '        <img class="h-8 w-8 rounded-full mr-2 object-cover" src="' . htmlspecialchars($imagenPerfil) . '" alt="Imagen de Perfil">';
+
                         echo '        <span>' . $aliasUsuarioActual . '</span>';
                         echo '        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
                         echo '    </button>';
@@ -148,13 +145,13 @@
                         echo '        <a href="../usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Panel</a>';
                         echo '        <a href="../usuarios/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
                          echo '        <hr class="border-gray-200">';
-                          echo '        <a href="../comunidad/tablon.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Tablón Comunidad</a>';
-                    echo '        <a href="../categoria/index.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Categoría</a>';
-                    echo '        <hr class="border-red-200">';
+                        echo '        <a href="../comunidad/tablon.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Tablón Comunidad</a>';
+                        echo '        <a href="../categoria/index.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Categoría</a>';
+                        echo '        <hr class="border-red-200">';
                          if (isset($_SESSION['usuario']['rol'])) {
                              if ($_SESSION['usuario']['rol'] === 'vendedor' || $_SESSION['usuario']['rol'] === 'admin') {
                                   echo '        <hr class="border-gray-200">';
-                                  echo '        <a href="../productos/gestionarProductos.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Gestionar Productos</a>';
+                                  echo '        <a href="gestionarProductos.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Gestionar Productos</a>';
                                   echo '        <a href="../servicios/gestionarServicios.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Gestionar Servicios</a>';
                              }
                          }
@@ -176,7 +173,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                     <div id="contenedor-imagen-principal" class="mb-4 cursor-zoom-in">
-                        <img id="imagen-principal" src="../util/<?php echo $imagen ?>" alt="Imagen del Servicio" class="w-full rounded-md">
+                        <img id="imagen-principal" src="/php/util/<?php echo $imagen ?>" alt="Imagen del Servicio" class="w-full rounded-md">
                     </div>
                     <div id="lightbox" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 z-50 hidden flex items-center justify-center">
                         <button id="cerrar-lightbox" class="absolute top-4 right-4 text-white text-3xl focus:outline-none">&times;</button>
@@ -209,7 +206,9 @@
                     <p class="text-gray-600 mb-4"><span class="text-green-500">Disponible</span></p>
 
                     <?php
+                        // Verificar si el usuario logueado es el propietario del servicio
                         if (isset($_SESSION["usuario"]["usuario"]) && $_SESSION["usuario"]["usuario"] === $usuarioPropietario) {
+                            // Mostrar el botón de editar
                             echo '<div class="mb-6">';
                             echo '    <a href="editarServicio.php?id_servicio=' . htmlspecialchars($idServicio) . '" class="bg-yellow-500 text-black py-3 px-6 rounded-md hover:bg-yellow-600 focus:outline-none focus:shadow-outline">Editar Servicio</a>';
                             echo '</div>';
@@ -221,7 +220,7 @@
                      ?>
 
                     <div>
-                        <h2 class="text-xl font-semibold text-gray-800 mb-2">Ofrecido por:</h2>
+                        <h2 class="text-xl font-semibold text-gray-800 mb-2">Servicio ofrecido por:</h2>
                         <div class="flex items-center">
                              <div class="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center text-white font-semibold mr-2">
                                 EP
@@ -237,25 +236,17 @@
                 <h2 class="text-2xl font-semibold text-gray-800 mb-4">Comentarios de otros usuarios</h2>
                 <div id="lista-comentarios">
                     <?php
-                        // --- Mostrar comentarios existentes ---
+                        // --- Mostrar comentarios existentes (Sin Foto de Perfil) ---
                         if (!empty($comentarios)) {
                             foreach ($comentarios as $comentario) {
-                                 $fotoPerfilComentario = '../util/img/usuario.jpg';
-                                 if (!empty($comentario['foto_perfil'])) {
-                                      $rutaImagenComentario = '../util/' . ltrim($comentario['foto_perfil'], '/');
-                                      if (file_exists($rutaImagenComentario)) {
-                                          $fotoPerfilComentario = $rutaImagenComentario;
-                                      }
-                                 }
-
                                 echo '<div class="mb-6 p-4 bg-gray-100 rounded-md border border-gray-200 comentario-item" data-id="' . htmlspecialchars($comentario['id_comentario']) . '">';
                                  echo '    <div class="flex items-center mb-2">';
-                                 echo '        <img src="' . htmlspecialchars($fotoPerfilComentario) . '" alt="Foto de perfil de ' . htmlspecialchars($comentario['nombre_usuario_comentario']) . '" class="w-8 h-8 rounded-full object-cover mr-2">';
                                  echo '        <p class="text-gray-700 font-semibold mr-2">' . htmlspecialchars($comentario['nombre_usuario_comentario']) . ':</p>';
-                                  echo '        <span class="text-gray-600 text-sm">' . htmlspecialchars(date("d/m/Y H:i", strtotime($comentario['fecha_creacion']))) . '</span>';
+                                  echo '        <span class="text-gray-600 text-sm">' . htmlspecialchars(date("d/m/Y H:i", strtotime($comentario['fecha_creacion']))) . '</span>'; // Formatear fecha
                                   echo '    </div>';
                                 echo '    <p class="text-gray-700 mb-2">' . htmlspecialchars($comentario['comentario']) . '</p>';
                                 echo '    <div class="flex items-center">';
+                                 // Mostrar estrellas de valoración para este comentario
                                  $valoracionIndividual = $comentario['valoracion'] ?? 0;
                                  for ($i = 1; $i <= 5; $i++) {
                                      if ($i <= $valoracionIndividual) {
@@ -273,10 +264,10 @@
                     ?>
                 </div>
 
-             <div class="mt-8">
+           <div class="mt-8">
     <h3 class="text-xl font-semibold text-gray-800 mb-4">Dejar un comentario y valoración</h3>
     <?php if (isset($_SESSION["usuario"]["usuario"])): ?>
-        <form id="formulario-comentario" method="POST" data-submit-url="../../php/servicios/guardar_comentario_ajax.php">
+        <form id="formulario-comentario" method="POST" data-submit-url="../../php/servicios/guardar_comentario_servicio_ajax.php">
              <input type="hidden" name="id_servicio" value="<?php echo htmlspecialchars($idServicio); ?>">
 
             <div class="mb-4">
@@ -301,7 +292,6 @@
         <p class="text-gray-600">Debes <a href="../usuarios/login.php" class="text-indigo-500 hover:underline">iniciar sesión</a> para dejar un comentario y valoración.</p>
     <?php endif; ?>
 </div>
-                </div>
             </div>
 
             <div class="mt-12">
@@ -316,7 +306,7 @@
                                     </a>
                                     <div class="p-4">
                                         <h3 class="font-semibold text-gray-700"><?php echo htmlspecialchars($servicioRelacionado['nombre']); ?></h3>
-                                         <p class="text-gray-600 text-sm">Precio: <?php echo htmlspecialchars($servicioRelacionado['precio']); ?>€</p>
+                                        <p class="text-gray-600 text-sm">Precio: <?php echo htmlspecialchars($servicioRelacionado['precio']); ?>€</p>
                                          <a href="detalleServicio.php?id_servicio=<?php echo htmlspecialchars($servicioRelacionado['id_servicio']); ?>" class="text-yellow-500 hover:underline text-sm mt-2 inline-block">Ver Detalles</a>
                                     </div>
                                 </div>
@@ -336,7 +326,7 @@
         </div>
     </main>
 
-     <a href="https://wa.me/+34693680668?text=Hola%20estoy%20interesado%20en%20tu%20servicio%20<?php echo urlencode($nombre); ?>%20que%20has%20publicado%20en%20We-Connect!%20Quiero%20saber%20más%20sobre%20él"
+    <a href="https://wa.me/+34693680668?text=Hola%20estoy%20interesado%20en%20tu%20producto%20<?php echo urlencode($nombre); ?>%20que%20has%20publicado%20en%20We-Connect!%20Quiero%20saber%20más%20sobre%20él"
        class="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 rounded-full shadow-lg p-4 flex items-center justify-center gap-2"
        target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
         <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -359,15 +349,13 @@
                     <h3 class="text-lg font-semibold mb-4 text-white">Enlaces Útiles</h3>
                     <ul class="list-none p-0">
                         <li><a href="../../index.php" class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Inicio</a></li>
-                        <li><a href="../productos/producto.php"
-                                class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Productos</a></li>
                         <li><a href="servicio.php"
                                 class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Servicios</a></li>
                         <li><a href="../contacto.php"
                                 class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Contacto</a></li>
                     </ul>
                 </div>
-                     <div class="footer-section">
+               <div class="footer-section">
                     <h3 class="text-lg font-semibold mb-4 text-white">Soporte</h3>
                     <ul class="list-none p-0">
                         <li><a href="php/terminos/faq.php" class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Preguntas Frecuentes</a></li>
@@ -391,11 +379,9 @@
         </div>
     </footer>
 
-     <script src="../../js/script2.js"></script>
-    <script src="../../js/desplegable.js"></script>
-    <script src="../../js/lightbox.js"></script>
-    <script src="../../js/comentario.js"></script>
-    <script src="../../js/relatedServicesCarousel.js"></script> </body>
-    </body>
-</html>
 
+
+    <script src="../../js/desplegable.js"></script> <script src="../../js/script2.js"></script>
+    <script src="../../js/lightbox.js"></script> <script src="../../js/comentario.js"></script> <script src="../../js/relatedProductsCarousel.js"></script> </body>
+
+</html>

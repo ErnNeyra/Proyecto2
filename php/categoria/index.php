@@ -103,7 +103,7 @@
 
                     // Determinar la ruta de la imagen de perfil
                     // Ruta por defecto desde php/categoria-index.php a php/util/
-                    $imagenPerfil = 'util/img/usuario.png'; // Ruta por defecto desde php/
+                    $imagenPerfil = 'php/util/img/usuario.png'; // Ruta por defecto desde php/
 
                     // Verificamos si existe la foto de perfil del usuario en la sesión y no está vacía
                     if (isset($_SESSION['usuario']['foto_perfil']) && !empty($_SESSION['usuario']['foto_perfil'])) {

@@ -123,7 +123,7 @@
             }
         } else {
             // Si no se subió ninguna foto, asignamos la ruta por defecto
-            $fotoPerfil = '../util/img/usuario.jpg';
+            $fotoPerfil = '../util/img/usuario.png';
         }
 
              if (empty($errores)) {
