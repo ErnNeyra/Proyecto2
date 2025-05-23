@@ -1,0 +1,612 @@
+/* index2.css - Versión mejorada del diseño original
+   Ajustes de accesibilidad, interacción y consistencia visual
+*/
+
+/* ==========================================================================  
+   Variables de Marca y Diseño  
+   ========================================================================== */
+:root {
+    --color-primary: #1a3d5e;
+    --color-primary-rgb: 26, 61, 94;
+    --color-primary-dark: #15314b;
+
+    --color-secondary: #f3a638;
+    --color-secondary-rgb: 243, 166, 56;
+    --color-secondary-dark: #e0972d;
+
+    --color-text-main: #333;
+    --color-text-heading: #1F2937;
+    --color-text-secondary: #6B7280;
+    --color-text-inverse: #f8f8f8;
+
+    --color-background-light: #f8f8f8;
+    --color-border-light: #E2E8F0;
+    --color-background-card-hover: #F7FAFC;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.15);
+    --shadow-card-hover: var(--shadow-medium);
+
+    --font-primary: 'Poppins', sans-serif;
+    --font-secondary: 'Open Sans', sans-serif;
+
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+
+    --border-radius-sm: 0.125rem;
+    --border-radius-md: 0.375rem;
+    --border-radius-lg: 0.75rem;
+    --border-radius-full: 9999px;
+
+    --transition-fast: 0.2s ease; /* mejora: más suave */
+    --transition-smooth: 0.3s ease-in-out;
+    --transition-default: var(--transition-smooth);
+
+    --z-index-low: 10;
+    --z-index-medium: 20;
+    --z-index-high: 30;
+    --z-index-superior: 40;
+    --z-index-header: 50;
+}
+
+/* Reset */
+body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, blockquote, dl, dd, form, fieldset, legend, textarea, pre {
+    margin: 0;
+    padding: 0;
+}
+html {
+    box-sizing: border-box;
+}
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: var(--font-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+    color: var(--color-text-main);
+}
+
+/* Accesibilidad */
+:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.5);
+    outline-offset: 3px; /* mejora */
+    transition: box-shadow var(--transition-fast);
+}
+:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
+}
+
+section {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+}
+
+/* Header */
+header {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid var(--color-border-light);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-index-header);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(5px);
+}
+header .container {
+    padding-top: var(--space-md);
+    padding-bottom: var(--space-md);
+}
+header .logo {
+    color: var(--color-text-heading);
+}
+header nav a {
+    color: var(--color-text-secondary);
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    display: inline-block;
+}
+header nav a:hover {
+    color: var(--color-primary);
+    transform: translateY(-3px);
+}
+header nav a:active {
+    transform: scale(0.95);
+}
+
+/* Botones */
+.btn-primary {
+    background-color: var(--color-secondary);
+    color: var(--color-text-heading);
+    font-weight: 600;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--border-radius-sm);
+    transition: background-color var(--transition-fast), transform var(--transition-fast), color var(--transition-fast);
+    display: inline-block;
+    text-decoration: none;
+}
+.btn-primary:hover {
+    background-color: var(--color-secondary-dark);
+    color: var(--color-text-inverse);
+    transform: translateY(-3px);
+}
+.btn-primary:active {
+    transform: scale(0.95);
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--color-primary), #2c3e50);
+    position: relative;
+    overflow: hidden;
+    color: var(--color-text-inverse);
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 40vh;
+    padding: var(--space-xl) 0;
+    text-align: center;
+}
+.hero-section h1 {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    color: var(--color-text-inverse);
+    margin-bottom: var(--space-md);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    font-size: 3rem;
+}
+.hero-section p {
+    font-family: var(--font-secondary);
+    font-size: 1.15rem; /* mejora: mejor legibilidad */
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 70ch;
+    line-height: 1.7;
+    margin-bottom: var(--space-lg);
+}
+
+/* Background del espacio (mantener como estaba) */
+.space-background {
+    background: linear-gradient(135deg, #16222A, #3A6073);
+    overflow: hidden;
+    position: relative;
+}
+
+.stars, .twinkling {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.stars {
+    background: url(./img/stars.png) repeat top center;
+    z-index: 0;
+}
+
+.twinkling {
+    background: url(./img/twinkling.png) repeat top center;
+    z-index: 1;
+    animation: twinkling 60s infinite;
+}
+
+/* Estilos para Productos Destacados (Carrusel) */
+#featured-products {
+    background-color: var(--color-background-light);
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+}
+
+#productos-carrusel-container {
+    cursor: grab;
+}
+#productos-carrusel-container.dragging {
+    cursor: grabbing;
+}
+
+#productos-carrusel {
+    gap: var(--space-md);
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: visible;
+}
+
+.producto-card {
+    transition: transform var(--transition-default), box-shadow var(--transition-default), border-color var(--transition-default);
+    background-color: #fff;
+    border: 1px solid #eee;
+    box-shadow: var(--shadow-soft);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    /* min-width ya lo gestiona Tailwind con px-2 */
+}
+
+.producto-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: var(--color-primary);
+}
+
+.producto-card img {
+    transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+}
+
+.producto-card:hover img {
+    transform: scale(1.05);
+    opacity: 0.95;
+}
+
+.producto-card-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--space-md);
+}
+
+.producto-card-content h3 {
+    color: var(--color-text-heading);
+    font-size: 1.1rem;
+    margin-bottom: var(--space-xs);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.producto-card-content a {
+    @extend .btn-primary; /* Placeholder o copiar propiedades */
+    padding: var(--space-sm) var(--space-md); /* Sobreescribe padding si es necesario */
+    margin-top: var(--space-sm);
+    text-align: center; /* Asegurar centrado si es un botón */
+}
+
+
+/* Controles del Carrusel (Flechas y Indicadores) */
+.carousel-control {
+    background-color: rgba(255, 255, 255, 0.8);
+    color: var(--color-primary);
+    border: none;
+    cursor: pointer;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+.carousel-control:hover {
+    background-color: rgba(255, 255, 255, 1);
+    color: var(--color-primary-dark);
+}
+
+/* Ocultar elementos no deseados */
+#carousel-indicators, #pause-play-button {
+    display: none;
+}
+
+/* Estilos para las otras secciones genéricas */
+.call-to-action, .how-it-works, .why-choose-us, .testimonials { /* Añadir .why-choose-us y .testimonials para consistencia */
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+}
+
+.how-it-works-item,
+.why-choose-us-item,
+.testimonial-card {
+    transition: transform var(--transition-default), box-shadow var(--transition-default), border-color var(--transition-default);
+    background-color: #fff;
+    border: 1px solid #eee;
+    box-shadow: var(--shadow-soft);
+    border-radius: var(--border-radius-md);
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+}
+
+.how-it-works-item:hover,
+.why-choose-us-item:hover,
+.testimonial-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-card-hover);
+}
+
+.how-it-works-item i,
+.why-choose-us-item i {
+    color: var(--color-secondary);
+    font-size: 3.5rem;
+    margin-bottom: var(--space-md);
+}
+
+.how-it-works-item h3,
+.why-choose-us-item h3,
+.testimonial-card h3 {
+    color: var(--color-text-heading);
+    font-size: 1.3rem;
+    margin-bottom: var(--space-sm);
+}
+
+.how-it-works-item p,
+.why-choose-us-item p {
+    color: var(--color-text-secondary);
+    flex-grow: 1;
+}
+
+.testimonial-card img {
+    border: 3px solid var(--color-secondary);
+    border-radius: var(--border-radius-full);
+    width: 96px; height: 96px;
+    object-fit: cover;
+    margin-bottom: var(--space-md);
+    transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+.testimonial-card:hover img {
+    transform: scale(1.08);
+    border-color: var(--color-primary);
+}
+
+.testimonial-card p.quote {
+    color: var(--color-text-secondary);
+    font-style: italic;
+    margin-bottom: var(--space-md);
+    flex-grow: 1;
+}
+
+/* Footer */
+footer {
+    background-color: #1F2937;
+    color: #D1D5DB;
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+    font-size: 0.95rem;
+}
+
+footer h3 {
+    color: #F9FAFB;
+    margin-bottom: var(--space-lg);
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+footer p {
+    margin-bottom: var(--space-sm);
+}
+
+footer a {
+    color: #D1D5DB;
+    transition: color var(--transition-fast);
+}
+footer a:hover {
+    color: var(--color-secondary);
+    text-decoration: underline;
+}
+
+footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+footer ul li {
+    margin-bottom: var(--space-xs);
+}
+
+.footer-section-links ul li {
+    margin-bottom: var(--space-sm);
+}
+
+footer .social-icons-footer .flex {
+    justify-content: center;
+}
+
+@media (min-width: 768px) {
+    footer .social-icons-footer .flex {
+        justify-content: flex-start;
+    }
+}
+
+footer .social-icons-footer a {
+    color: #D1D5DB;
+    font-size: 1.6rem;
+    margin: 0 var(--space-sm);
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    display: inline-block;
+}
+
+footer .social-icons-footer a:hover {
+    color: var(--color-secondary);
+    transform: translateY(-3px) scale(1.1);
+}
+
+footer .copyright {
+    color: rgba(209, 213, 219, 0.7);
+    margin-top: var(--space-2xl);
+    text-align: center;
+    font-size: 0.9rem;
+    border-top: 1px solid #4B5563;
+    padding-top: var(--space-lg);
+}
+
+
+/* ==========================================================================
+   Animaciones Keyframes
+   ========================================================================== */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse-subtle {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.02);
+        opacity: 0.95;
+    }
+}
+
+/* Animación para scroll */
+.fade-in-up-scroll {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.fade-in-up-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* ==========================================================================
+   Responsivo (Ajustes y Estructura para Breakpoints)
+   ========================================================================== */
+
+/* Ajustes generales para padding y espaciado en pantallas más pequeñas */
+@media (max-width: 1024px) { /* Breakpoint 'lg' de Tailwind */
+    .container {
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
+    }
+
+    section {
+        padding-top: var(--space-xl);
+        padding-bottom: var(--space-xl);
+    }
+}
+
+
+@media (max-width: 768px) { /* Breakpoint 'md' de Tailwind */
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-section p {
+        font-size: 1.1rem;
+    }
+
+    .how-it-works-item,
+    .why-choose-us-item,
+    .testimonial-card,
+    .producto-card {
+        padding: var(--space-md);
+    }
+
+    .how-it-works-item i,
+    .why-choose-us-item i {
+        font-size: 3rem;
+        margin-bottom: var(--space-md);
+    }
+
+    .testimonial-card img {
+        width: 80px; height: 80px;
+        margin-bottom: var(--space-md);
+    }
+
+    footer {
+        padding-top: var(--space-xl);
+        padding-bottom: var(--space-xl);
+    }
+
+    footer .social-icons-footer a { /* Cambiado de .flex para afectar directamente el a */
+        font-size: 1.4rem;
+        margin: 0 var(--space-sm);
+    }
+}
+
+@media (max-width: 640px) { /* Breakpoint 'sm' de Tailwind */
+    .hero-section {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+    .hero-content {
+        min-height: auto;
+        padding-top: var(--space-lg);
+        padding-bottom: var(--space-lg);
+    }
+
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+
+    .hero-section p {
+        font-size: 1rem;
+    }
+
+    h1 { font-size: 2em; }
+    h2 { font-size: 1.6em; }
+    h3 { font-size: 1.3em; }
+
+    section {
+        padding-top: var(--space-lg);
+        padding-bottom: var(--space-lg);
+    }
+
+    footer {
+        padding-top: var(--space-lg);
+        padding-bottom: var(--space-lg);
+    }
+
+    footer .social-icons-footer a { /* Cambiado de .flex para afectar directamente el a */
+        font-size: 1.2rem;
+        margin: 0 var(--space-xs);
+    }
+}
+
+/* Considera ajustar la complejidad de animaciones en dispositivos de gama baja o con `@media (prefers-reduced-motion: reduce)` */
+@media (prefers-reduced-motion: reduce) {
+    /* Desactivar todas las transiciones y transformaciones */
+    * {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+        box-shadow: none !important; /* Resetear sombras si causan distracción */
+    }
+
+    /* Restaurar sombras solo para elementos que las necesitan si "none" es demasiado agresivo */
+    .producto-card, .how-it-works-item, .why-choose-us-item, .testimonial-card, header, #user-dropdown {
+        box-shadow: var(--shadow-soft) !important;
+    }
+
+    /* Asegurar que los elementos fade-in estén visibles instantáneamente */
+    .fade-in-up-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    /* Asegurar que los fondos se desplacen con el scroll */
+    .hero-section.space-background,
+    .hero-section {
+        background-attachment: scroll !important;
+    }
+}

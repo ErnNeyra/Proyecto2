@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>We-Connect: Tu Plataforma de Conexión Profesional</title>
-
+  
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/styles.css">
+    
+    <link rel="stylesheet" href="css/nuevo.css">
+    
     
 
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -46,7 +47,7 @@
                         echo '<div class="relative">'; // Clase relativa para el posicionamiento absoluto del desplegable
                         echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-marca-primario transition duration-200 focus:outline-none" aria-expanded="false" aria-haspopup="true">';
                         // Mostrar la foto de perfil
-                        echo '        <img class="h-8 w-8 rounded-full mr-2 object-cover" src="/' . htmlspecialchars($imagenPerfil) . '" alt="Imagen de Perfil de ' . $nombreUsuario . '">';
+                        echo '        <img class="h-8 w-8 rounded-full mr-2 object-cover" src="./' . htmlspecialchars($imagenPerfil) . '" alt="Imagen de Perfil de ' . $nombreUsuario . '">';
                         echo '        <span>' . $nombreUsuario . '</span>';
                         echo '        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
                         echo '    </button>';
@@ -296,6 +297,7 @@
 
     <script src="js/desplegable.js"></script>
     <script src="js/script2.js"></script>
+     <script src="js/index.js"></script>
     
 </body>
 </html>

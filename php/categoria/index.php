@@ -42,44 +42,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explorar Categorías | We-Connect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../css/index.css">
-    <link rel="stylesheet" href="../../css/styles.css">
+    
     <link rel="stylesheet" href="../../css/categorias.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="icon" href="../util/img/faviconWC.png " type="image/x-icon">
     <!-- favicon -->
-    <style>
-         /* Estilos básicos para las tarjetas de categoría si no usas un archivo css/categorias.css */
-        .category-card {
-             border: 1px solid #e5e7eb; /* Tailwind gray-200 */
-             border-radius: 0.5rem;
-             padding: 1.5rem;
-             background-color: #ffffff; /* Tailwind white */
-             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
-        .category-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .category-card h2 {
-             font-weight: 600; /* font-semibold */
-             color: #1f2937; /* gray-800 */
-             margin-bottom: 0.5rem;
-        }
-         .category-card p {
-            color: #374151; /* gray-700 */
-            font-size: 0.875rem; /* text-sm */
-         }
-         .category-card a {
-             color: #4F46E5; /* Tailwind indigo-600 */
-             font-weight: 500; /* font-medium */
-             font-size: 0.875rem; /* text-sm */
-         }
-         .category-card a:hover {
-             text-decoration: underline;
-         }
-    </style>
+   
 
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
