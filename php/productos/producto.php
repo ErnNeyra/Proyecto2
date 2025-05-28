@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Productos y Servicios | We-Connect</title>
+    <title>Listado de Productos | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="../util/img/faviconWC.png " type="image/x-icon">
@@ -97,14 +97,30 @@
         //$idProducto = $_GET['id_producto'];
         //$sql = "SELECT * FROM productos WHERE id_producto = $idProducto";
         // $stmt = $_conexion->prepare($sql);
-        $sql = "SELECT * FROM producto LIMIT 20";
+        $busqueda = isset($_GET['busqueda']) ? trim($_GET['busqueda']) : '';
+        if ($busqueda !== '') {
+            $busqueda_sql = $_conexion->real_escape_string($busqueda);
+            $sql = "SELECT * FROM producto 
+                    WHERE nombre LIKE '%$busqueda_sql%' 
+                    OR descripcion LIKE '%$busqueda_sql%' 
+                    OR usuario LIKE '%$busqueda_sql%'
+                    LIMIT 20";
+        } else {
+            $sql = "SELECT * FROM producto LIMIT 20";
+        }
         $resultado = $_conexion->query($sql);
         ?>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <?php
             if ($resultado->num_rows == 0) {
-                echo "<h2 class='text-red-500'>No hay productos disponibles ahora mismo...</h2>";
+                if ($busqueda !== '') {
+                    // Si hay búsqueda y no hay resultados
+                    echo "<h2 class='text-red-500'>No se han encontrado resultados para '<span class=\"font-bold\">".htmlspecialchars($busqueda)."</span>'</h2>";
+                } else {
+                    // Si NO hay búsqueda y tampoco resultados
+                    echo "<h2 class='text-red-500'>No hay productos disponibles ahora mismo...</h2>";
+                }   
             }
             while ($producto = $resultado->fetch_assoc()) { ?>
                 <div class="bg-white rounded-md shadow-md overflow-hidden border border-gray-200">

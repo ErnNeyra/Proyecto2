@@ -248,6 +248,7 @@
     <footer class="bg-black py-4 text-center text-gray-400">
         &copy; 2025 We-Connect. Todos los derechos reservados.
     </footer>
+    <script src="../../js/desplegable.js"></script> <script src="../../js/script2.js"></script>
     <script>
         // Funcionalidad para mejorar descripción
         document.getElementById('mejorarDescripcion').addEventListener('click', async function() {

@@ -90,14 +90,32 @@
             //$idProducto = $_GET['id_producto'];
             //$sql = "SELECT * FROM productos WHERE id_producto = $idProducto";
             // $stmt = $_conexion->prepare($sql);
-            $sql = "SELECT * FROM servicio LIMIT 20";
+            $busqueda = isset($_GET['busqueda']) ? trim($_GET['busqueda']) : '';
+            if ($busqueda !== '') {
+                $busqueda_sql = $_conexion->real_escape_string($busqueda);
+                $sql = "SELECT * FROM servicio 
+                        WHERE nombre LIKE '%$busqueda_sql%' 
+                        OR descripcion LIKE '%$busqueda_sql%' 
+                        OR usuario LIKE '%$busqueda_sql%'
+                        LIMIT 20";
+            } else {
+                $sql = "SELECT * FROM servicio LIMIT 20";
+            }
+
+            
             $resultado = $_conexion -> query($sql);
         ?>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <?php
             if($resultado -> num_rows == 0){
-                echo "<h2 class='text-red-500'>No hay productos disponibles ahora mismo...</h2>";
+               if ($busqueda !== '') {
+                    // Si hay búsqueda y no hay resultados
+                    echo "<h2 class='text-red-500'>No se han encontrado resultados en servicios para '<span class=\"font-bold\">".htmlspecialchars($busqueda)."</span>'</h2>";
+                } else {
+                    // Si NO hay búsqueda y tampoco resultados
+                    echo "<h2 class='text-red-500'>No hay servicios disponibles ahora mismo...</h2>";
+                }
             }
             while($servicio = $resultado -> fetch_assoc()){ ?>
                 <div class="bg-white rounded-md shadow-md overflow-hidden border border-gray-200">

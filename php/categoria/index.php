@@ -51,7 +51,7 @@
     <link rel="icon" href="../util/img/faviconWC.png " type="image/x-icon">
     <!-- favicon -->
    
-
+    <script src="../../js/script2.js"></script> <script src="../../js/desplegable.js"></script>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
 
@@ -230,9 +230,5 @@
             </div>
         </div>
     </footer>
-
-    <script src="../../js/desplegable.js"></script>
-    <script src="../../js/script2.js"></script>
-
 </body>
 </html>
