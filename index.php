@@ -240,10 +240,13 @@
                 <p class="text-xl text-gray-700 mb-8 js-fade-in-up" data-delay="0.2s">
                     Comienza a construir tu futuro profesional y a descubrir oportunidades increíbles.
                 </p>
-                <a href="php/usuarios/registro.php" class="cta-button bg-gray-800 text-white py-3 px-8 rounded-md hover:bg-gray-900 transition duration-200 font-semibold text-lg js-fade-in-up" data-delay="0.4s">
+                <a href="php/usuarios/registro.php" class="cta-button bg-gray-800 text-white py-3 px-8 rounded-md hover:bg-gray-900 transition duration-200 font-semibold text-lg js-fade-in-up mb-4" data-delay="0.4s">
                     Regístrate Ahora
                 </a>
-            </div>
+                <a href="php/usuarios/CambioPremium.php" class="cta-button bg-gray-800 text-white py-3 px-8 rounded-md hover:bg-gray-900 transition duration-200 font-semibold text-lg js-fade-in-up" data-delay="0.4s">
+                cámbiate a Premium
+            </a>
+        </div>
         </section>
 <?php 
     } ?>
