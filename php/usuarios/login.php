@@ -15,7 +15,7 @@
             $error_message = "Por favor, introduce tu nombre de usuario y contraseña.";
         } else {
             // Consulta a la base de datos para verificar las credenciales, incluyendo la foto de perfil
-            $sql = "SELECT id_usuario, usuario, nombre, email, contrasena, foto_perfil FROM usuario WHERE usuario = ?";
+            $sql = "SELECT id_usuario, usuario, nombre, email, contrasena, foto_perfil, premium FROM usuario WHERE usuario = ?";
             $stmt = $_conexion->prepare($sql);
             $stmt->bind_param("s", $username);
             $stmt->execute();
@@ -31,7 +31,8 @@
                         'usuario' => $row['usuario'],
                         'nombre' => $row['nombre'],
                         'email' => $row['email'],
-                        'foto_perfil' => $row['foto_perfil'] // Guardar la ruta o nombre del archivo de la foto de perfil
+                        'foto_perfil' => $row['foto_perfil'],
+                        'premium' => (bool)$row['premium'] // Guardar como booleano
                         // Puedes guardar más información si es necesario
                     );
 

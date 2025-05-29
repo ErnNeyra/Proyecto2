@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -75,8 +74,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['premium_paid']) && $_P
     $stmt->bind_param("i", $usuario_id);
     if ($stmt->execute()) {
         // Actualiza la sesión
-        $_SESSION['usuario']['plan'] = 'premium';
-        echo "<script>alert('¡Ahora eres usuario premium!'); window.location='panelUsuario.php';</script>";
+        $_SESSION['usuario']['premium'] = 1;
+        // Redirige a recursos o muestra un mensaje de éxito
+        header("Location: ../recursos/recursos.php?premium=ok");
         exit;
     } else {
         echo "<div class='text-red-500 text-center mt-4'>Error al actualizar el plan. Intenta de nuevo.</div>";

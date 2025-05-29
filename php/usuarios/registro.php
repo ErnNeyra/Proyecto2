@@ -126,13 +126,17 @@
             $fotoPerfil = '../util/img/usuario.png';
         }
 
-             if (empty($errores)) {
-                $contrasena_cifrada = password_hash($contrasena, PASSWORD_DEFAULT);
-                $sql = "INSERT INTO usuario (nombre, usuario, email, telefono, contrasena, foto_perfil) VALUES (?, ?, ?, ?, ?, ?)";
-                $stmt = $_conexion->prepare($sql);
-                $stmt->bind_param("ssssss", $nombre, $usuario, $email, $telefono, $contrasena_cifrada, $fotoPerfil);
+        // Determinar si el usuario es premium según el formulario
+        $premium = (isset($_POST['plan']) && $_POST['plan'] === 'premium_paid') ? 1 : 0;
 
-                if ($stmt->execute()) {
+        if (empty($errores)) {
+            $contrasena_cifrada = password_hash($contrasena, PASSWORD_DEFAULT);
+            // Agrega el campo premium en la consulta SQL
+            $sql = "INSERT INTO usuario (nombre, usuario, email, telefono, contrasena, foto_perfil, premium) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $_conexion->prepare($sql);
+            $stmt->bind_param("ssssssi", $nombre, $usuario, $email, $telefono, $contrasena_cifrada, $fotoPerfil, $premium);
+
+            if ($stmt->execute()) {
                 // Obtener el ID del usuario recién registrado
                     $user_id = $_conexion->insert_id;
 
@@ -310,7 +314,7 @@
                 return actions.order.create({
                     purchase_units: [{
                         amount: {
-                            value: '1.00'
+                            value: '9.99'
                         }
                     }]
                 });
@@ -320,6 +324,8 @@
                     alert('¡Pago completado por ' + details.payer.name.given_name + '!');
                     registerButton.style.display = 'block';
                     planInput.value = 'premium_paid';
+                    //BASE de datos: Aquí podrías actualizar el estado del usuario a premium
+                    
                 });
             },
             onError: function(err) {

@@ -64,16 +64,6 @@
                         }
                     
 
-                        // Obtener el rol del usuario si está seteado (necesario para enlaces condicionales)
-                        if (isset($_SESSION['usuario']['premium'])) {
-                            // Asumimos que 'premium' indica el rol del usuario, puede ser 'vendedor', 'admin', etc.
-                            // Depuración: Verifica el valor de $_SESSION['usuario']['premium']
-                            $userRole = $_SESSION['usuario']['premium'];
-                            var_dump($userRole);
-                        } 
-                         // Depuración: Verifica el rol del usuario
-
-
                         // Estructura del desplegable - Rutas relativas desde php/categoria-index.php
                         echo '<div class="relative">'; // Clase relativa para el posicionamiento absoluto del desplegable
                         echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-marca-primario transition duration-200 focus:outline-none" aria-expanded="false" aria-haspopup="true">';
@@ -89,12 +79,6 @@
                         echo '        <a href="../usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Perfil</a>'; // Mantener "Mi Perfil" según tu código original
                         echo '        <a href="../usuarios/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
 
-                        // Enlaces de gestión (solo para vendedores/admin) - Añadidos/Integrados
-                        if ($userRole === 'vendedor' || $userRole === 'admin') {
-                            echo '        <hr class="border-gray-200">'; // Separador
-                            echo '        <a href="../productos/gestionarProductos.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Gestionar Productos</a>';
-                            echo '        <a href="../servicios/gestionarServicios.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Gestionar Servicios</a>';
-                        }
 
                         // Enlaces de comunidad/contenido
                         echo '        <hr class="border-gray-200">'; // Separador
@@ -137,7 +121,7 @@
             </p>
         </div>
     </section>
-    <?php if (!isset($_SESSION['usuario']['premium']) || $_SESSION['usuario']['premium'] != 1): ?>
+    <?php if (empty($_SESSION['usuario']['premium']) || intval($_SESSION['usuario']['premium']) !== 1): ?>
         <div class="text-center my-12">
             <p class="text-xl font-semibold mb-6">
                 ¡Hola, <?= htmlspecialchars($_SESSION['usuario']['usuario']) ?>! Únete a nuestro plan premium.
@@ -620,12 +604,12 @@
             document.getElementById('acciones-valor-agregado').classList.add('hidden');
 
             const prompt = `Actúa como un consultor de innovación para emprendedores. Analiza el siguiente producto y su contexto, y sugiere una forma detallada, creativa y realista de agregarle valor agregado, explicando el razonamiento y los pasos a seguir, no mas de 500 palabras. 
-Producto: ${nombre}
-Descripción: ${descripcion}
-Mercado objetivo: ${mercado}
-Problema que resuelve: ${problema}
-Diferenciadores actuales: ${diferenciadores ? diferenciadores : 'No especificado'}
-Propuesta de valor agregado:`;
+                    Producto: ${nombre}
+                    Descripción: ${descripcion}
+                    Mercado objetivo: ${mercado}
+                    Problema que resuelve: ${problema}
+                    Diferenciadores actuales: ${diferenciadores ? diferenciadores : 'No especificado'}
+                    Propuesta de valor agregado:`;
 
             try {
                 const response = await fetch("https://api.openai.com/v1/chat/completions", {
