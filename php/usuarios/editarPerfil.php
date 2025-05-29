@@ -1,23 +1,27 @@
 <?php
     error_reporting(E_ALL);
-    ini_set("display_errors",1);
-    require ('../util/config.php');
-    require ('../util/depurar.php');
+    ini_set("display_errors", 1);
+    require('../util/config.php');
+    require('../util/depurar.php');
+
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
-    if (!isset($_SESSION["usuario"]["usuario"])) {
-        //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
-        //se ejecute el código body
+
+    // Validar sesión de usuario
+    if (!isset($_SESSION["usuario"])) {
         header("location: login.php");
         exit;
     }
-    $idUsuario = $_GET["id_usuario"] ?? null;
-    if (!$idUsuario || !is_numeric($idUsuario)) {
+
+    // Obtener ID del usuario desde la sesión (nunca por GET)
+    $idUsuario = $_SESSION["usuario"]["id_usuario"] ?? null;
+    if (!$idUsuario) {
         header("Location: ../../index.php");
         exit;
     }
 
+    // Obtener datos actuales del usuario
     $sql = "SELECT * FROM usuario WHERE id_usuario = ?";
     $stmt = $_conexion->prepare($sql);
     $stmt->bind_param("i", $idUsuario);
@@ -37,11 +41,10 @@
     $imagenActual = $usuario["imagen"];
     $ciudad = $usuario["area_trabajo"];
 
-
-    // Variables de error unificadas
     $errores = [];
     $success = "";
 
+    // Procesar el formulario
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Sanitización y validación
         $tmpNombre = depurar($_POST['nombre']);
@@ -50,8 +53,10 @@
         $contrasenaActual = $_POST['contrasena_actual'] ?? '';
         $nuevaContrasena = $_POST['nueva_contrasena'] ?? '';
         $confirmarContrasena = $_POST['confirmar_contrasena'] ?? '';
+        $tmpCiudad = depurar($_POST['ciudad']);
+        $ciudad = $tmpCiudad;
 
-        // Validación de nombre (igual que registro)
+        // Validación de nombre
         if (strlen($tmpNombre) < 2) {
             $errores[] = "El nombre debe tener al menos 2 caracteres";
         } elseif (preg_match('/\d/', $tmpNombre)) {
@@ -60,7 +65,7 @@
             $nombre = ucwords(strtolower($tmpNombre));
         }
 
-        // Validación de email (con verificación de existencia)
+        // Validación de email (único, excluyendo el propio)
         if (!filter_var($tmpEmail, FILTER_VALIDATE_EMAIL)) {
             $errores[] = "Formato de email inválido";
         } else {
@@ -74,7 +79,7 @@
             }
         }
 
-        // Validación de teléfono (misma que registro)
+        // Validación de teléfono
         if (!preg_match('/^(\+|00)?\d{1,4}[\s\-\.]?\(?\d+\)?([\s\-\.]?\d+)*$/', $tmpTelefono)) {
             $errores[] = "Teléfono inválido (ej: +34612345678)";
         } else {
@@ -95,31 +100,28 @@
             $stmt->bind_result($hashActual);
             $stmt->fetch();
             $stmt->close();
-            
+
             if (!password_verify($contrasenaActual, $hashActual)) {
                 $errores[] = "Contraseña actual incorrecta";
             }
-            
-            // Validar nueva contraseña (igual que registro)
-            if (strlen($nuevaContrasena) < 8 || 
-                !preg_match('/[a-z]/', $nuevaContrasena) || 
-                !preg_match('/[A-Z]/', $nuevaContrasena) || 
+
+            // Validar nueva contraseña
+            if (strlen($nuevaContrasena) < 8 ||
+                !preg_match('/[a-z]/', $nuevaContrasena) ||
+                !preg_match('/[A-Z]/', $nuevaContrasena) ||
                 !preg_match('/[0-9]/', $nuevaContrasena)) {
                 $errores[] = "La nueva contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número";
             } elseif ($nuevaContrasena !== $confirmarContrasena) {
                 $errores[] = "Las contraseñas nuevas no coinciden";
             }
         }
-         // Validación de ciudad (opcional)
-        $tmpCiudad = depurar($_POST['ciudad']);
-        $ciudad = $tmpCiudad;
 
-        // Procesamiento de imagen (igual que registro)
+        // Procesamiento de imagen
         $imagenFinal = $imagenActual;
         if (isset($_FILES["imagen"]) && $_FILES["imagen"]["error"] === UPLOAD_ERR_OK) {
             $tiposPermitidos = ['image/jpeg', 'image/png', 'image/gif'];
             $maxTamano = 2 * 1024 * 1024; // 2MB
-            
+
             if (!in_array($_FILES["imagen"]["type"], $tiposPermitidos)) {
                 $errores[] = "Formato de imagen no permitido (solo JPG/PNG/GIF)";
             } elseif ($_FILES["imagen"]["size"] > $maxTamano) {
@@ -128,9 +130,9 @@
                 $extension = pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
                 $nombreImagen = uniqid('perfil_', true) . '.' . $extension;
                 $ubicacionFinal = "../util/img/$nombreImagen";
-                
+
                 if (move_uploaded_file($_FILES["imagen"]["tmp_name"], $ubicacionFinal)) {
-                    if (!empty($imagenActual) && $imagenActual != '../util/img/usuario.png') {
+                    if (!empty($imagenActual) && basename($imagenActual) != 'usuario.png' && file_exists($imagenActual)) {
                         unlink($imagenActual);
                     }
                     $imagenFinal = $ubicacionFinal;
@@ -140,35 +142,58 @@
             }
         }
 
-        // Actualización si no hay errores
+        // Actualización en la base de datos
         if (empty($errores)) {
-            $params = [$nombre, $email, $telefono, $ciudad, $imagenFinal, $idUsuario];
-            $sql = "UPDATE usuario SET nombre=?, email=?, telefono=?, area_trabajo=?, imagen=? WHERE id_usuario=?";
-            
             if (!empty($nuevaContrasena)) {
                 $hashNueva = password_hash($nuevaContrasena, PASSWORD_DEFAULT);
-                array_splice($params, 3, 0, $hashNueva);
                 $sql = "UPDATE usuario SET nombre=?, email=?, telefono=?, contrasena=?, area_trabajo=?, imagen=? WHERE id_usuario=?";
+                $stmt = $_conexion->prepare($sql);
+                $stmt->bind_param("ssssssi", $nombre, $email, $telefono, $hashNueva, $ciudad, $imagenFinal, $idUsuario);
+            } else {
+                $sql = "UPDATE usuario SET nombre=?, email=?, telefono=?, area_trabajo=?, imagen=? WHERE id_usuario=?";
+                $stmt = $_conexion->prepare($sql);
+                $stmt->bind_param("sssssi", $nombre, $email, $telefono, $ciudad, $imagenFinal, $idUsuario);
             }
-            
-            $stmt = $_conexion->prepare($sql);
-            $types = str_repeat('s', count($params) - 1) . 'i';
-            $stmt->bind_param($types, ...$params);
-            
+
             if ($stmt->execute()) {
-                $success = "Perfil actualizado con éxito";
                 // Actualizar datos de sesión
                 $_SESSION['usuario']['nombre'] = $nombre;
                 $_SESSION['usuario']['email'] = $email;
                 $_SESSION['usuario']['telefono'] = $telefono;
                 $_SESSION['usuario']['area_trabajo'] = $ciudad;
                 $_SESSION['usuario']['imagen'] = $imagenFinal;
+
+                // Redirección para evitar reenvío de formulario
+                header("Location: editarPerfil.php?success=1");
+                exit;
             } else {
                 $errores[] = "Error al actualizar: " . $_conexion->error;
             }
         }
     }
+
+    // Mostrar mensaje de éxito si corresponde
+    if (isset($_GET['success']) && $_GET['success'] == 1) {
+        $success = "Perfil actualizado con éxito.";
+    }
 ?>
+
+<!-- FORMULARIO HTML DE EJEMPLO -->
+<?php if (!empty($errores)): ?>
+    <div class="server-errors">
+        <?php foreach ($errores as $error): ?>
+            <p><?= htmlspecialchars($error) ?></p>
+        <?php endforeach ?>
+    </div>
+<?php endif; ?>
+
+<?php if ($success): ?>
+    <div class="success"><?= htmlspecialchars($success) ?></div>
+<?php endif; ?>
+
+<form method="post" enctype="multipart/form-data">
+    <label>Nombre:</label>
+
 
 <!-- Formulario HTML (manteniendo tu estructura actual) -->
 <?php if (!empty($errores)): ?>
