@@ -91,6 +91,14 @@
             </h1>
             <p class="text-lg md:text-xl mb-10 max-w-3xl mx-auto js-fade-in-up" data-delay="0.3s">
                 Conecta con profesionales, encuentra servicios y descubre productos increíbles.
+                <?php
+                    if (isset($_SESSION['usuario'])) {
+                        echo '<br>¡Hola, ' . htmlspecialchars($_SESSION['usuario']['usuario']) . ' únete a nuestro plan premium !<br><br><br>';
+                        echo '<a href="php/usuarios/cambioPremium.php" class="cta-button bg-gray-800 text-white py-3 px-8 rounded-md hover:bg-gray-900 transition duration-200 font-semibold text-lg js-fade-in-up" data-delay="0.4s">
+                        cámbiate a Premium
+                        </a>';
+                    }
+                ?>
             </p>
             </div>
     </section>
@@ -247,9 +255,6 @@
                 <a href="php/usuarios/registro.php" class="cta-button bg-gray-800 text-white py-3 px-8 rounded-md hover:bg-gray-900 transition duration-200 font-semibold text-lg js-fade-in-up mb-4" data-delay="0.4s">
                     Regístrate Ahora
                 </a>
-                <a href="php/usuarios/CambioPremium.php" class="cta-button bg-gray-800 text-white py-3 px-8 rounded-md hover:bg-gray-900 transition duration-200 font-semibold text-lg js-fade-in-up" data-delay="0.4s">
-                cámbiate a Premium
-            </a>
         </div>
         </section>
 <?php 
