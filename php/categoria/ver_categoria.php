@@ -210,7 +210,7 @@
                         // Verificamos si existe la foto de perfil del usuario en la sesión y no está vacía
                         if (isset($_SESSION['usuario']['foto_perfil']) && !empty($_SESSION['usuario']['foto_perfil'])) {
                             // La ruta guardada en BD es relativa a 'util/', así que desde php/categoria-index.php es 'util/' + ruta_bd
-                            $rutaImagenBD = 'util/' . ltrim($_SESSION['usuario']['foto_perfil'], '/');
+                            $rutaImagenBD = '../util/' . ltrim($_SESSION['usuario']['foto_perfil'], '/');
                         
                             if (file_exists($rutaImagenBD)) { // Esta comprobación asume que PHP está en la raíz del sitio o se ajusta include_path
                                 $imagenPerfil = htmlspecialchars($rutaImagenBD); // Usar la ruta validada

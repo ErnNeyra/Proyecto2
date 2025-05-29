@@ -128,7 +128,7 @@
                         $aliasUsuarioActual = htmlspecialchars($_SESSION['usuario']['usuario']);
                          $imagenPerfil = '/php/util/img/usuario.png'; // Ruta por defecto para el header
                          if (isset($_SESSION['usuario']['foto_perfil']) && !empty($_SESSION['usuario']['foto_perfil'])) {
-                             $rutaImagen = '/php/util/' . ltrim($_SESSION['usuario']['foto_perfil'], '/');
+                             $rutaImagen = '../util/' . ltrim($_SESSION['usuario']['foto_perfil'], '/');
                              if (file_exists($rutaImagen)) {
                                  $imagenPerfil = $rutaImagen;
                              }
@@ -267,7 +267,7 @@
            <div class="mt-8">
     <h3 class="text-xl font-semibold text-gray-800 mb-4">Dejar un comentario y valoración</h3>
     <?php if (isset($_SESSION["usuario"]["usuario"])): ?>
-        <form id="formulario-comentario" method="POST" data-submit-url="../../php/servicios/guardar_comentario_servicio_ajax.php">
+        <form id="formulario-comentario" method="POST" data-submit-url="guardar_comentario_servicio_ajax.php">
              <input type="hidden" name="id_servicio" value="<?php echo htmlspecialchars($idServicio); ?>">
 
             <div class="mb-4">

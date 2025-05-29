@@ -269,7 +269,7 @@
            <div class="mt-8">
     <h3 class="text-xl font-semibold text-gray-800 mb-4">Dejar un comentario y valoración</h3>
     <?php if (isset($_SESSION["usuario"]["usuario"])): ?>
-        <form id="formulario-comentario" method="POST" data-submit-url="../../php/productos/guardar_comentario_producto_ajax.php">
+        <form id="formulario-comentario" method="POST" data-submit-url="guardar_comentario_producto_ajax.php">
              <input type="hidden" name="id_producto" value="<?php echo htmlspecialchars($idProducto); ?>">
 
             <div class="mb-4">
