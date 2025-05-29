@@ -38,7 +38,7 @@
     $nombre = $usuario["nombre"];
     $email = $usuario["email"];
     $telefono = $usuario["telefono"];
-    $imagenActual = $usuario["imagen"];
+    $imagenActual = $usuario["foto_perfil"];
     $ciudad = $usuario["area_trabajo"];
 
     $errores = [];
@@ -146,11 +146,11 @@
         if (empty($errores)) {
             if (!empty($nuevaContrasena)) {
                 $hashNueva = password_hash($nuevaContrasena, PASSWORD_DEFAULT);
-                $sql = "UPDATE usuario SET nombre=?, email=?, telefono=?, contrasena=?, area_trabajo=?, imagen=? WHERE id_usuario=?";
+                $sql = "UPDATE usuario SET nombre=?, email=?, telefono=?, contrasena=?, area_trabajo=?, foto_perfil=? WHERE id_usuario=?";
                 $stmt = $_conexion->prepare($sql);
                 $stmt->bind_param("ssssssi", $nombre, $email, $telefono, $hashNueva, $ciudad, $imagenFinal, $idUsuario);
             } else {
-                $sql = "UPDATE usuario SET nombre=?, email=?, telefono=?, area_trabajo=?, imagen=? WHERE id_usuario=?";
+                $sql = "UPDATE usuario SET nombre=?, email=?, telefono=?, area_trabajo=?, foto_perfil=? WHERE id_usuario=?";
                 $stmt = $_conexion->prepare($sql);
                 $stmt->bind_param("sssssi", $nombre, $email, $telefono, $ciudad, $imagenFinal, $idUsuario);
             }
@@ -161,7 +161,7 @@
                 $_SESSION['usuario']['email'] = $email;
                 $_SESSION['usuario']['telefono'] = $telefono;
                 $_SESSION['usuario']['area_trabajo'] = $ciudad;
-                $_SESSION['usuario']['imagen'] = $imagenFinal;
+                $_SESSION['usuario']['foto_perfil'] = $imagenFinal;
 
                 // Redirección para evitar reenvío de formulario
                 header("Location: editarPerfil.php?success=1");
