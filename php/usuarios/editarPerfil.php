@@ -12,7 +12,173 @@
         header("location: login.php");
         exit;
     }
+    $idUsuario = $_GET["id_usuario"] ?? null;
+    if (!$idUsuario || !is_numeric($idUsuario)) {
+        header("Location: ../../index.php");
+        exit;
+    }
+
+    $sql = "SELECT * FROM usuario WHERE id_usuario = ?";
+    $stmt = $_conexion->prepare($sql);
+    $stmt->bind_param("i", $idUsuario);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+    $usuario = $resultado->fetch_assoc();
+
+    if (!$usuario) {
+        echo "<p class='text-red-500'>Usuario no encontrado.</p>";
+        exit;
+    }
+
+    // Variables para mostrar en el formulario
+    $nombre = $usuario["nombre"];
+    $email = $usuario["email"];
+    $telefono = $usuario["telefono"];
+    $imagenActual = $usuario["imagen"];
+    $ciudad = $usuario["area_trabajo"];
+
+
+    // Variables de error unificadas
+    $errores = [];
+    $success = "";
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Sanitización y validación
+        $tmpNombre = depurar($_POST['nombre']);
+        $tmpEmail = depurar($_POST['email']);
+        $tmpTelefono = depurar($_POST['telefono']);
+        $contrasenaActual = $_POST['contrasena_actual'] ?? '';
+        $nuevaContrasena = $_POST['nueva_contrasena'] ?? '';
+        $confirmarContrasena = $_POST['confirmar_contrasena'] ?? '';
+
+        // Validación de nombre (igual que registro)
+        if (strlen($tmpNombre) < 2) {
+            $errores[] = "El nombre debe tener al menos 2 caracteres";
+        } elseif (preg_match('/\d/', $tmpNombre)) {
+            $errores[] = "El nombre no puede contener números";
+        } else {
+            $nombre = ucwords(strtolower($tmpNombre));
+        }
+
+        // Validación de email (con verificación de existencia)
+        if (!filter_var($tmpEmail, FILTER_VALIDATE_EMAIL)) {
+            $errores[] = "Formato de email inválido";
+        } else {
+            $checkEmail = $_conexion->prepare("SELECT id_usuario FROM usuario WHERE email = ? AND id_usuario != ?");
+            $checkEmail->bind_param("si", $tmpEmail, $idUsuario);
+            $checkEmail->execute();
+            if ($checkEmail->get_result()->num_rows > 0) {
+                $errores[] = "Este email ya está registrado";
+            } else {
+                $email = strtolower($tmpEmail);
+            }
+        }
+
+        // Validación de teléfono (misma que registro)
+        if (!preg_match('/^(\+|00)?\d{1,4}[\s\-\.]?\(?\d+\)?([\s\-\.]?\d+)*$/', $tmpTelefono)) {
+            $errores[] = "Teléfono inválido (ej: +34612345678)";
+        } else {
+            $telefono = preg_replace('/[^\d+]/', '', $tmpTelefono);
+            if (strpos($telefono, '0034') === 0) {
+                $telefono = '+34' . substr($telefono, 4);
+            } elseif (preg_match('/^[6789]\d{8}$/', $telefono)) {
+                $telefono = '+34' . $telefono;
+            }
+        }
+
+        // Validación de contraseña (si se cambia)
+        if (!empty($nuevaContrasena)) {
+            // Verificar contraseña actual
+            $stmt = $_conexion->prepare("SELECT contrasena FROM usuario WHERE id_usuario = ?");
+            $stmt->bind_param("i", $idUsuario);
+            $stmt->execute();
+            $stmt->bind_result($hashActual);
+            $stmt->fetch();
+            $stmt->close();
+            
+            if (!password_verify($contrasenaActual, $hashActual)) {
+                $errores[] = "Contraseña actual incorrecta";
+            }
+            
+            // Validar nueva contraseña (igual que registro)
+            if (strlen($nuevaContrasena) < 8 || 
+                !preg_match('/[a-z]/', $nuevaContrasena) || 
+                !preg_match('/[A-Z]/', $nuevaContrasena) || 
+                !preg_match('/[0-9]/', $nuevaContrasena)) {
+                $errores[] = "La nueva contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número";
+            } elseif ($nuevaContrasena !== $confirmarContrasena) {
+                $errores[] = "Las contraseñas nuevas no coinciden";
+            }
+        }
+         // Validación de ciudad (opcional)
+        $tmpCiudad = depurar($_POST['ciudad']);
+        $ciudad = $tmpCiudad;
+
+        // Procesamiento de imagen (igual que registro)
+        $imagenFinal = $imagenActual;
+        if (isset($_FILES["imagen"]) && $_FILES["imagen"]["error"] === UPLOAD_ERR_OK) {
+            $tiposPermitidos = ['image/jpeg', 'image/png', 'image/gif'];
+            $maxTamano = 2 * 1024 * 1024; // 2MB
+            
+            if (!in_array($_FILES["imagen"]["type"], $tiposPermitidos)) {
+                $errores[] = "Formato de imagen no permitido (solo JPG/PNG/GIF)";
+            } elseif ($_FILES["imagen"]["size"] > $maxTamano) {
+                $errores[] = "La imagen supera el tamaño máximo de 2MB";
+            } else {
+                $extension = pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
+                $nombreImagen = uniqid('perfil_', true) . '.' . $extension;
+                $ubicacionFinal = "../util/img/$nombreImagen";
+                
+                if (move_uploaded_file($_FILES["imagen"]["tmp_name"], $ubicacionFinal)) {
+                    if (!empty($imagenActual) && $imagenActual != '../util/img/usuario.png') {
+                        unlink($imagenActual);
+                    }
+                    $imagenFinal = $ubicacionFinal;
+                } else {
+                    $errores[] = "Error al subir la imagen";
+                }
+            }
+        }
+
+        // Actualización si no hay errores
+        if (empty($errores)) {
+            $params = [$nombre, $email, $telefono, $ciudad, $imagenFinal, $idUsuario];
+            $sql = "UPDATE usuario SET nombre=?, email=?, telefono=?, area_trabajo=?, imagen=? WHERE id_usuario=?";
+            
+            if (!empty($nuevaContrasena)) {
+                $hashNueva = password_hash($nuevaContrasena, PASSWORD_DEFAULT);
+                array_splice($params, 3, 0, $hashNueva);
+                $sql = "UPDATE usuario SET nombre=?, email=?, telefono=?, contrasena=?, area_trabajo=?, imagen=? WHERE id_usuario=?";
+            }
+            
+            $stmt = $_conexion->prepare($sql);
+            $types = str_repeat('s', count($params) - 1) . 'i';
+            $stmt->bind_param($types, ...$params);
+            
+            if ($stmt->execute()) {
+                $success = "Perfil actualizado con éxito";
+                // Actualizar datos de sesión
+                $_SESSION['usuario']['nombre'] = $nombre;
+                $_SESSION['usuario']['email'] = $email;
+                $_SESSION['usuario']['telefono'] = $telefono;
+                $_SESSION['usuario']['area_trabajo'] = $ciudad;
+                $_SESSION['usuario']['imagen'] = $imagenFinal;
+            } else {
+                $errores[] = "Error al actualizar: " . $_conexion->error;
+            }
+        }
+    }
 ?>
+
+<!-- Formulario HTML (manteniendo tu estructura actual) -->
+<?php if (!empty($errores)): ?>
+    <div class="server-errors">
+        <?php foreach ($errores as $error): ?>
+            <p><?= htmlspecialchars($error) ?></p>
+        <?php endforeach ?>
+    </div>
+<?php endif; ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -130,9 +296,11 @@
         <div class="edit-profile-panel">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Editar Perfil</h2>
 
-            <?php if (isset($error)): ?>
-                <div class="error-message-overall mb-4">
-                    <?php echo htmlspecialchars($error); ?>
+            <?php if (!empty($errores)): ?>
+                <div class="server-errors">
+                    <?php foreach ($errores as $error): ?>
+                        <p><?= htmlspecialchars($error) ?></p>
+                    <?php endforeach ?>
                 </div>
             <?php endif; ?>
 
@@ -142,7 +310,7 @@
                 </div>
             <?php endif; ?>
 
-            <form method="post" action="" enctype="multipart/form-data" novalidate>
+            <form method="post" action="panelUsuario.php" enctype="multipart/form-data" novalidate>
                 <div class="form-group">
                     <label for="nombre">Nombre:</label>
                     <input
@@ -150,7 +318,6 @@
                         id="nombre"
                         name="nombre"
                         value="<?php echo isset($usuario['nombre']) ? htmlspecialchars($usuario['nombre']) : ''; ?>"
-                        pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{3,50}$"
                         required
                         title="El nombre debe tener entre 3 y 50 caracteres y solo puede contener letras y espacios"
                         class="focus:border-yellow-500 focus:ring-yellow-500">
@@ -180,7 +347,7 @@
                         pattern="^[0-9]{9,15}$"
                         title="Introduce un teléfono válido (solo números, 9 a 15 dígitos)"
                         class="focus:border-yellow-500 focus:ring-yellow-500">
-                    <div class="error-message" id="error-telefono"></div>
+                    <div class="error-message" id="error-telefono" ></span></div>
                 </div>
 
                 <div class="form-group">
@@ -199,7 +366,6 @@
                         type="password"
                         id="password_nuevo"
                         name="password_nuevo"
-                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
                         title="La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial"
                         class="focus:border-yellow-500 focus:ring-yellow-500">
                 </div>
@@ -210,41 +376,18 @@
                         type="password"
                         id="confirmar_password_nuevo"
                         name="confirmar_password_nuevo"
-                        oninput="this.setCustomValidity(this.value != document.getElementById('password_nuevo').value ? 'Las contraseñas no coinciden' : '')"
                         class="focus:border-yellow-500 focus:ring-yellow-500">
                 </div>
 
-                <div class="form-group">
-                    <label for="descripcion">Descripción del Negocio:</label>
-                    <textarea
-                        id="descripcion"
-                        name="descripcion"
-                        maxlength="500"
-                        class="w-full p-3 border border-gray-300 rounded-md focus:border-yellow-500 focus:ring-yellow-500"
-                        rows="4"><?php echo isset($usuario['descripcion']) ? htmlspecialchars($usuario['descripcion']) : ''; ?></textarea>
-                    <button type="button"
-                            id="mejorarDescripcion"
-                            class="mt-2 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200">
-                        Mejorar Descripción
-                    </button>
-                    <div id="sugerenciaDescripcion" class="mt-3 p-3 border rounded-md hidden">
-                        <h4 class="font-semibold mb-2">Sugerencia de mejora:</h4>
-                        <p id="textoSugerencia" class="text-gray-700"></p>
-                        <button type="button"
-                                id="aplicarSugerencia"
-                                class="mt-2 bg-green-500 text-white py-1 px-3 rounded-md hover:bg-green-600 transition duration-200">
-                            Aplicar Sugerencia
-                        </button>
-                    </div>
-                </div>
+                
 
                 <div class="form-group">
-                    <label for="ciudad">Ciudad:</label>
+                    <label for="area_trabajo">Ciudad:</label>
                     <input
                         type="text"
-                        id="ciudad"
-                        name="ciudad"
-                        value="<?php echo isset($usuario['ciudad']) ? htmlspecialchars($usuario['ciudad']) : ''; ?>"
+                        id="area_trabajo"
+                        name="area_trabajo"
+                        value="<?php echo isset($usuario['area_trabajo']) ? htmlspecialchars($usuario['area_trabajo']) : ''; ?>"
                         maxlength="100"
                         class="focus:border-yellow-500 focus:ring-yellow-500">
                 </div>

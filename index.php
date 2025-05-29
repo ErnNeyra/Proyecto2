@@ -232,18 +232,21 @@
         </div>
     </section>
 
-
-    <section class="call-to-action bg-yellow-500 py-12 text-center observe-section">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-gray-800 mb-6 js-fade-in-up" data-delay="0s">Únete a We-Connect Hoy</h2>
-            <p class="text-xl text-gray-700 mb-8 js-fade-in-up" data-delay="0.2s">
-                Comienza a construir tu futuro profesional y a descubrir oportunidades increíbles.
-            </p>
-            <a href="php/usuarios/registro.php" class="cta-button bg-gray-800 text-white py-3 px-8 rounded-md hover:bg-gray-900 transition duration-200 font-semibold text-lg js-fade-in-up" data-delay="0.4s">
-                Regístrate Ahora
-            </a>
-        </div>
-    </section>
+<?php
+    if (!isset($_SESSION['usuario'])) { ?>
+        <section class="call-to-action bg-yellow-500 py-12 text-center observe-section">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 js-fade-in-up" data-delay="0s">Únete a We-Connect Hoy</h2>
+                <p class="text-xl text-gray-700 mb-8 js-fade-in-up" data-delay="0.2s">
+                    Comienza a construir tu futuro profesional y a descubrir oportunidades increíbles.
+                </p>
+                <a href="php/usuarios/registro.php" class="cta-button bg-gray-800 text-white py-3 px-8 rounded-md hover:bg-gray-900 transition duration-200 font-semibold text-lg js-fade-in-up" data-delay="0.4s">
+                    Regístrate Ahora
+                </a>
+            </div>
+        </section>
+<?php 
+    } ?>
 
 
     <footer class="bg-gray-800 text-white py-8">
