@@ -43,10 +43,11 @@
                 <a href="../contacto.php" class="main-nav-link text-gray-700 hover:text-black mr-4">Contacto</a>
 
                 <?php
+
                     if (isset($_SESSION['usuario'])) {
                         // Obtener datos del usuario de la sesión, usando htmlspecialchars por seguridad
                         $nombreUsuario = htmlspecialchars($_SESSION['usuario']['usuario']); // Usamos 'usuario'
-
+                        $premium = isset($_SESSION['usuario']['premium']) ? $_SESSION['usuario']['premium'] : false;
                         // Determinar la ruta de la imagen de perfil
                         // Ruta por defecto desde php/categoria-index.php a php/util/
                         $imagenPerfil = '../util/img/usuario.png'; // Ruta por defecto desde php/
@@ -64,7 +65,13 @@
                     
 
                         // Obtener el rol del usuario si está seteado (necesario para enlaces condicionales)
-                        $userRole = $_SESSION['usuario']['rol'] ?? '';
+                        if (isset($_SESSION['usuario']['premium'])) {
+                            // Asumimos que 'premium' indica el rol del usuario, puede ser 'vendedor', 'admin', etc.
+                            // Depuración: Verifica el valor de $_SESSION['usuario']['premium']
+                            $userRole = $_SESSION['usuario']['premium'];
+                            var_dump($userRole);
+                        } 
+                         // Depuración: Verifica el rol del usuario
 
 
                         // Estructura del desplegable - Rutas relativas desde php/categoria-index.php
@@ -105,7 +112,7 @@
 
                         // Enlace para cerrar sesión
                         echo '        <hr class="border-gray-200">'; // Separador antes de cerrar sesión
-                        echo '        <a href="usuarios/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
+                        echo '        <a href="../usuarios/logout.php" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition duration-200">Cerrar Sesión</a>';
 
                         echo '    </div>'; // Cierre del div del desplegable
                         echo '</div>'; // Cierre del div relativo del desplegable
@@ -130,331 +137,341 @@
             </p>
         </div>
     </section>
-
-    <main class="container mx-auto py-12 px-6 flex-grow">
-        <div class="bg-white rounded-lg shadow-md p-8">
-
-            <p class="text-gray-700 mb-8 text-center max-w-2xl mx-auto">
-                Esta sección te proporciona acceso a recursos valiosos para tu negocio, así como un espacio para
-                interactuar y colaborar con otros miembros de la comunidad We-Connect.
+    <?php if (!isset($_SESSION['usuario']['premium']) || $_SESSION['usuario']['premium'] != 1): ?>
+        <div class="text-center my-12">
+            <p class="text-xl font-semibold mb-6">
+                ¡Hola, <?= htmlspecialchars($_SESSION['usuario']['usuario']) ?>! Únete a nuestro plan premium.
             </p>
-
-            <div class="mb-10">
-                <h2 class="resources-section-title text-2xl font-semibold text-gray-800 mb-4">Cursos y Formación Online
-                </h2>
-                <p class="text-gray-600 mb-6">Aprende nuevas habilidades y mejora tu conocimiento con cursos gratuitos y
-                    recursos de plataformas educativas:</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="resource-card">
-                        <i class="fas fa-graduation-cap resource-icon text-xl"></i>
-                        <a href="https://www.coursera.org/courses?query=business" target="_blank" rel="noopener">Cursos
-                            de Negocios en Coursera</a>
-                        <p class="text-gray-500 text-sm mt-1">Accede a cursos de universidades y empresas líderes.</p>
-                    </div>
-                    <div class="resource-card">
-                        <i class="fas fa-book-open resource-icon text-xl"></i>
-                        <a href="https://www.edx.org/learn/entrepreneurship" target="_blank" rel="noopener">Programas de
-                            Emprendimiento en edX</a>
-                        <p class="text-gray-500 text-sm mt-1">Explora programas de las mejores instituciones.</p>
-                    </div>
-                    <div class="resource-card">
-                        <i class="fas fa-video resource-icon text-xl"></i>
-                        <a href="https://www.udemy.com/courses/business/" target="_blank" rel="noopener">Cursos de
-                            Negocios en Udemy</a>
-                        <p class="text-gray-500 text-sm mt-1">Amplia variedad de cursos, busca opciones gratuitas.</p>
-                    </div>
-                    <div class="resource-card">
-                        <i class="fab fa-youtube resource-icon text-xl"></i>
-                        <a href="https://creatoracademy.youtube.com/landing" target="_blank" rel="noopener">YouTube
-                            Creator Academy</a>
-                        <p class="text-gray-500 text-sm mt-1">Ideal para mejorar tu estrategia de contenido en video.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mb-10">
-                <h2 class="resources-section-title text-2xl font-semibold text-gray-800 mb-4">Herramientas de Gestión y
-                    Plantillas</h2>
-                <p class="text-gray-600 mb-6">Optimiza la gestión de tu negocio con herramientas y plantillas útiles:
-                </p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="resource-card">
-                        <i class="fas fa-file-excel resource-icon text-xl"></i>
-                        <a href="https://docs.google.com/spreadsheets/u/0/" target="_blank" rel="noopener">Google
-                            Sheets</a>
-                        <p class="text-gray-500 text-sm mt-1">Para contabilidad básica, inventario, y más.</p>
-                    </div>
-                    <div class="resource-card">
-                        <i class="fas fa-paint-brush resource-icon text-xl"></i>
-                        <a href="https://www.canva.com/es/" target="_blank" rel="noopener">Canva</a>
-                        <p class="text-gray-500 text-sm mt-1">Diseño gráfico sencillo para marketing.</p>
-                    </div>
-                    <div class="resource-card">
-                        <i class="fas fa-tasks resource-icon text-xl"></i>
-                        <a href="https://trello.com/es" target="_blank" rel="noopener">Trello</a>
-                        <p class="text-gray-500 text-sm mt-1">Gestión visual de proyectos y tareas.</p>
-                    </div>
-                    <div class="resource-card">
-                        <i class="fas fa-clipboard-list resource-icon text-xl"></i>
-                        <a href="https://asana.com/es" target="_blank" rel="noopener">Asana</a>
-                        <p class="text-gray-500 text-sm mt-1">Plataforma robusta para gestión de proyectos en equipo.
-                        </p>
-                    </div>
-                    <div class="resource-card">
-                        <i class="fas fa-file-alt resource-icon text-xl"></i>
-                        <a href="https://www.emprendepyme.net/plantilla-de-plan-de-negocio.html" target="_blank"
-                            rel="noopener">Plantilla de Plan de Negocio</a>
-                        <p class="text-gray-500 text-sm mt-1">Estructura tu idea de negocio con esta plantilla externa.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mb-10">
-                <h2 class="resources-section-title text-2xl font-semibold text-gray-800 mb-4">Herramientas con IA para
-                    Emprendedores</h2>
-                <p class="text-gray-600 mb-6">Accede a herramientas inteligentes para potenciar tu emprendimiento:</p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="resource-card flex flex-col items-center justify-between">
-                        <div class="flex flex-col items-center">
-                            <i class="fas fa-lightbulb resource-icon text-2xl mb-2 text-yellow-500"></i>
-                            <h3 class="text-lg font-semibold text-gray-800 mb-1 text-center">Generar Valor Agregado a un
-                                Producto</h3>
-                            <p class="text-gray-500 text-sm mb-3 text-center">Descubre ideas para diferenciar y mejorar
-                                tu producto con ayuda de IA.</p>
-                        </div>
-                        <button
-                            class="bg-yellow-500 text-black px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold mt-2"
-                            onclick="document.getElementById('form-valor-agregado').classList.toggle('hidden')"
-                            type="button">Obtener</button>
-                        <form id="form-valor-agregado"
-                            class="w-full mt-4 bg-orange-50 p-4 rounded-md shadow-inner hidden">
-                            <label class="block mb-2 text-sm font-semibold text-gray-700" for="nombre-producto">Nombre
-                                del producto</label>
-                            <input type="text" id="nombre-producto" name="nombre_producto"
-                                class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
-                                placeholder="Ejemplo: Taza personalizada" required>
-
-                            <label class="block mb-2 text-sm font-semibold text-gray-700"
-                                for="descripcion-producto">Descripción breve</label>
-                            <textarea id="descripcion-producto" name="descripcion_producto"
-                                class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
-                                rows="2" placeholder="¿Qué hace tu producto? ¿Para quién es?" required></textarea>
-
-                            <label class="block mb-2 text-sm font-semibold text-gray-700" for="mercado-objetivo">Mercado
-                                objetivo</label>
-                            <input type="text" id="mercado-objetivo" name="mercado_objetivo"
-                                class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
-                                placeholder="Ejemplo: Jóvenes universitarios, empresas, etc." required>
-
-                            <label class="block mb-2 text-sm font-semibold text-gray-700" for="problema">Problema que
-                                resuelve</label>
-                            <input type="text" id="problema" name="problema"
-                                class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
-                                placeholder="¿Qué necesidad o problema atiende?" required>
-
-                            <label class="block mb-2 text-sm font-semibold text-gray-700" for="diferenciadores">¿Qué lo
-                                hace diferente actualmente?</label>
-                            <input type="text" id="diferenciadores" name="diferenciadores"
-                                class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
-                                placeholder="Opcional">
-
-                            <button type="button" id="btn-generar-valor-agregado"
-                                class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold w-full mt-2">Generar</button>
-                            <div id="respuesta-valor-agregado" class="mt-4 text-gray-800 text-sm whitespace-pre-line">
-                            </div>
-                            <div id="acciones-valor-agregado" class="flex flex-col md:flex-row gap-2 mt-2 hidden">
-                                <button type="button" id="btn-reintentar-valor-agregado"
-                                    class="bg-red-500 text-white px-4 py-2 rounded-md transition duration-200 font-semibold flex-1 opacity-50 cursor-not-allowed"
-                                    style="pointer-events: none;" disabled>No me gusta, generar otro</button>
-                                <button type="button" id="btn-copiar-valor-agregado"
-                                    class="bg-green-500 text-white px-4 py-2 rounded-md transition duration-200 font-semibold flex-1 opacity-50 cursor-not-allowed"
-                                    style="pointer-events: none;" disabled>Me gusta, copiar texto!</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="resource-card flex flex-col items-center justify-between">
-                        <div class="flex flex-col items-center">
-                            <i class="fas fa-bullhorn resource-icon text-2xl mb-2 text-green-500"></i>
-                            <h3 class="text-lg font-semibold text-gray-800 mb-1 text-center">Generar Plan de Marketing
-                            </h3>
-                            <p class="text-gray-500 text-sm mb-3 text-center">Crea un plan de marketing personalizado
-                                para tu negocio en minutos.</p>
-                        </div>
-                        <button
-                            class="bg-yellow-500 text-black px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold mt-2"
-                            onclick="document.getElementById('form-plan-marketing').classList.toggle('hidden')"
-                            type="button">Obtener</button>
-                        <form id="form-plan-marketing" class="w-full mt-4 p-4 rounded-md shadow-inner hidden">
-                            <label class="block mb-2 text-sm font-semibold text-gray-700" for="pm-nombre-negocio">Nombre
-                                del negocio o producto</label>
-                            <input type="text" id="pm-nombre-negocio" name="nombre_negocio"
-                                class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
-                                placeholder="Ejemplo: Café Aroma" required>
-
-                            <label class="block mb-2 text-sm font-semibold text-gray-700"
-                                for="pm-descripcion">Descripción breve</label>
-                            <textarea id="pm-descripcion" name="descripcion"
-                                class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
-                                rows="2" placeholder="¿Qué ofreces? ¿Qué te hace especial?" required></textarea>
-
-                            <label class="block mb-2 text-sm font-semibold text-gray-700"
-                                for="pm-publico-objetivo">Público objetivo</label>
-                            <input type="text" id="pm-publico-objetivo" name="publico_objetivo"
-                                class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
-                                placeholder="Ejemplo: Jóvenes, empresas, familias, etc." required>
-
-                            <label class="block mb-2 text-sm font-semibold text-gray-700"
-                                for="pm-objetivo-marketing">Objetivo principal del marketing</label>
-                            <input type="text" id="pm-objetivo-marketing" name="objetivo_marketing"
-                                class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
-                                placeholder="Ejemplo: Aumentar ventas, posicionar marca, etc." required>
-
-                            <label class="block mb-2 text-sm font-semibold text-gray-700"
-                                for="pm-presupuesto">Presupuesto estimado (opcional)</label>
-                            <input type="text" id="pm-presupuesto" name="presupuesto"
-                                class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
-                                placeholder="Ejemplo: $5000, Bajo, Medio, Alto">
-
-                            <button type="button" id="btn-generar-plan-marketing"
-                                class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold w-full mt-2">Generar</button>
-                            <div id="respuesta-plan-marketing" class="mt-4 text-gray-800 text-sm whitespace-pre-line">
-                            </div>
-                            <div id="acciones-plan-marketing" class="flex flex-col md:flex-row gap-2 mt-2 hidden">
-                                <button type="button" id="btn-reintentar-plan-marketing"
-                                    class="bg-red-500 text-white px-4 py-2 rounded-md transition duration-200 font-semibold flex-1 opacity-50 cursor-not-allowed"
-                                    style="pointer-events: none;" disabled>No me gusta, generar otro</button>
-                                <button type="button" id="btn-copiar-plan-marketing"
-                                    class="bg-green-500 text-white px-4 py-2 rounded-md transition duration-200 font-semibold flex-1 opacity-50 cursor-not-allowed"
-                                    style="pointer-events: none;" disabled>Me gusta, copiar texto!</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="resource-card flex flex-col items-center justify-between">
-                        <div class="flex flex-col items-center">
-                            <i class="fas fa-image resource-icon text-2xl mb-2 text-purple-500"></i>
-                            <h3 class="text-lg font-semibold text-gray-800 mb-1 text-center">Generar Imágenes o Logos
-                            </h3>
-                            <p class="text-gray-500 text-sm mb-3 text-center">Crea imágenes, logos o posters
-                                promocionales únicos para tu marca utilizando IA.</p>
-                        </div>
-                        <button
-                            class="bg-yellow-500 text-black px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold mt-2"
-                            onclick="document.getElementById('form-imagen-logo').classList.toggle('hidden')"
-                            type="button">Obtener</button>
-                        <form id="form-imagen-logo" class="w-full mt-4 p-4 rounded-md shadow-inner hidden">
-                            <label class="block mb-2 text-sm font-semibold text-gray-700" for="tipo-imagen">¿Qué deseas
-                                generar?</label>
-                            <select id="tipo-imagen" name="tipo_imagen"
-                                class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
-                                required>
-                                <option value="">Selecciona una opción</option>
-                                <option value="logo">Logo</option>
-                                <option value="poster">Poster promocional</option>
-                                <option value="imagen">Imagen creativa</option>
-                            </select>
-
-                            <label class="block mb-2 text-sm font-semibold text-gray-700"
-                                for="descripcion-imagen">Describe lo que quieres (colores, estilo, mensaje, elementos,
-                                etc.)</label>
-                            <textarea id="descripcion-imagen" name="descripcion_imagen"
-                                class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
-                                rows="3"
-                                placeholder="Ejemplo: Logo minimalista para cafetería, colores marrón y crema, taza de café estilizada, sensación acogedora."
-                                required></textarea>
-
-                            <label class="block mb-2 text-sm font-semibold text-gray-700" for="uso-imagen">¿Dónde se
-                                usará? (opcional)</label>
-                            <input type="text" id="uso-imagen" name="uso_imagen"
-                                class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
-                                placeholder="Ejemplo: Instagram, sitio web, tarjetas, etc.">
-
-                            <button type="button" id="btn-generar-imagen-logo"
-                                class="bg-yellow-500 text-black px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold w-full mt-2">Generar</button>
-                            <div id="respuesta-imagen-logo" class="mt-4 text-gray-800 text-sm whitespace-pre-line">
-                            </div>
-                            <div id="acciones-imagen-logo" class="flex flex-col md:flex-row gap-2 mt-2 hidden">
-                                <button type="button" id="btn-reintentar-imagen-logo"
-                                    class="bg-red-500 text-white px-4 py-2 rounded-md transition duration-200 font-semibold flex-1 opacity-50 cursor-not-allowed"
-                                    style="pointer-events: none;" disabled>No me gusta, generar otro</button>
-                                <button type="button" id="btn-copiar-imagen-logo"
-                                    class="bg-green-500 text-white px-4 py-2 rounded-md transition duration-200 font-semibold flex-1 opacity-50 cursor-not-allowed"
-                                    style="pointer-events: none;" disabled>Me gusta, copiar enlace!</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <div id="tablon-colaboracion" class="mt-12 pt-8 border-t border-gray-200">
-                <h2 class="resources-section-title text-2xl font-semibold text-gray-800 mb-4">Tablón de Colaboración
-                </h2>
-                <p class="text-gray-700 mb-6">Conecta con otros emprendedores para encontrar proveedores, socios de
-                    producción o servicios especializados que tu negocio necesita, o publica lo que tú ofreces a la
-                    comunidad de We-Connect.</p>
-
-                <div class="text-center mb-8">
-                    <?php if (isset($_SESSION["usuario"]["usuario"])): ?>
-                        <a href="../comunidad/publicar.php"
-                            class="bg-green-500 text-white py-3 px-6 rounded-md hover:bg-green-600 transition duration-200 font-semibold text-lg">Publicar
-                            Necesidad </a>
-                    <?php else: ?>
-                        <p class="text-gray-600">Debes <a href="../usuarios/login.php"
-                                class="text-indigo-500 hover:underline">iniciar sesión</a> para publicar en el tablón.</p>
-                    <?php endif; ?>
-                </div>
-
-
-                <div id="listado-publicaciones" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                    <?php
-                    // --- Obtener publicaciones de la base de datos ---
-                    // La conexión a BD ($_conexion) ya se incluyó al inicio del archivo.
-                    $sqlPublicaciones = "SELECT * FROM necesidades_ofertas ORDER BY fecha_publicacion DESC";
-                    $resultadoPublicaciones = $_conexion->query($sqlPublicaciones);
-
-                    if ($resultadoPublicaciones && $resultadoPublicaciones->num_rows > 0) {
-                        while ($publicacion = $resultadoPublicaciones->fetch_assoc()) {
-                            // Determinar colores e iconos según el tipo de publicación
-                            $borderColorClass = ($publicacion['tipo'] === 'necesidad') ? 'border-blue-300' : 'border-green-300';
-                            $bgColorClass = ($publicacion['tipo'] === 'necesidad') ? 'bg-blue-50' : 'bg-green-50';
-                            $iconClass = ($publicacion['tipo'] === 'necesidad') ? 'fas fa-search text-blue-600' : 'fas fa-tools text-green-600';
-                            $titleColorClass = ($publicacion['tipo'] === 'necesidad') ? 'text-blue-800' : 'text-green-800';
-                            $tipoTexto = ($publicacion['tipo'] === 'necesidad') ? 'Necesidad' : 'Oferta';
-
-                            echo '<div class="resource-card ' . $borderColorClass . ' ' . $bgColorClass . '">';
-                            echo '    <div class="flex-shrink-0 mr-4">';
-                            echo '        <i class="' . $iconClass . ' resource-icon text-2xl"></i>';
-                            echo '    </div>';
-                            echo '    <div class="flex-grow">';
-                            echo '        <h3 class="text-lg font-semibold ' . $titleColorClass . ' mb-1">' . htmlspecialchars($tipoTexto) . ': ' . htmlspecialchars($publicacion['titulo']) . '</h3>';
-                            echo '        <p class="text-gray-700 text-sm mb-2">' . nl2br(htmlspecialchars($publicacion['descripcion'])) . '</p>'; // nl2br para mantener saltos de línea
-                            // Mostrar categoría si existe
-                            if (!empty($publicacion['categoria_b2b'])) {
-                                echo '        <p class="text-gray-600 text-xs mb-1">Categoría: <span class="font-semibold">' . htmlspecialchars($publicacion['categoria_b2b']) . '</span></p>';
-                            }
-                            // Mostrar estado (opcional, podrías darle estilos según el estado)
-                            // echo '        <p class="text-gray-600 text-xs mb-1">Estado: <span class="font-semibold">' . htmlspecialchars($publicacion['estado']) . '</span></p>';
-                            echo '        <p class="text-gray-600 text-xs">Publicado por: <span class="font-semibold">' . htmlspecialchars($publicacion['usuario_alias']) . '</span> el ' . htmlspecialchars(date("d/m/Y", strtotime($publicacion['fecha_publicacion']))) . '</p>';
-                            // Puedes añadir un enlace para ver detalles o contactar si implementas esa funcionalidad
-                            // echo '        <a href="../comunidad/detalle_publicacion.php?id=' . $publicacion['id'] . '" class="text-indigo-600 hover:underline text-sm mt-2 inline-block">Ver Detalles / Contactar</a>'; // Ruta relativa a una posible página de detalle en php/comunidad/
-                            echo '    </div>';
-                            echo '</div>';
-                        }
-                    } else {
-                        echo "<p class='text-center text-gray-600 w-full md:col-span-2'>Aún no hay publicaciones en el tablón. ¡Sé el primero en publicar una necesidad u oferta!</p>";
-                    }
-
-                    // Cerrar conexión
-                    $_conexion->close();
-                    ?>
-
-                </div>
-            </div>
-
+            <a href="../usuarios/cambioPremium.php" class="cta-button bg-gray-800 text-white py-3 px-8 rounded-md hover:bg-gray-900 transition duration-200 font-semibold text-lg js-fade-in-up" data-delay="0.4s">
+                Cámbiate a Premium
+            </a>
         </div>
-    </main>
+    <?php else: ?>
+        <main class="container mx-auto py-12 px-6 flex-grow">
+            <div class="bg-white rounded-lg shadow-md p-8">
+
+                <p class="text-gray-700 mb-8 text-center max-w-2xl mx-auto">
+                    Esta sección te proporciona acceso a recursos valiosos para tu negocio, así como un espacio para
+                    interactuar y colaborar con otros miembros de la comunidad We-Connect.
+                </p>
+
+                <div class="mb-10">
+                    <h2 class="resources-section-title text-2xl font-semibold text-gray-800 mb-4">Cursos y Formación Online
+                    </h2>
+                    <p class="text-gray-600 mb-6">Aprende nuevas habilidades y mejora tu conocimiento con cursos gratuitos y
+                        recursos de plataformas educativas:</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="resource-card">
+                            <i class="fas fa-graduation-cap resource-icon text-xl"></i>
+                            <a href="https://www.coursera.org/courses?query=business" target="_blank" rel="noopener">Cursos
+                                de Negocios en Coursera</a>
+                            <p class="text-gray-500 text-sm mt-1">Accede a cursos de universidades y empresas líderes.</p>
+                        </div>
+                        <div class="resource-card">
+                            <i class="fas fa-book-open resource-icon text-xl"></i>
+                            <a href="https://www.edx.org/learn/entrepreneurship" target="_blank" rel="noopener">Programas de
+                                Emprendimiento en edX</a>
+                            <p class="text-gray-500 text-sm mt-1">Explora programas de las mejores instituciones.</p>
+                        </div>
+                        <div class="resource-card">
+                            <i class="fas fa-video resource-icon text-xl"></i>
+                            <a href="https://www.udemy.com/courses/business/" target="_blank" rel="noopener">Cursos de
+                                Negocios en Udemy</a>
+                            <p class="text-gray-500 text-sm mt-1">Amplia variedad de cursos, busca opciones gratuitas.</p>
+                        </div>
+                        <div class="resource-card">
+                            <i class="fab fa-youtube resource-icon text-xl"></i>
+                            <a href="https://creatoracademy.youtube.com/landing" target="_blank" rel="noopener">YouTube
+                                Creator Academy</a>
+                            <p class="text-gray-500 text-sm mt-1">Ideal para mejorar tu estrategia de contenido en video.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-10">
+                    <h2 class="resources-section-title text-2xl font-semibold text-gray-800 mb-4">Herramientas de Gestión y
+                        Plantillas</h2>
+                    <p class="text-gray-600 mb-6">Optimiza la gestión de tu negocio con herramientas y plantillas útiles:
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="resource-card">
+                            <i class="fas fa-file-excel resource-icon text-xl"></i>
+                            <a href="https://docs.google.com/spreadsheets/u/0/" target="_blank" rel="noopener">Google
+                                Sheets</a>
+                            <p class="text-gray-500 text-sm mt-1">Para contabilidad básica, inventario, y más.</p>
+                        </div>
+                        <div class="resource-card">
+                            <i class="fas fa-paint-brush resource-icon text-xl"></i>
+                            <a href="https://www.canva.com/es/" target="_blank" rel="noopener">Canva</a>
+                            <p class="text-gray-500 text-sm mt-1">Diseño gráfico sencillo para marketing.</p>
+                        </div>
+                        <div class="resource-card">
+                            <i class="fas fa-tasks resource-icon text-xl"></i>
+                            <a href="https://trello.com/es" target="_blank" rel="noopener">Trello</a>
+                            <p class="text-gray-500 text-sm mt-1">Gestión visual de proyectos y tareas.</p>
+                        </div>
+                        <div class="resource-card">
+                            <i class="fas fa-clipboard-list resource-icon text-xl"></i>
+                            <a href="https://asana.com/es" target="_blank" rel="noopener">Asana</a>
+                            <p class="text-gray-500 text-sm mt-1">Plataforma robusta para gestión de proyectos en equipo.
+                            </p>
+                        </div>
+                        <div class="resource-card">
+                            <i class="fas fa-file-alt resource-icon text-xl"></i>
+                            <a href="https://www.emprendepyme.net/plantilla-de-plan-de-negocio.html" target="_blank"
+                                rel="noopener">Plantilla de Plan de Negocio</a>
+                            <p class="text-gray-500 text-sm mt-1">Estructura tu idea de negocio con esta plantilla externa.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-10">
+                    <h2 class="resources-section-title text-2xl font-semibold text-gray-800 mb-4">Herramientas con IA para
+                        Emprendedores</h2>
+                    <p class="text-gray-600 mb-6">Accede a herramientas inteligentes para potenciar tu emprendimiento:</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="resource-card flex flex-col items-center justify-between">
+                            <div class="flex flex-col items-center">
+                                <i class="fas fa-lightbulb resource-icon text-2xl mb-2 text-yellow-500"></i>
+                                <h3 class="text-lg font-semibold text-gray-800 mb-1 text-center">Generar Valor Agregado a un
+                                    Producto</h3>
+                                <p class="text-gray-500 text-sm mb-3 text-center">Descubre ideas para diferenciar y mejorar
+                                    tu producto con ayuda de IA.</p>
+                            </div>
+                            <button
+                                class="bg-yellow-500 text-black px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold mt-2"
+                                onclick="document.getElementById('form-valor-agregado').classList.toggle('hidden')"
+                                type="button">Obtener</button>
+                            <form id="form-valor-agregado"
+                                class="w-full mt-4 bg-orange-50 p-4 rounded-md shadow-inner hidden">
+                                <label class="block mb-2 text-sm font-semibold text-gray-700" for="nombre-producto">Nombre
+                                    del producto</label>
+                                <input type="text" id="nombre-producto" name="nombre_producto"
+                                    class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
+                                    placeholder="Ejemplo: Taza personalizada" required>
+
+                                <label class="block mb-2 text-sm font-semibold text-gray-700"
+                                    for="descripcion-producto">Descripción breve</label>
+                                <textarea id="descripcion-producto" name="descripcion_producto"
+                                    class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
+                                    rows="2" placeholder="¿Qué hace tu producto? ¿Para quién es?" required></textarea>
+
+                                <label class="block mb-2 text-sm font-semibold text-gray-700" for="mercado-objetivo">Mercado
+                                    objetivo</label>
+                                <input type="text" id="mercado-objetivo" name="mercado_objetivo"
+                                    class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
+                                    placeholder="Ejemplo: Jóvenes universitarios, empresas, etc." required>
+
+                                <label class="block mb-2 text-sm font-semibold text-gray-700" for="problema">Problema que
+                                    resuelve</label>
+                                <input type="text" id="problema" name="problema"
+                                    class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
+                                    placeholder="¿Qué necesidad o problema atiende?" required>
+
+                                <label class="block mb-2 text-sm font-semibold text-gray-700" for="diferenciadores">¿Qué lo
+                                    hace diferente actualmente?</label>
+                                <input type="text" id="diferenciadores" name="diferenciadores"
+                                    class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
+                                    placeholder="Opcional">
+
+                                <button type="button" id="btn-generar-valor-agregado"
+                                    class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold w-full mt-2">Generar</button>
+                                <div id="respuesta-valor-agregado" class="mt-4 text-gray-800 text-sm whitespace-pre-line">
+                                </div>
+                                <div id="acciones-valor-agregado" class="flex flex-col md:flex-row gap-2 mt-2 hidden">
+                                    <button type="button" id="btn-reintentar-valor-agregado"
+                                        class="bg-red-500 text-white px-4 py-2 rounded-md transition duration-200 font-semibold flex-1 opacity-50 cursor-not-allowed"
+                                        style="pointer-events: none;" disabled>No me gusta, generar otro</button>
+                                    <button type="button" id="btn-copiar-valor-agregado"
+                                        class="bg-green-500 text-white px-4 py-2 rounded-md transition duration-200 font-semibold flex-1 opacity-50 cursor-not-allowed"
+                                        style="pointer-events: none;" disabled>Me gusta, copiar texto!</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="resource-card flex flex-col items-center justify-between">
+                            <div class="flex flex-col items-center">
+                                <i class="fas fa-bullhorn resource-icon text-2xl mb-2 text-green-500"></i>
+                                <h3 class="text-lg font-semibold text-gray-800 mb-1 text-center">Generar Plan de Marketing
+                                </h3>
+                                <p class="text-gray-500 text-sm mb-3 text-center">Crea un plan de marketing personalizado
+                                    para tu negocio en minutos.</p>
+                            </div>
+                            <button
+                                class="bg-yellow-500 text-black px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold mt-2"
+                                onclick="document.getElementById('form-plan-marketing').classList.toggle('hidden')"
+                                type="button">Obtener</button>
+                            <form id="form-plan-marketing" class="w-full mt-4 p-4 rounded-md shadow-inner hidden">
+                                <label class="block mb-2 text-sm font-semibold text-gray-700" for="pm-nombre-negocio">Nombre
+                                    del negocio o producto</label>
+                                <input type="text" id="pm-nombre-negocio" name="nombre_negocio"
+                                    class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
+                                    placeholder="Ejemplo: Café Aroma" required>
+
+                                <label class="block mb-2 text-sm font-semibold text-gray-700"
+                                    for="pm-descripcion">Descripción breve</label>
+                                <textarea id="pm-descripcion" name="descripcion"
+                                    class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
+                                    rows="2" placeholder="¿Qué ofreces? ¿Qué te hace especial?" required></textarea>
+
+                                <label class="block mb-2 text-sm font-semibold text-gray-700"
+                                    for="pm-publico-objetivo">Público objetivo</label>
+                                <input type="text" id="pm-publico-objetivo" name="publico_objetivo"
+                                    class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
+                                    placeholder="Ejemplo: Jóvenes, empresas, familias, etc." required>
+
+                                <label class="block mb-2 text-sm font-semibold text-gray-700"
+                                    for="pm-objetivo-marketing">Objetivo principal del marketing</label>
+                                <input type="text" id="pm-objetivo-marketing" name="objetivo_marketing"
+                                    class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
+                                    placeholder="Ejemplo: Aumentar ventas, posicionar marca, etc." required>
+
+                                <label class="block mb-2 text-sm font-semibold text-gray-700"
+                                    for="pm-presupuesto">Presupuesto estimado (opcional)</label>
+                                <input type="text" id="pm-presupuesto" name="presupuesto"
+                                    class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
+                                    placeholder="Ejemplo: $5000, Bajo, Medio, Alto">
+
+                                <button type="button" id="btn-generar-plan-marketing"
+                                    class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold w-full mt-2">Generar</button>
+                                <div id="respuesta-plan-marketing" class="mt-4 text-gray-800 text-sm whitespace-pre-line">
+                                </div>
+                                <div id="acciones-plan-marketing" class="flex flex-col md:flex-row gap-2 mt-2 hidden">
+                                    <button type="button" id="btn-reintentar-plan-marketing"
+                                        class="bg-red-500 text-white px-4 py-2 rounded-md transition duration-200 font-semibold flex-1 opacity-50 cursor-not-allowed"
+                                        style="pointer-events: none;" disabled>No me gusta, generar otro</button>
+                                    <button type="button" id="btn-copiar-plan-marketing"
+                                        class="bg-green-500 text-white px-4 py-2 rounded-md transition duration-200 font-semibold flex-1 opacity-50 cursor-not-allowed"
+                                        style="pointer-events: none;" disabled>Me gusta, copiar texto!</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="resource-card flex flex-col items-center justify-between">
+                            <div class="flex flex-col items-center">
+                                <i class="fas fa-image resource-icon text-2xl mb-2 text-purple-500"></i>
+                                <h3 class="text-lg font-semibold text-gray-800 mb-1 text-center">Generar Imágenes o Logos
+                                </h3>
+                                <p class="text-gray-500 text-sm mb-3 text-center">Crea imágenes, logos o posters
+                                    promocionales únicos para tu marca utilizando IA.</p>
+                            </div>
+                            <button
+                                class="bg-yellow-500 text-black px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold mt-2"
+                                onclick="document.getElementById('form-imagen-logo').classList.toggle('hidden')"
+                                type="button">Obtener</button>
+                            <form id="form-imagen-logo" class="w-full mt-4 p-4 rounded-md shadow-inner hidden">
+                                <label class="block mb-2 text-sm font-semibold text-gray-700" for="tipo-imagen">¿Qué deseas
+                                    generar?</label>
+                                <select id="tipo-imagen" name="tipo_imagen"
+                                    class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
+                                    required>
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="logo">Logo</option>
+                                    <option value="poster">Poster promocional</option>
+                                    <option value="imagen">Imagen creativa</option>
+                                </select>
+
+                                <label class="block mb-2 text-sm font-semibold text-gray-700"
+                                    for="descripcion-imagen">Describe lo que quieres (colores, estilo, mensaje, elementos,
+                                    etc.)</label>
+                                <textarea id="descripcion-imagen" name="descripcion_imagen"
+                                    class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
+                                    rows="3"
+                                    placeholder="Ejemplo: Logo minimalista para cafetería, colores marrón y crema, taza de café estilizada, sensación acogedora."
+                                    required></textarea>
+
+                                <label class="block mb-2 text-sm font-semibold text-gray-700" for="uso-imagen">¿Dónde se
+                                    usará? (opcional)</label>
+                                <input type="text" id="uso-imagen" name="uso_imagen"
+                                    class="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
+                                    placeholder="Ejemplo: Instagram, sitio web, tarjetas, etc.">
+
+                                <button type="button" id="btn-generar-imagen-logo"
+                                    class="bg-yellow-500 text-black px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold w-full mt-2">Generar</button>
+                                <div id="respuesta-imagen-logo" class="mt-4 text-gray-800 text-sm whitespace-pre-line">
+                                </div>
+                                <div id="acciones-imagen-logo" class="flex flex-col md:flex-row gap-2 mt-2 hidden">
+                                    <button type="button" id="btn-reintentar-imagen-logo"
+                                        class="bg-red-500 text-white px-4 py-2 rounded-md transition duration-200 font-semibold flex-1 opacity-50 cursor-not-allowed"
+                                        style="pointer-events: none;" disabled>No me gusta, generar otro</button>
+                                    <button type="button" id="btn-copiar-imagen-logo"
+                                        class="bg-green-500 text-white px-4 py-2 rounded-md transition duration-200 font-semibold flex-1 opacity-50 cursor-not-allowed"
+                                        style="pointer-events: none;" disabled>Me gusta, copiar enlace!</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tablon-colaboracion" class="mt-12 pt-8 border-t border-gray-200">
+                    <h2 class="resources-section-title text-2xl font-semibold text-gray-800 mb-4">Tablón de Colaboración
+                    </h2>
+                    <p class="text-gray-700 mb-6">Conecta con otros emprendedores para encontrar proveedores, socios de
+                        producción o servicios especializados que tu negocio necesita, o publica lo que tú ofreces a la
+                        comunidad de We-Connect.</p>
+
+                    <div class="text-center mb-8">
+                        <?php if (isset($_SESSION["usuario"]["usuario"])): ?>
+                            <a href="../comunidad/publicar.php"
+                                class="bg-green-500 text-white py-3 px-6 rounded-md hover:bg-green-600 transition duration-200 font-semibold text-lg">Publicar
+                                Necesidad </a>
+                        <?php else: ?>
+                            <p class="text-gray-600">Debes <a href="../usuarios/login.php"
+                                    class="text-indigo-500 hover:underline">iniciar sesión</a> para publicar en el tablón.</p>
+                        <?php endif; ?>
+                    </div>
+
+
+                    <div id="listado-publicaciones" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        <?php
+                        // --- Obtener publicaciones de la base de datos ---
+                        // La conexión a BD ($_conexion) ya se incluyó al inicio del archivo.
+                        $sqlPublicaciones = "SELECT * FROM necesidades_ofertas ORDER BY fecha_publicacion DESC";
+                        $resultadoPublicaciones = $_conexion->query($sqlPublicaciones);
+
+                        if ($resultadoPublicaciones && $resultadoPublicaciones->num_rows > 0) {
+                            while ($publicacion = $resultadoPublicaciones->fetch_assoc()) {
+                                // Determinar colores e iconos según el tipo de publicación
+                                $borderColorClass = ($publicacion['tipo'] === 'necesidad') ? 'border-blue-300' : 'border-green-300';
+                                $bgColorClass = ($publicacion['tipo'] === 'necesidad') ? 'bg-blue-50' : 'bg-green-50';
+                                $iconClass = ($publicacion['tipo'] === 'necesidad') ? 'fas fa-search text-blue-600' : 'fas fa-tools text-green-600';
+                                $titleColorClass = ($publicacion['tipo'] === 'necesidad') ? 'text-blue-800' : 'text-green-800';
+                                $tipoTexto = ($publicacion['tipo'] === 'necesidad') ? 'Necesidad' : 'Oferta';
+
+                                echo '<div class="resource-card ' . $borderColorClass . ' ' . $bgColorClass . '">';
+                                echo '    <div class="flex-shrink-0 mr-4">';
+                                echo '        <i class="' . $iconClass . ' resource-icon text-2xl"></i>';
+                                echo '    </div>';
+                                echo '    <div class="flex-grow">';
+                                echo '        <h3 class="text-lg font-semibold ' . $titleColorClass . ' mb-1">' . htmlspecialchars($tipoTexto) . ': ' . htmlspecialchars($publicacion['titulo']) . '</h3>';
+                                echo '        <p class="text-gray-700 text-sm mb-2">' . nl2br(htmlspecialchars($publicacion['descripcion'])) . '</p>'; // nl2br para mantener saltos de línea
+                                // Mostrar categoría si existe
+                                if (!empty($publicacion['categoria_b2b'])) {
+                                    echo '        <p class="text-gray-600 text-xs mb-1">Categoría: <span class="font-semibold">' . htmlspecialchars($publicacion['categoria_b2b']) . '</span></p>';
+                                }
+                                // Mostrar estado (opcional, podrías darle estilos según el estado)
+                                // echo '        <p class="text-gray-600 text-xs mb-1">Estado: <span class="font-semibold">' . htmlspecialchars($publicacion['estado']) . '</span></p>';
+                                echo '        <p class="text-gray-600 text-xs">Publicado por: <span class="font-semibold">' . htmlspecialchars($publicacion['usuario_alias']) . '</span> el ' . htmlspecialchars(date("d/m/Y", strtotime($publicacion['fecha_publicacion']))) . '</p>';
+                                // Puedes añadir un enlace para ver detalles o contactar si implementas esa funcionalidad
+                                // echo '        <a href="../comunidad/detalle_publicacion.php?id=' . $publicacion['id'] . '" class="text-indigo-600 hover:underline text-sm mt-2 inline-block">Ver Detalles / Contactar</a>'; // Ruta relativa a una posible página de detalle en php/comunidad/
+                                echo '    </div>';
+                                echo '</div>';
+                            }
+                        } else {
+                            echo "<p class='text-center text-gray-600 w-full md:col-span-2'>Aún no hay publicaciones en el tablón. ¡Sé el primero en publicar una necesidad u oferta!</p>";
+                        }
+
+                        // Cerrar conexión
+                        $_conexion->close();
+                        ?>
+
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    <?php endif; ?>
 
     <footer class="bg-gray-800 text-white py-8">
         <div class="container mx-auto px-6">

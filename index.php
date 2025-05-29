@@ -95,7 +95,7 @@
                     if (isset($_SESSION['usuario'])) {
                         echo '<br>¡Hola, ' . htmlspecialchars($_SESSION['usuario']['usuario']) . ' únete a nuestro plan premium !<br><br><br>';
                         echo '<a href="php/usuarios/cambioPremium.php" class="cta-button bg-gray-800 text-white py-3 px-8 rounded-md hover:bg-gray-900 transition duration-200 font-semibold text-lg js-fade-in-up" data-delay="0.4s">
-                        cámbiate a Premium
+                        Cámbiate a Premium
                         </a>';
                     }
                 ?>
