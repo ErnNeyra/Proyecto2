@@ -203,7 +203,7 @@
                         </div>
                         <div class="resource-card">
                             <i class="fas fa-file-alt resource-icon text-xl"></i>
-                            <a href="https://www.emprendepyme.net/plantilla-de-plan-de-negocio.html" target="_blank"
+                            <a href="https://es.smartsheet.com/content/simple-business-plan-templates" target="_blank"
                                 rel="noopener">Plantilla de Plan de Negocio</a>
                             <p class="text-gray-500 text-sm mt-1">Estructura tu idea de negocio con esta plantilla externa.
                             </p>
