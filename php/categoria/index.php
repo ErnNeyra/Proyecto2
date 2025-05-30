@@ -47,12 +47,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     
-    <link rel="stylesheet" href="../../css/categorias.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="../../css/categorias.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="icon" href="../util/img/faviconWC.png " type="image/x-icon">
-    <!-- favicon -->
-   
-    <script src="../../js/script2.js"></script> <script src="../../js/desplegable.js"></script>
-</head>
+    </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
 
     <header class="main-header shadow-md sticky top-0 z-50">
@@ -66,31 +64,29 @@
                 <a href="../contacto.php" class="main-nav-link text-gray-700 hover:text-black mr-4">Contacto</a>
                 <a href="../recursos/recursos.php" class="main-nav-link text-gray-700 hover:text-black mr-4">Recursos </a>
                 <?php
-
-
                 if (isset($_SESSION['usuario'])) {
                     // Obtener datos del usuario de la sesión, usando htmlspecialchars por seguridad
                     $nombreUsuario = htmlspecialchars($_SESSION['usuario']['usuario']); // Usamos 'usuario'
 
                     // Determinar la ruta de la imagen de perfil
-                    // Ruta por defecto desde php/categoria-index.php a php/util/
-                    $imagenPerfil = 'php/util/img/usuario.png'; // Ruta por defecto desde php/
+                    // RUTA CORREGIDA: Ahora es relativa a la ubicación actual (php/categoria/)
+                    $imagenPerfil = '../util/img/usuario.png'; // Ruta por defecto CORRECTA
 
                     // Verificamos si existe la foto de perfil del usuario en la sesión y no está vacía
                     if (isset($_SESSION['usuario']['foto_perfil']) && !empty($_SESSION['usuario']['foto_perfil'])) {
                         // La ruta guardada en BD es relativa a 'util/', así que desde php/categoria-index.php es 'util/' + ruta_bd
                         $rutaImagenBD = '../util/' . ltrim($_SESSION['usuario']['foto_perfil'], '/');
                     
-                        if (file_exists($rutaImagenBD)) { // Esta comprobación asume que PHP está en la raíz del sitio o se ajusta include_path
+                        // Comprobamos si el archivo existe antes de usarlo
+                        // Esto es útil si las rutas en la DB no siempre son precisas o los archivos se borran
+                        if (file_exists($rutaImagenBD)) {
                             $imagenPerfil = htmlspecialchars($rutaImagenBD); // Usar la ruta validada
                         }
-                        // Si no existe en el sistema de archivos, la variable $imagenPerfil mantiene la ruta por defecto
+                        // Si no existe en el sistema de archivos, la variable $imagenPerfil mantiene la ruta por defecto (que ahora es correcta)
                     }
                 
-
                     // Obtener el rol del usuario si está seteado (necesario para enlaces condicionales)
                     $userRole = $_SESSION['usuario']['rol'] ?? '';
-
 
                     // Estructura del desplegable - Rutas relativas desde php/categoria-index.php
                     echo '<div class="relative">'; // Clase relativa para el posicionamiento absoluto del desplegable
@@ -104,10 +100,10 @@
                     // Contenido del desplegable (oculto por defecto)
                     echo '    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-10 hidden">';
                     // Enlaces del desplegable - Rutas relativas desde php/categoria-index.php
-                    echo '        <a href="../usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Perfil</a>'; // Mantener "Mi Perfil" según tu código original
+                    echo '        <a href="../usuarios/panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Perfil</a>';
                     echo '        <a href="../usuarios/editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
 
-                    // Enlaces de gestión (solo para vendedores/admin) - Añadidos/Integrados
+                    // Enlaces de gestión (solo para vendedores/admin)
                     if ($userRole === 'vendedor' || $userRole === 'admin') {
                         echo '        <hr class="border-gray-200">'; // Separador
                         echo '        <a href="../productos/gestionarProductos.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Gestionar Productos</a>';
@@ -117,15 +113,12 @@
                     // Enlaces de comunidad/contenido
                     echo '        <hr class="border-gray-200">'; // Separador
                     echo '        <a href="../comunidad/tablon.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Tablón Comunidad</a>';
-                    // Enlace a la página principal de Categorías (asumimos que la página de listado está en php/categoria/index.php)
-                    echo '        <a href="index.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Categorias</a>'; // Mantener "Categorias" según tu código
+                    echo '        <a href="index.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Categorias</a>';
 
-                    // Enlace a Mis Mensajes (Añadido/Integrado)
-                    // Asumiendo que la carpeta mensajes existe con conversacioens.php dentro
+                    // Enlace a Mis Mensajes
                     // Si has descartado esta funcionalidad, puedes eliminar esta línea
-                    if (file_exists('mensajes/conversaciones.php')) { // Verificar si el archivo de mensajes existe
-                        echo '        <a href="mensajes/conversaciones.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200 font-semibold">Mis Mensajes</a>';
-                    }
+                    // La comprobación file_exists no es necesaria en el echo, la ruta ../mensajes/conversaciones.php es correcta desde aquí
+                    echo '        <a href="../mensajes/conversaciones.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200 font-semibold">Mis Mensajes</a>';
 
 
                     // Enlace para cerrar sesión
@@ -137,19 +130,16 @@
 
                 } else {
                     // Código para usuarios NO logueados
-                    // Rutas de login/registro relativas desde php/categoria-index.php
                     echo '<a href="../usuarios/login.php" class="text-gray-700 hover:text-marca-primario transition duration-200">Iniciar Sesión</a>';
                     echo '<a href="../usuarios/registro.php" class="cta-button bg-yellow-500 text-black py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 font-semibold">Regístrate</a>';
                 }
-            ?>
+                ?>
             </nav>
         </div>
     </header>
 
-
     <main class="container mx-auto py-12 px-6 flex-grow">
         <div class="bg-white rounded-lg shadow-md p-8">
-
             <h1 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Explora por Categorías</h1>
 
             <?php if (!empty($mensaje_error)): ?>
@@ -165,13 +155,13 @@
                              <div>
                                 <h2 class="text-xl font-semibold text-gray-800 mb-2"><?php echo htmlspecialchars($categoria['nombre']); ?></h2>
                                  <?php if (!empty($categoria['descripcion'])): ?>
-                                     <p class="text-gray-600 text-sm mb-4"><?php echo htmlspecialchars(substr($categoria['descripcion'], 0, 100)) . (strlen($categoria['descripcion']) > 100 ? '...' : ''); ?></p>
+                                    <p class="text-gray-600 text-sm mb-4"><?php echo htmlspecialchars(substr($categoria['descripcion'], 0, 100)) . (strlen($categoria['descripcion']) > 100 ? '...' : ''); ?></p>
                                  <?php endif; ?>
                              </div>
                              <div class="mt-auto">
-                                <a href="ver_categoria.php?cat=<?php echo urlencode(htmlspecialchars($categoria['nombre'])); ?>" class="inline-block bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold py-2 px-4 rounded">
-                                    Ver Contenido <i class="fas fa-arrow-right ml-1"></i>
-                                </a>
+                                 <a href="ver_categoria.php?cat=<?php echo urlencode(htmlspecialchars($categoria['nombre'])); ?>" class="inline-block bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold py-2 px-4 rounded">
+                                     Ver Contenido <i class="fas fa-arrow-right ml-1"></i>
+                                 </a>
                              </div>
                         </div>
                     <?php endforeach; ?>
@@ -196,14 +186,14 @@
                 <div class="footer-section">
                     <h3 class="text-lg font-semibold mb-4 text-white">Enlaces Útiles</h3>
                     <ul class="list-none p-0">
-                         <li><a href="../../index.php" class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Inicio</a></li>
-                        <li><a href="../productos/producto.php"
-                                class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Productos</a></li>
-                        <li><a href="../servicios/servicio.php"
-                                class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Servicios</a></li>
-                        <li><a href="../contacto.php"
-                                class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Contacto</a></li>
-                       
+                             <li><a href="../../index.php" class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Inicio</a></li>
+                             <li><a href="../productos/producto.php"
+                                     class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Productos</a></li>
+                             <li><a href="../servicios/servicio.php"
+                                     class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Servicios</a></li>
+                             <li><a href="../contacto.php"
+                                     class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Contacto</a></li>
+                        
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -213,10 +203,10 @@
                         <li><a href="../terminos/terms.php" class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Términos de Servicio</a></li>
                         <li><a href="../terminos/privacy.php" class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Política de Privacidad</a></li>
                         <li><a href="../contacto.php"
-                                class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Ayuda</a></li>
+                                     class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Ayuda</a></li>
                     </ul>
                 </div>
-                 <div class="footer-section social-icons-footer">
+                   <div class="footer-section social-icons-footer">
                     <h3 class="text-lg font-semibold text-white mb-4">Síguenos</h3>
                     <div class="flex justify-center md:justify-start space-x-4 text-xl">
                         <a href="#" class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500"><i class="fab fa-facebook-f"></i></a>
@@ -230,5 +220,7 @@
             </div>
         </div>
     </footer>
+    <script src="../../js/script2.js"></script>
+    
 </body>
 </html>

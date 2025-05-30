@@ -114,7 +114,7 @@
     <title>Tablón Comunidad | We-Connect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     
-    <link rel="stylesheet" href="../../css/index.css">
+    <link rel="stylesheet" href="../../css/nuevo.css">
     <link rel="stylesheet" href="../../css/tablon.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="icon" href="../util/img/faviconWC.png " type="image/x-icon">
@@ -283,6 +283,9 @@
 
                              <?php if (isset($_SESSION['usuario']) && $_SESSION['usuario']['usuario'] === $publicacion['usuario_alias']): ?>
                                    <a href="editarPublicacion.php?id=<?php echo htmlspecialchars($publicacion['id']); ?>" class="detalle-link mt-3 inline-block text-blue-600 hover:text-blue-800">Editar</a>
+                              <?php endif; ?>
+                              <?php if (isset($_SESSION['usuario']) && $_SESSION['usuario']['usuario'] === $publicacion['usuario_alias']): ?>
+                                   <a href="detallePublicacion.php?id=<?php echo htmlspecialchars($publicacion['id']); ?>" class="detalle-link mt-3 inline-block text-blue-600 hover:text-blue-800">Detalles</a>
                               <?php endif; ?>
 
                              </div>
