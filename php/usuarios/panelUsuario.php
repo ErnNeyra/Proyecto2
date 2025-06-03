@@ -290,7 +290,7 @@
                                     </div>
                                     <?php else: ?>
                                     <!-- Botón "Ver detalles" si el usuario no es el propietario -->
-                                    <a href="../<?php echo $item['tipo'] ?>s/detalle<?php echo ucfirst($item['tipo']) ?>.php?id_<?php echo ucfirst($item['tipo']) ?>=<?php echo $item['id']; ?>"
+                                    <a href="../<?php echo $item['tipo'] ?>s/detalle<?php echo ucfirst($item['tipo']) ?>.php?id_<?php echo $item['tipo'] ?>=<?php echo $item['id']; ?>"
                                     class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-200">
                                         Ver detalles
                                     </a>
