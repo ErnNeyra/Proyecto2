@@ -32,6 +32,14 @@
         exit;
     }
 
+    if ($_SESSION["usuario"]["usuario"] !== $servicio["usuario"]) {
+        // Redirigir o mostrar error si no es el propietario
+        header("Location: producto.php");
+        // También puedes mostrar un mensaje de error:
+        echo "<p class='text-red-500'>No tienes permiso para editar este servicio.</p>";
+        exit;
+    }
+
     // Variables para mostrar en el formulario
     $nombre = $servicio["nombre"];
     $descripcion = $servicio["descripcion"];

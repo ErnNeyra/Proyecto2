@@ -93,13 +93,20 @@
             $busqueda = isset($_GET['busqueda']) ? trim($_GET['busqueda']) : '';
             if ($busqueda !== '') {
                 $busqueda_sql = $_conexion->real_escape_string($busqueda);
-                $sql = "SELECT * FROM servicio 
-                        WHERE nombre LIKE '%$busqueda_sql%' 
-                        OR descripcion LIKE '%$busqueda_sql%' 
-                        OR usuario LIKE '%$busqueda_sql%'
+                $sql = "SELECT s.*, u.premium 
+                        FROM servicio s
+                        JOIN usuario u ON s.usuario = u.usuario
+                        WHERE s.nombre LIKE '%$busqueda_sql%' 
+                        OR s.descripcion LIKE '%$busqueda_sql%' 
+                        OR s.usuario LIKE '%$busqueda_sql%'
+                        ORDER BY u.premium DESC
                         LIMIT 20";
             } else {
-                $sql = "SELECT * FROM servicio LIMIT 20";
+                $sql = "SELECT s.*, u.premium 
+                        FROM servicio s
+                        JOIN usuario u ON s.usuario = u.usuario
+                        ORDER BY u.premium DESC, RAND()
+                        LIMIT 20";
             }
 
             

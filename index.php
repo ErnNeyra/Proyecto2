@@ -93,10 +93,12 @@
                 Conecta con profesionales, encuentra servicios y descubre productos increíbles.
                 <?php
                     if (isset($_SESSION['usuario'])) {
-                        echo '<br>¡Hola, ' . htmlspecialchars($_SESSION['usuario']['usuario']) . ' únete a nuestro plan premium !<br><br><br>';
-                        echo '<a href="php/usuarios/cambioPremium.php" class="cta-button bg-gray-800 text-white py-3 px-8 rounded-md hover:bg-gray-900 transition duration-200 font-semibold text-lg js-fade-in-up" data-delay="0.4s">
-                        Cámbiate a Premium
-                        </a>';
+                        echo '<br>¡Hola, ' . htmlspecialchars($_SESSION['usuario']['usuario']) . '!<br><br>';
+                        if (!isset($_SESSION['usuario']['premium']) || $_SESSION['usuario']['premium'] != 1) {
+                            echo '<a href="php/usuarios/cambioPremium.php" class="cta-button bg-gray-800 text-white py-3 px-8 rounded-md hover:bg-gray-900 transition duration-200 font-semibold text-lg js-fade-in-up" data-delay="0.4s">
+                            Cámbiate a Premium
+                            </a><br><br>';
+                        }
                     }
                 ?>
             </p>
@@ -105,7 +107,7 @@
 
     <section id="featured-products" class="featured-products py-8 observe-section">
         <div class="container mx-auto px-6">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center js-fade-in-up" data-delay="0s">Productos Destacados</h2>
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center js-fade-in-up" data-delay="0s">Productos y Servicios Destacados</h2>
             <div id="productos-carrusel-wrapper" class="relative group">
                 <div id="productos-carrusel-container" class="overflow-hidden">
                     <div id="productos-carrusel" class="flex transition-transform duration-500 ease-in-out py-4 gap-4">
@@ -113,10 +115,25 @@
                             //*** NO TOCAR ***
 
                             //recojo 20 productos y servicios aleatorios
-                            $sql =" SELECT id_producto AS id, nombre, imagen, 'producto' AS tipo FROM producto
+                            $sql = "SELECT 
+                                        p.id_producto AS id, 
+                                        p.nombre, 
+                                        p.imagen, 
+                                        'producto' AS tipo,
+                                        u.premium
+                                    FROM producto p
+                                    JOIN usuario u ON p.usuario = u.usuario
                                     UNION ALL
-                                    SELECT id_servicio AS id, nombre, imagen, 'servicio' AS tipo FROM servicio
-                                    ORDER BY RAND() LIMIT 20"; // Cambié el límite a 20 para mostrar más productos/servicios
+                                    SELECT 
+                                        s.id_servicio AS id, 
+                                        s.nombre, 
+                                        s.imagen, 
+                                        'servicio' AS tipo,
+                                        u.premium
+                                    FROM servicio s
+                                    JOIN usuario u ON s.usuario = u.usuario
+                                    ORDER BY premium DESC, RAND()
+                                    LIMIT 20"; // Cambié el límite a 20 para mostrar más productos/servicios
                             $resultado = $_conexion->query($sql);
                             $productos_servicios = [];
 

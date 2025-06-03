@@ -13,18 +13,22 @@
         exit;
     }
 
-    // Obtener el ID del usuario de la sesión de forma segura
-    $id_usuario = $_SESSION['usuario']['id_usuario'];
-    $usuarioActual = $_SESSION['usuario']['usuario'];
-    $aliasUsuario = htmlspecialchars($_SESSION['usuario']['usuario']);
-
+    $usuarioPerfil = isset($_GET['usuario']) ? trim($_GET['usuario']) : $_SESSION['usuario']['usuario'];
     // Obtener información del usuario
-    $sql = "SELECT * FROM usuario WHERE id_usuario = ?";
+    $sql = "SELECT * FROM usuario WHERE usuario = ?";
     $stmt = $_conexion->prepare($sql);
-    $stmt->bind_param("i", $id_usuario);
+    $stmt->bind_param("s", $usuarioPerfil);  // "s" porque es un string 
     $stmt->execute();
     $resultado = $stmt->get_result();
     $usuario = $resultado->fetch_assoc();
+
+    if (!$usuario) {
+        echo "<p class='text-red-500'>Error: El usuario no existe.</p>";
+        exit;
+    }
+
+    // Obtener el ID del usuario del perfil (no el de la sesión)
+    $id_usuario_perfil = $usuario['id_usuario'];
 
     // Verificar si se encontró el usuario en la base de datos
     if (!$usuario) {
@@ -32,12 +36,19 @@
         exit;
     }
 
-    // Obtener productos del usuario
-    $sql_productos = "SELECT * FROM producto WHERE usuario = ? ORDER BY fecha_agregado DESC";
+    // Obtener productos del usuario del perfil
+    $sql_productos = "SELECT * FROM producto WHERE usuario = ?";
     $stmt_productos = $_conexion->prepare($sql_productos);
-    $stmt_productos->bind_param("s", $usuario['usuario']); // Usamos el nombre de usuario del perfil
+    $stmt_productos->bind_param("s", $usuarioPerfil);  // Usar el nombre de usuario del perfil
     $stmt_productos->execute();
     $productos = $stmt_productos->get_result();
+
+    // Obtener servicios del usuario del perfil
+    $sql_servicios = "SELECT * FROM servicio WHERE usuario = ?";
+    $stmt_servicios = $_conexion->prepare($sql_servicios);
+    $stmt_servicios->bind_param("s", $usuarioPerfil);  // Usar el nombre de usuario del perfil
+    $stmt_servicios->execute();
+    $servicios = $stmt_servicios->get_result();
 
 ?>
 <!DOCTYPE html>
@@ -129,18 +140,12 @@
                         </svg>
                         <?php echo htmlspecialchars($usuario['usuario']); ?>
                     </p>
-                    <p class="text-gray-600 mb-2">
-                        <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        <?php echo htmlspecialchars($usuario['email']); ?>
-                    </p>
                     <p class="text-gray-600 mb-4">
                         <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
-                        <?php echo htmlspecialchars($usuario['telefono'] ?? 'Teléfono no especificado'); ?>
+                        <?php echo htmlspecialchars($usuario['area_trabajo']); ?>
                     </p>
                     <p class="text-gray-600 mb-4">
                         <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,6 +174,19 @@
                 } else {
                     // Tipo desconocido
                     exit('Tipo no válido.');
+                }
+
+                // Primero, comprueba que el producto/servicio pertenece al usuario logueado
+                $sql = $_conexion->prepare("SELECT usuario FROM $tabla WHERE $campo = ?");
+                $sql->bind_param("i", $id);
+                $sql->execute();
+                $sql->bind_result($usuarioPropietario);
+                $sql->fetch();
+                $sql->close();
+
+                if ($usuarioPropietario !== $_SESSION['usuario']['usuario']) {
+                    // No es el propietario, no permitas la acción
+                    exit('No tienes permiso para realizar esta acción.');
                 }
                 // Gestiono
                 $sql = $_conexion->prepare("SELECT imagen FROM $tabla WHERE $campo = ?");
@@ -203,7 +221,7 @@
                     categoria,
                     fecha_agregado
                 FROM producto
-                WHERE usuario = '$usuarioActual'
+                WHERE usuario = ?
 
                 UNION ALL
 
@@ -218,11 +236,14 @@
                     categoria,
                     fecha_agregado
                 FROM servicio
-                WHERE usuario = '$usuarioActual'
+                WHERE usuario = ?
 
                 ORDER BY fecha_agregado DESC
             ";
-            $resultado = $_conexion->query($sql);
+            $stmt = $_conexion->prepare($sql);
+            $stmt->bind_param("ss", $usuarioPerfil, $usuarioPerfil); // "ss" porque son dos parámetros de tipo string
+            $stmt->execute();
+            $resultado = $stmt->get_result();
 
         ?>
         <h2 class="text-2xl font-semibold text-gray-800 mb-6">Tus Productos Y Servicios Publicados</h2>
@@ -255,7 +276,7 @@
                                     <?php if(isset($_SESSION['usuario']['usuario']) && $_SESSION['usuario']['usuario'] == $usuario['usuario']): ?>
                                         <div class="flex space-x-4">
                                             <!-- Enlace dinámico para editar (producto o servicio) -->
-                                            <a href="../<?php echo $item['tipo'] ?>s/editar<?php echo ucfirst($item['tipo']) ?>.php?id=<?php echo $item['id']; ?>"
+                                            <a href="../<?php echo $item['tipo'] ?>s/editar<?php echo ucfirst($item['tipo']) ?>.php?id_<?php echo ucfirst($item['tipo']) ?>=<?php echo $item['id']; ?>"
                                             class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200">
                                                 Editar <?php echo $item['tipo'] ?>
                                             </a>

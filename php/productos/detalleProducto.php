@@ -227,10 +227,10 @@
                              <div class="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center text-white font-semibold mr-2">
                                 EP
                             </div>
-                            <p class="text-gray-700 font-semibold"><?php echo $usuarioPropietario ?></p>
+                            <a href="panelUsuario.php?id_usuario=<?php echo $usuarioPropietario['id_usuario']; ?>" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4"><?php echo $usuarioPropietario ?></a>
+                            <p class="text-gray-700 font-semibold"></p>
                         </div>
-                        <p class="text-gray-600 text-sm mt-1">Breve descripción del emprendedor.</p>
-                         </div>
+                    </div>
                 </div>
             </div>
 
