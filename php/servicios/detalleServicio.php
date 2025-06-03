@@ -17,8 +17,6 @@
             session_start();
         }
         if (!isset($_SESSION["usuario"]["usuario"])) {
-            //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
-            //se ejecute el código body
             header("location: ../usuarios/login.php");
             exit;
         }

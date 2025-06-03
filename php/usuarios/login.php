@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require('../util/config.php'); // Asegúrate de que este archivo contiene tu conexión a la base de datos ($_conexion)
+    require('../util/config.php');
 
     // Inicializar variables para mensajes de error
     $error_message = "";
@@ -82,10 +82,12 @@
                 </label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="Contraseña" name="password">
             </div>
-            <div class="flex items-center justify-between">
+            <div class="flex justify-center">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                     Iniciar Sesión
                 </button>
+            </div>
+            <div class="mt-4 text-center">
                 <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
                     ¿Olvidaste tu contraseña?
                 </a>
