@@ -1,37 +1,38 @@
 /* index2.css - Versión mejorada del diseño original
    Ajustes de accesibilidad, interacción y consistencia visual
+   Integración de estilo de panel.css para una estética más moderna
 */
 
 /* ==========================================================================  
    Variables de Marca y Diseño  
    ========================================================================== */
 :root {
-    --color-primary: #1a3d5e;
-    --color-primary-rgb: 26, 61, 94;
-    --color-primary-dark: #15314b;
+    --color-primary: #0077b6; /* Inspirado en btn-primary de panel.css */
+    --color-primary-rgb: 0, 119, 182;
+    --color-primary-dark: #023e8a; /* Inspirado en btn-primary:hover de panel.css */
 
-    --color-secondary: #f3a638;
-    --color-secondary-rgb: 243, 166, 56;
-    --color-secondary-dark: #e0972d;
+    --color-secondary: #e63946; /* Inspirado en btn-danger de panel.css */
+    --color-secondary-rgb: 230, 57, 70;
+    --color-secondary-dark: #d62828; /* Inspirado en btn-danger:hover de panel.css */
 
-    --color-text-main: #333;
-    --color-text-heading: #1F2937;
-    --color-text-secondary: #6B7280;
-    --color-text-inverse: #f8f8f8;
+    --color-text-main: #333; /* De panel.css */
+    --color-text-heading: #1F2937; /* Mantener de nuevo.css */
+    --color-text-secondary: #6B7280; /* Mantener de nuevo.css */
+    --color-text-inverse: #f8f8f8; /* Mantener de nuevo.css */
 
-    --color-background-light: #f8f8f8;
-    --color-border-light: #E2E8F0;
-    --color-background-card-hover: #F7FAFC;
+    --color-background-light: #ece9e6; /* Inspirado en body background de panel.css */
+    --color-border-light: #E2E8F0; /* Mantener de nuevo.css */
+    --color-background-card-hover: #F7FAFC; /* Mantener de nuevo.css */
 
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
-    --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.15);
-    --shadow-card-hover: var(--shadow-medium);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05); /* Mantener de nuevo.css */
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Mantener de nuevo.css */
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Mantener de nuevo.css */
+    --shadow-soft: 0 2px 10px rgba(0,0,0,0.05); /* Inspirado en header shadow de panel.css */
+    --shadow-medium: 0 6px 20px rgba(0,0,0,0.1); /* Inspirado en bg-glass de panel.css */
+    --shadow-card-hover: 0 8px 20px rgba(0,0,0,0.08); /* Inspirado en item-card:hover de panel.css */
 
-    --font-primary: 'Poppins', sans-serif;
-    --font-secondary: 'Open Sans', sans-serif;
+    --font-primary: 'Inter', sans-serif; /* Cambiado a Inter de panel.css */
+    --font-secondary: 'Open Sans', sans-serif; /* Mantener como opción secundaria */
 
     --space-xs: 0.25rem;
     --space-sm: 0.5rem;
@@ -42,19 +43,19 @@
     --space-3xl: 4rem;
 
     --border-radius-sm: 0.125rem;
-    --border-radius-md: 0.375rem;
-    --border-radius-lg: 0.75rem;
+    --border-radius-md: 0.75rem; /* Aumentado para coincidir con border-radius de panel.css (1rem) */
+    --border-radius-lg: 1rem; /* Nuevo para elementos más grandes como card */
     --border-radius-full: 9999px;
 
-    --transition-fast: 0.2s ease; /* mejora: más suave */
-    --transition-smooth: 0.3s ease-in-out;
+    --transition-fast: 0.2s ease;
+    --transition-smooth: 0.3s ease-in-out; /* Mantenido de panel.css y nuevo.css */
     --transition-default: var(--transition-smooth);
 
     --z-index-low: 10;
     --z-index-medium: 20;
     --z-index-high: 30;
     --z-index-superior: 40;
-    --z-index-header: 50;
+    --z-index-header: 100; /* Aumentado a 100 como en panel.css */
 }
 
 /* Reset */
@@ -70,18 +71,20 @@ html {
 }
 
 body {
-    font-family: var(--font-primary);
+    font-family: var(--font-primary); /* Usa la nueva fuente Inter */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.6;
     color: var(--color-text-main);
+    background: linear-gradient(to right, #ece9e6, #ffffff); /* Fondo de panel.css */
+    min-height: 100vh; /* Asegura que ocupe toda la altura */
 }
 
 /* Accesibilidad */
 :focus-visible {
     outline: none;
     box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.5);
-    outline-offset: 3px; /* mejora */
+    outline-offset: 3px;
     transition: box-shadow var(--transition-fast);
 }
 :focus:not(:focus-visible) {
@@ -96,13 +99,13 @@ section {
 
 /* Header */
 header {
-    background-color: rgba(255, 255, 255, 0.9);
-    border-bottom: 1px solid var(--color-border-light);
+    background-color: #ffffffcc; /* Más claro y con transparencia de panel.css */
+    backdrop-filter: blur(10px); /* De panel.css */
+    border-bottom: 1px solid var(--color-border-light); /* Mantener */
     position: sticky;
     top: 0;
-    z-index: var(--z-index-header);
-    box-shadow: var(--shadow-soft);
-    backdrop-filter: blur(5px);
+    z-index: var(--z-index-header); /* Nuevo z-index */
+    box-shadow: var(--shadow-soft); /* Nueva sombra */
 }
 header .container {
     padding-top: var(--space-md);
@@ -113,11 +116,16 @@ header .logo {
 }
 header nav a {
     color: var(--color-text-secondary);
-    transition: color var(--transition-fast), transform var(--transition-fast);
+    transition: color var(--transition-fast), transform var(--transition-fast); /* Mantener animaciones */
     display: inline-block;
+    font-weight: 600; /* De panel.css */
+    margin-right: var(--space-md); /* Espaciado de navegación */
+}
+header nav a:last-child {
+    margin-right: 0; /* Eliminar margen del último elemento */
 }
 header nav a:hover {
-    color: var(--color-primary);
+    color: var(--color-primary); /* Usar el nuevo color primario */
     transform: translateY(-3px);
 }
 header nav a:active {
@@ -126,27 +134,51 @@ header nav a:active {
 
 /* Botones */
 .btn-primary {
-    background-color: var(--color-secondary);
-    color: var(--color-text-heading);
+    background-color: var(--color-primary); /* Usar el nuevo color primario */
+    color: var(--color-text-inverse); /* Cambiado a texto inverso */
     font-weight: 600;
     padding: var(--space-sm) var(--space-md);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--border-radius-md); /* Usar nuevo radio de botón */
     transition: background-color var(--transition-fast), transform var(--transition-fast), color var(--transition-fast);
     display: inline-block;
     text-decoration: none;
+    border: none; /* Asegurar que no haya borde por defecto */
+    cursor: pointer;
 }
 .btn-primary:hover {
-    background-color: var(--color-secondary-dark);
-    color: var(--color-text-inverse);
+    background-color: var(--color-primary-dark); /* Usar nuevo color primario oscuro */
+    color: var(--color-text-inverse); /* Mantener texto inverso */
     transform: translateY(-3px);
 }
 .btn-primary:active {
     transform: scale(0.95);
 }
 
+/* Nuevo botón .btn-secondary o similar, si se necesita un "danger" */
+.btn-danger {
+    background-color: var(--color-secondary); /* Usa el nuevo color secundario (danger) */
+    color: var(--color-text-inverse);
+    font-weight: 600;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--border-radius-md);
+    transition: background-color var(--transition-fast), transform var(--transition-fast);
+    display: inline-block;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+.btn-danger:hover {
+    background-color: var(--color-secondary-dark); /* Usa el nuevo color secundario oscuro */
+    transform: translateY(-3px);
+}
+.btn-danger:active {
+    transform: scale(0.95);
+}
+
+
 /* Hero Section */
 .hero-section {
-    background: linear-gradient(135deg, var(--color-primary), #2c3e50);
+    background: linear-gradient(135deg, var(--color-primary), #2c3e50); /* Mantener gradiente, ajusta colores si quieres más "espacio" */
     position: relative;
     overflow: hidden;
     color: var(--color-text-inverse);
@@ -163,7 +195,7 @@ header nav a:active {
     text-align: center;
 }
 .hero-section h1 {
-    font-family: var(--font-primary);
+    font-family: var(--font-primary); /* Usa Inter */
     font-weight: 700;
     color: var(--color-text-inverse);
     margin-bottom: var(--space-md);
@@ -171,8 +203,8 @@ header nav a:active {
     font-size: 3rem;
 }
 .hero-section p {
-    font-family: var(--font-secondary);
-    font-size: 1.15rem; /* mejora: mejor legibilidad */
+    font-family: var(--font-primary); /* Usa Inter para consistencia */
+    font-size: 1.15rem;
     color: rgba(255, 255, 255, 0.8);
     max-width: 70ch;
     line-height: 1.7;
@@ -209,7 +241,7 @@ header nav a:active {
 
 /* Estilos para Productos Destacados (Carrusel) */
 #featured-products {
-    background-color: var(--color-background-light);
+    background-color: var(--color-background-light); /* Usa el nuevo color de fondo */
     padding-top: var(--space-2xl);
     padding-bottom: var(--space-2xl);
 }
@@ -231,21 +263,20 @@ header nav a:active {
 .producto-card {
     transition: transform var(--transition-default), box-shadow var(--transition-default), border-color var(--transition-default);
     background-color: #fff;
-    border: 1px solid #eee;
-    box-shadow: var(--shadow-soft);
-    border-radius: var(--border-radius-md);
+    border: 1px solid #eee; /* Mantener borde suave */
+    box-shadow: var(--shadow-medium); /* Sombra más pronunciada como en panel.css */
+    border-radius: var(--border-radius-lg); /* Bordes más redondeados */
     overflow: hidden;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     height: 100%;
-    /* min-width ya lo gestiona Tailwind con px-2 */
 }
 
 .producto-card:hover {
     transform: translateY(-8px);
-    box-shadow: var(--shadow-card-hover);
-    border-color: var(--color-primary);
+    box-shadow: var(--shadow-card-hover); /* Sombra de hover más sutil de panel.css */
+    border-color: var(--color-primary); /* Color de borde al hover */
 }
 
 .producto-card img {
@@ -254,6 +285,9 @@ header nav a:active {
     height: 180px;
     object-fit: cover;
     display: block;
+    /* Los border-radius de la imagen ahora se controlan a través de .producto-card */
+    border-top-left-radius: var(--border-radius-lg);
+    border-top-right-radius: var(--border-radius-lg);
 }
 
 .producto-card:hover img {
@@ -276,27 +310,55 @@ header nav a:active {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-weight: 700; /* Asegurar negrita para títulos */
 }
 
 .producto-card-content a {
-    @extend .btn-primary; /* Placeholder o copiar propiedades */
-    padding: var(--space-sm) var(--space-md); /* Sobreescribe padding si es necesario */
+    /* Las propiedades de .btn-primary ya están definidas arriba. */
+    /* Aquí se usaría una clase como <a class="btn-primary">...</a> en el HTML */
+    padding: var(--space-sm) var(--space-md);
     margin-top: var(--space-sm);
-    text-align: center; /* Asegurar centrado si es un botón */
+    text-align: center;
+    /* Eliminar @extend si no usas SASS/SCSS. Si no, necesitarás copiar las propiedades manualmente */
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+    font-weight: 600;
+    border-radius: var(--border-radius-md);
+    transition: background-color var(--transition-fast), transform var(--transition-fast), color var(--transition-fast);
+    display: inline-block;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+.producto-card-content a:hover {
+    background-color: var(--color-primary-dark);
+    color: var(--color-text-inverse);
+    transform: translateY(-3px);
+}
+.producto-card-content a:active {
+    transform: scale(0.95);
 }
 
 
 /* Controles del Carrusel (Flechas y Indicadores) */
 .carousel-control {
     background-color: rgba(255, 255, 255, 0.8);
-    color: var(--color-primary);
+    color: var(--color-primary); /* Usa el nuevo color primario */
     border: none;
     cursor: pointer;
     transition: background-color var(--transition-fast), color var(--transition-fast);
+    border-radius: var(--border-radius-full); /* Hacerlos redondos */
+    width: 40px; /* Tamaño fijo */
+    height: 40px; /* Tamaño fijo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-sm); /* Añadir sombra sutil */
 }
 .carousel-control:hover {
     background-color: rgba(255, 255, 255, 1);
-    color: var(--color-primary-dark);
+    color: var(--color-primary-dark); /* Usa el nuevo color primario oscuro */
+    box-shadow: var(--shadow-md); /* Sombra al hover */
 }
 
 /* Ocultar elementos no deseados */
@@ -305,7 +367,7 @@ header nav a:active {
 }
 
 /* Estilos para las otras secciones genéricas */
-.call-to-action, .how-it-works, .why-choose-us, .testimonials { /* Añadir .why-choose-us y .testimonials para consistencia */
+.call-to-action, .how-it-works, .why-choose-us, .testimonials {
     padding-top: var(--space-2xl);
     padding-bottom: var(--space-2xl);
 }
@@ -314,10 +376,11 @@ header nav a:active {
 .why-choose-us-item,
 .testimonial-card {
     transition: transform var(--transition-default), box-shadow var(--transition-default), border-color var(--transition-default);
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo con transparencia como bg-glass */
+    backdrop-filter: blur(8px); /* Blur de fondo */
     border: 1px solid #eee;
-    box-shadow: var(--shadow-soft);
-    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-medium); /* Sombra de panel.css */
+    border-radius: var(--border-radius-lg); /* Bordes más redondeados */
     padding: var(--space-lg);
     display: flex;
     flex-direction: column;
@@ -330,12 +393,13 @@ header nav a:active {
 .why-choose-us-item:hover,
 .testimonial-card:hover {
     transform: translateY(-8px);
-    box-shadow: var(--shadow-card-hover);
+    box-shadow: var(--shadow-card-hover); /* Sombra de hover de panel.css */
+    border-color: var(--color-primary); /* Resaltar al hover */
 }
 
 .how-it-works-item i,
 .why-choose-us-item i {
-    color: var(--color-secondary);
+    color: var(--color-primary); /* Usar color primario para iconos */
     font-size: 3.5rem;
     margin-bottom: var(--space-md);
 }
@@ -346,6 +410,7 @@ header nav a:active {
     color: var(--color-text-heading);
     font-size: 1.3rem;
     margin-bottom: var(--space-sm);
+    font-weight: 700; /* Negrita para títulos */
 }
 
 .how-it-works-item p,
@@ -355,16 +420,17 @@ header nav a:active {
 }
 
 .testimonial-card img {
-    border: 3px solid var(--color-secondary);
+    border: 4px solid var(--color-primary); /* Usar color primario para el borde de la imagen */
     border-radius: var(--border-radius-full);
     width: 96px; height: 96px;
     object-fit: cover;
     margin-bottom: var(--space-md);
     transition: transform var(--transition-fast), border-color var(--transition-fast);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Sombra como en profile-image de panel.css */
 }
 .testimonial-card:hover img {
     transform: scale(1.08);
-    border-color: var(--color-primary);
+    border-color: var(--color-primary-dark); /* Color de borde oscuro al hover */
 }
 
 .testimonial-card p.quote {
@@ -376,7 +442,7 @@ header nav a:active {
 
 /* Footer */
 footer {
-    background-color: #1F2937;
+    background-color: #1F2937; /* Mantener color oscuro */
     color: #D1D5DB;
     padding-top: var(--space-2xl);
     padding-bottom: var(--space-2xl);
@@ -399,7 +465,7 @@ footer a {
     transition: color var(--transition-fast);
 }
 footer a:hover {
-    color: var(--color-secondary);
+    color: var(--color-primary); /* Usar el nuevo color primario */
     text-decoration: underline;
 }
 
@@ -436,7 +502,7 @@ footer .social-icons-footer a {
 }
 
 footer .social-icons-footer a:hover {
-    color: var(--color-secondary);
+    color: var(--color-primary); /* Usar el nuevo color primario */
     transform: translateY(-3px) scale(1.1);
 }
 
@@ -451,8 +517,13 @@ footer .copyright {
 
 
 /* ==========================================================================
-   Animaciones Keyframes
+   Animaciones Keyframes (mantener y ajustar si es necesario)
    ========================================================================== */
+
+@keyframes fadeIn { /* Nueva animación de panel.css */
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
 @keyframes fadeInUp {
     from {
@@ -473,6 +544,15 @@ footer .copyright {
     50% {
         transform: scale(1.02);
         opacity: 0.95;
+    }
+}
+
+@keyframes twinkling { /* Mantener animación de estrellas */
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: -10000px 5000px;
     }
 }
 
@@ -538,7 +618,7 @@ footer .copyright {
         padding-bottom: var(--space-xl);
     }
 
-    footer .social-icons-footer a { /* Cambiado de .flex para afectar directamente el a */
+    footer .social-icons-footer a {
         font-size: 1.4rem;
         margin: 0 var(--space-sm);
     }
@@ -577,9 +657,13 @@ footer .copyright {
         padding-bottom: var(--space-lg);
     }
 
-    footer .social-icons-footer a { /* Cambiado de .flex para afectar directamente el a */
+    footer .social-icons-footer a {
         font-size: 1.2rem;
         margin: 0 var(--space-xs);
+    }
+
+    .producto-card img {
+        border-radius: var(--border-radius-md) var(--border-radius-md) 0 0; /* Ajuste para móviles si se apilan */
     }
 }
 
@@ -610,3 +694,6 @@ footer .copyright {
         background-attachment: scroll !important;
     }
 }
+
+/* Importar la fuente Inter de Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
