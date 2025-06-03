@@ -203,7 +203,7 @@
                          ?>
                         <span class="text-gray-600 text-sm ml-2">(<?php echo $totalValoraciones; ?> valoraciones)</span>
                     </div>
-                    <p class="text-gray-700 leading-relaxed mb-6"><?php echo $descripcion ?></p>
+                    <p class="text-gray-700 leading-relaxed mb-6"><?php echo sentence_case($descripcion) ?></p>
                     <p class="text-gray-600 font-semibold mb-2">Precio: <span class="text-black"><?php echo $precio?>€</span></p>
                     <p class="text-gray-600 mb-4"><span class="text-green-500">Disponible</span></p>
 
@@ -227,7 +227,7 @@
                              <div class="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center text-white font-semibold mr-2">
                                 EP
                             </div>
-                            <a href="panelUsuario.php?id_usuario=<?php echo $usuarioPropietario['id_usuario']; ?>" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4"><?php echo $usuarioPropietario ?></a>
+                            <a href="../usuarios/panelUsuario.php?usuario=<?php echo htmlspecialchars($usuarioPropietario); ?>" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4"><?php echo $usuarioPropietario ?></a>
                             <p class="text-gray-700 font-semibold"></p>
                         </div>
                     </div>

@@ -135,7 +135,7 @@
                         class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="font-semibold text-gray-700 mb-2"><?php echo $producto["nombre"] ?></h3>
-                        <p class="text-gray-600 text-sm mb-2"><?php echo $producto["descripcion"] ?></p>
+                        <p class="text-gray-600 text-sm mb-2"><?php echo sentence_case($producto["descripcion"]) ?></p>
                         <p class="text-gray-500 text-xs mb-2">Ofrecido por: <?php echo $producto["usuario"] ?></p>
 
                         <a href="detalleProducto.php?id_producto=<?php echo $producto['id_producto']; ?>"

@@ -129,7 +129,7 @@
                     <img src="<?php echo $servicio["imagen"]?>" alt="<?php echo $servicio["nombre"] ?>" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="font-semibold text-gray-700 mb-2"><?php echo $servicio["nombre"] ?></h3>
-                        <p class="text-gray-600 text-sm mb-2"><?php echo $servicio["descripcion"] ?></p>
+                        <p class="text-gray-600 text-sm mb-2"><?php echo sentence_case($servicio["descripcion"]) ?></p>
                         <p class="text-gray-500 text-xs mb-2">Ofrecido por: <?php echo $servicio["usuario"] ?></p>
                         
                         <a href="detalleServicio.php?id_servicio=<?php echo $servicio['id_servicio']; ?>" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 text-sm inline-block mt-4">Ver Detalles</a>

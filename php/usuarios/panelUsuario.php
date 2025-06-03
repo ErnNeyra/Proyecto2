@@ -104,10 +104,11 @@
                 if(isset($_SESSION["usuario"]["usuario"])){
                     echo '<div class="relative">';
                     echo '    <button id="user-dropdown-button" class="flex items-center text-gray-700 hover:text-black focus:outline-none" aria-expanded="false" aria-haspopup="true">';
-                    echo '        <span>' . $aliasUsuario . '</span>';
+                    echo '        <span>' . $_SESSION['usuario']['usuario'] . '</span>';
                     echo '        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
                     echo '    </button>';
                     echo '    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-10 hidden">';
+                    echo '        <a href="panelUsuario.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Mi Perfil</a>';
                     echo '        <a href="editarPerfil.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Editar Perfil</a>';
                     echo '        <hr class="border-gray-200">';
                     echo '        <a href="../comunidad/tablon.php" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Tablón Comunidad</a>';
@@ -145,7 +146,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
-                        <?php echo htmlspecialchars($usuario['area_trabajo']); ?>
+                        <?php echo ($usuario['area_trabajo']); ?>
                     </p>
                     <p class="text-gray-600 mb-4">
                         <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -246,7 +247,7 @@
             $resultado = $stmt->get_result();
 
         ?>
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Tus Productos Y Servicios Publicados</h2>
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Productos Y Servicios Publicados</h2>
             <div class="grid gap-6">
                 <?php if ($resultado->num_rows > 0): ?>
                     <?php while($item = $resultado->fetch_assoc()): ?>
@@ -267,7 +268,7 @@
                                         <?php echo htmlspecialchars($item['nombre']); ?>
                                     </h3>
                                     <p class="text-gray-600 mb-4">
-                                        <?php echo htmlspecialchars($item['descripcion']); ?>
+                                        <?php echo sentence_case($item['descripcion']); ?>
                                     </p>
                                     <p class="text-lg font-bold text-yellow-500 mb-4">
                                         €<?php echo number_format($item['precio'], 2); ?>
@@ -287,6 +288,12 @@
                                             <button type="submit" class="btn btn-danger" onClick="location.reload()">Eliminar <?php echo $item['tipo']?></button>
                                         </form>
                                     </div>
+                                    <?php else: ?>
+                                    <!-- Botón "Ver detalles" si el usuario no es el propietario -->
+                                    <a href="../<?php echo $item['tipo'] ?>s/detalle<?php echo ucfirst($item['tipo']) ?>.php?id_<?php echo ucfirst($item['tipo']) ?>=<?php echo $item['id']; ?>"
+                                    class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-200">
+                                        Ver detalles
+                                    </a>
                                 <?php endif; ?>
                             </div>
                         </div>
