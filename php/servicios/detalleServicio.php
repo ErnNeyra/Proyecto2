@@ -17,8 +17,6 @@
             session_start();
         }
         if (!isset($_SESSION["usuario"]["usuario"])) {
-            //CUIDADO AMIGO esta función es peligrosa, tiene que ejecutarse antes de que
-            //se ejecute el código body
             header("location: ../usuarios/login.php");
             exit;
         }
@@ -267,7 +265,7 @@
            <div class="mt-8">
     <h3 class="text-xl font-semibold text-gray-800 mb-4">Dejar un comentario y valoración</h3>
     <?php if (isset($_SESSION["usuario"]["usuario"])): ?>
-        <form id="formulario-comentario" method="POST" data-submit-url="guardar_comentario_servicio_ajax.php">
+        <form id="formulario-comentario" method="POST" data-submit-url="guardar_comentario_ajax_servicio.php">
              <input type="hidden" name="id_servicio" value="<?php echo htmlspecialchars($idServicio); ?>">
 
             <div class="mb-4">

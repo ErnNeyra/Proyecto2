@@ -150,9 +150,6 @@
                 </div>
                 <div class="footer-section">
                     <h3 class="text-lg font-semibold mb-4 text-white">Enlaces Útiles</h3>
-<<<<<<< HEAD
-                    <ul class="list-
-=======
                     <ul class="list-none p-0">
                         <li><a href="../../index.php" class="hover:text-marca-secundaria transition duration-200 text-gray-300 hover:text-yellow-500">Inicio</a></li>
                         <li><a href="../productos/producto.php"
@@ -192,4 +189,3 @@
 
 </body>
 </html>
->>>>>>> 39331ad4504567df7d5f33ab819c2b589da09df2
