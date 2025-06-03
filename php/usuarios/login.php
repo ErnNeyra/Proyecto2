@@ -87,9 +87,9 @@
                     Iniciar Sesión
                 </button>
             </div>
-            <div class="mt-4 text-center">
-                <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
-                    ¿Olvidaste tu contraseña?
+            <div class="flex justify-center mt-4">
+                <a href="../../index.php" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Volver
                 </a>
             </div>
         </form>

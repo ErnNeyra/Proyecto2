@@ -265,31 +265,30 @@
                 return;
             }
 
-            try {
-                this.disabled = true;
-                this.textContent = 'Procesando...';
+            this.disabled = true;
+            this.textContent = 'Procesando...';
 
-                const response = await fetch('../util/mejorar_descripcion.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ descripcion: descripcion })
-                });
+            const response = await fetch('../util/mejorar_descripcion.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ descripcion: descripcion })
+            });
 
+            if (response.ok) {
                 const data = await response.json();
                 if (data.success) {
                     textoSugerencia.textContent = data.success;
                     sugerenciaDiv.classList.remove('hidden');
                 } else {
-                    alert('Error: ' + (data.error || 'No se pudo procesar la solicitud'));
+                   
                 }
-            } catch (error) {
-                alert('Error al procesar la solicitud');
-            } finally {
-                this.disabled = false;
-                this.textContent = 'Mejorar Descripción';
             }
+   
+
+            this.disabled = false;
+            this.textContent = 'Mejorar Descripción';
         });
 
         document.getElementById('aplicarSugerencia').addEventListener('click', function() {

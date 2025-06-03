@@ -23,7 +23,7 @@
 </head>
 <body class="flex items-center justify-center min-h-screen bg-gray-100">
     <div class="registration-container max-w-md w-full p-8 bg-white rounded shadow">
-        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Hazte Premium</h2>
+        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Hazte Premium por 9,99€/mes</h2>
         <p class="mb-4 text-center text-gray-700">
             Disfruta de todas las ventajas del plan Premium:<br>
             <span class="block mt-2 text-yellow-600 font-semibold">

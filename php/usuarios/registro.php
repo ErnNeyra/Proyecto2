@@ -244,7 +244,7 @@
                         </ul>
                     </div>
                     <div id="plan-premium" class="plan-card border border-yellow-400 bg-yellow-100 p-4 rounded cursor-pointer">
-                        <h3 class="text-lg font-semibold text-yellow-800">Plan Premium - $5 USD</h3>
+                        <h3 class="text-lg font-semibold text-yellow-800">Plan Premium - 9.99€</h3>
                         <ul class="text-sm text-gray-700 list-disc pl-5 mt-2">
                             <li>Acceso completo</li>
                             <li>Perfil destacado</li>
